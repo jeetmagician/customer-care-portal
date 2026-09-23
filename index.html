@@ -961,12 +961,9 @@ let CARE_USERS=[
 ];
 /* admin logins — a separate, higher-privilege account set from customer care staff */
 let ADMIN_USERS=[
- {id:'AD1',name:'Assam Admin',loginId:'admin',password:'Admin@123',active:true,state:'Assam'},
- {id:'AD2',name:'Odisha Admin',loginId:'odisha.admin',password:'Odisha@Admin1',active:true,state:'Odisha'},
- {id:'AD3',name:'West Bengal Admin',loginId:'wb.admin',password:'WestBengal@Admin1',active:true,state:'West Bengal'}
+ {id:'AD1',name:'Namonamaha Admin',loginId:'admin',password:'Admin@123',active:true}
 ];
-/* States / UTs offered in "Select temple location" on the login page. An admin or temple
-   login only works for the location it belongs to. */
+/* States / UTs offered when an admin adds a temple. */
 const INDIA_STATES=['Andaman and Nicobar Islands','Andhra Pradesh','Arunachal Pradesh','Assam','Bihar','Chandigarh','Chhattisgarh',
  'Dadra and Nagar Haveli and Daman and Diu','Delhi','Goa','Gujarat','Haryana','Himachal Pradesh','Jammu and Kashmir','Jharkhand','Karnataka',
  'Kerala','Ladakh','Lakshadweep','Madhya Pradesh','Maharashtra','Manipur','Meghalaya','Mizoram','Nagaland','Odisha','Puducherry','Punjab',
@@ -998,15 +995,11 @@ const adminUser=id=>ADMIN_USERS.find(u=>u.id===id);
 const bk    =id=>DB.bookings.find(b=>b.id===id);
 /* Customer care is temple-wise: a CC login (or an admin opening a temple's portal) only
    works the bookings of that one temple. No temple on the login = sees every temple. */
-function ccTempleId(){
-  if(S.role!=='cc') return null;
-  const u=S.careUser?careUser(S.careUser):null;
-  return (u&&u.templeId)||null;
-}
+/* Customer care is a single portal covering every temple and client — no per-temple scoping. */
+function ccTempleId(){ return null; }
 const loginTaken=(id,exceptUser,exceptAdmin)=>{ const k=String(id).trim().toLowerCase();
   return CARE_USERS.some(x=>x.id!==exceptUser&&x.loginId.toLowerCase()===k)||ADMIN_USERS.some(x=>x.id!==exceptAdmin&&x.loginId.toLowerCase()===k); };
-const adminState=()=>{ const a=S.adminUser?adminUser(S.adminUser):null; return a?a.state:null; };
-const templesInZone=()=>{ const st=adminState(); return st?TEMPLES.filter(t=>t.state===st):TEMPLES; };
+const allTemples=()=>TEMPLES.slice().sort((a,b)=>a.state.localeCompare(b.state)||a.name.localeCompare(b.name));
 function scopeBk(list){ const t=ccTempleId(); return t?list.filter(b=>b.templeId===t):list; }
 const ccScopeLabel=()=>{ const t=ccTempleId(); return t?temple(t).name:'All temples'; };
 
@@ -1736,7 +1729,7 @@ function seed(){
   ev('Push','Escalation raised — NMH-1038','No pandit free for this puja. Puja is in 23h. Routed to customer care.','NMH-1038','nm_escalation');
   DB.events.sort((a,c)=>c.at-a.at);
   S={role:'cc',sub:'queue',id:null,draft:{},device:'desktop',open:null,noteDraft:'',modal:null,
-    careUser:null,stateDraft:'',fromAdmin:false,templeLogin:null,revealCred:{},loginError:'',loginDraft:'',pwDraft:'',pwShow:false,
+    careUser:null,fromAdmin:false,templeLogin:null,revealCred:{},loginError:'',loginDraft:'',pwDraft:'',pwShow:false,
     adminUser:null,adminLoginError:'',adminLoginDraft:'',adminPwDraft:'',adminPwShow:false,
     devFilter:{type:'all',pay:'all',from:'',to:'',q:'',letter:'',expFrom:'',expTo:''}};
   ME_AGENT='A1'; ME_PANDIT='D1';
@@ -2308,16 +2301,13 @@ function uFeedback(){
    SCREENS — customer care CRM
    ========================================================================== */
 function ccScreen(){
-  const user=S.careUser?careUser(S.careUser):null;
-  if(!user||!user.active){ S.careUser=null; return careLoginScreen(); }
+  const user=S.adminUser?adminUser(S.adminUser):(S.careUser?careUser(S.careUser):null);
+  if(!user||!user.active){ S.careUser=null; S.adminUser=null; return careLoginScreen(); }
   const tabs=[['queue','Work queue'],['history','All history'],['sla','SLA & escalations'],['cancellations','Cancellations'],['templates','Message log']];
   const sub=S.sub||'queue';
   const body = sub==='booking'?ccBooking():sub==='temple'?ccTemple():sub==='agent'?ccAgentView():
     sub==='sla'?ccSla():sub==='cancellations'?ccCancel():sub==='templates'?ccTemplates():sub==='history'?ccHistory():ccQueue();
-  const userBadge=S.fromAdmin?
-    '<div class="cc-user-badge"><span class="who">'+esc(temple(user.templeId).name)+' · opened by <b>Admin</b></span>'+
-    '<button class="btn btn-sm" data-act="cc-back-admin">← Back to admin</button></div>':
-    '<div class="cc-user-badge"><span class="who">Signed in as <b>'+esc(user.name)+'</b></span>'+
+  const userBadge='<div class="cc-user-badge"><span class="who">Signed in as <b>'+esc(user.name)+'</b></span>'+
     '<button class="btn btn-sm" data-act="cc-logout">Log out</button></div>';
   return dashShell('cc','Care CRM',tabs,['booking','temple','agent'].includes(sub)?'queue':sub,body,{logo:true,userHtml:userBadge,wallpaper:true})+
     (S.modal?ccModal():'')+autoAssignPanel();
@@ -2330,10 +2320,8 @@ function careLoginScreen(){
    '<img src="logo-transparent.png?v=2" alt="Namonamaha" class="care-login-logo">'+
    '<div class="eyebrow" style="text-align:center">Customer care portal</div>'+
    '<h1 class="h-page" style="text-align:center">Staff sign in</h1>'+
-   '<p class="sub" style="text-align:center;margin:0 0 18px">Choose your temple location, then sign in with the login ID and password issued to you. You only see temples of that location.</p>'+
+   '<p class="sub" style="text-align:center;margin:0 0 18px">Sign in with the login ID and password issued to you.</p>'+
    (S.loginError?'<div class="stopbox" style="margin-bottom:14px"><h4>'+esc(S.loginError)+'</h4></div>':'')+
-   '<div class="fld"><label class="f" for="clst">Select temple location</label><select class="inp" id="clst">'+
-   '<option value="">— Choose state / UT —</option>'+INDIA_STATES.map(x=>'<option value="'+esc(x)+'"'+(x===S.stateDraft?' selected':'')+'>'+esc(x)+'</option>').join('')+'</select></div>'+
    '<div class="fld"><label class="f" for="cli">Login ID</label><input class="inp" id="cli" autocomplete="username" placeholder="e.g. priya.care" value="'+esc(S.loginDraft||'')+'"></div>'+
    '<div class="fld"><label class="f" for="clp">Password</label><div class="pw-wrap">'+
    '<input class="inp" id="clp" type="'+(S.pwShow?'text':'password')+'" autocomplete="current-password" placeholder="••••••••" value="'+esc(S.pwDraft||'')+'">'+
@@ -3319,7 +3307,7 @@ function adCareTeam(){
       '<div class="ed" style="width:160px"><label class="ed-l">Login ID</label><input class="inp mono" id="uid-'+u.id+'" value="'+esc(u.loginId)+'"></div>'+
       '<div class="ed" style="width:160px"><label class="ed-l">Password</label><input class="inp mono" id="upw-'+u.id+'" value="'+esc(u.password)+'"></div>'+
       '<div class="ed" style="width:190px"><label class="ed-l">Temple</label><select class="inp" id="utp-'+u.id+'">'+
-        templesInZone().map(t=>'<option value="'+t.id+'"'+(t.id===u.templeId?' selected':'')+'>'+esc(t.name)+'</option>').join('')+'</select></div>'+
+        allTemples().map(t=>'<option value="'+t.id+'"'+(t.id===u.templeId?' selected':'')+'>'+esc(t.name)+'</option>').join('')+'</select></div>'+
       '<div class="row" style="gap:6px"><button class="btn btn-sm btn-pri" data-act="ad-save-careuser" data-id="'+u.id+'">Save</button>'+
       '<button class="btn btn-sm" data-act="ad-reveal-cred" data-id="'+u.id+'">Hide</button></div>':
       '<div class="ed" style="width:160px"><div class="ed-l">Login ID</div><div class="mono" style="padding:9px 0">'+esc(maskCred(u.loginId))+'</div></div>'+
@@ -3328,34 +3316,36 @@ function adCareTeam(){
       '<button class="chip-tog" aria-pressed="'+u.active+'" data-act="tg-careuser" data-id="'+u.id+'">Active '+(u.active?'✓':'')+'</button></div>')+
     '</div>';
   };
-  return '<div class="eyebrow">Zone · '+esc(adminState()||'All')+'</div><h1 class="h-page">Temple customer care</h1>'+
-   trig(['You only see the temples of your own location ('+esc(adminState()||'all')+'), not other states. Add temples and create customer care logins for them from this page — only for your own location. Customer care is organised temple by temple. Click a temple to open its portal: a sign-in pop-up asks for that temple’s own login ID and password, then you see exactly that temple’s queue, history, SLAs and cancellations.',
+  return '<h1 class="h-page">Temple customer care</h1>'+
+   trig(['All temples from every state are listed here. Click a temple to open its customer care: a sign-in pop-up asks for that temple’s own login ID and password.',
          'Change a customer care person’s login ID, password or temple right here; it takes effect on their next sign-in. Deactivating blocks sign-in without deleting call history.',
          'A login ID must be unique across all temples. Each temple has its own password, so staff of one temple cannot open another’s portal. Only Admin sees every ID and password here.',
          'IDs and passwords are masked (e.g. pr***** / Ka*****) until an admin clicks Show / change; the temple pop-up never displays them.'])+
-   '<div class="stack" style="margin-top:12px">'+templesInZone().map(t=>{
+   '<div class="stack" style="margin-top:12px">'+allTemples().map((t,i,arr)=>{
+     const hdr=(i===0||arr[i-1].state!==t.state)?'<h3 class="h-sec" style="margin:14px 0 2px">'+esc(t.state)+'</h3>':'';
      const users=CARE_USERS.filter(u=>u.templeId===t.id);
      const open=DB.bookings.filter(b=>b.templeId===t.id&&!['CANCELLED','COMPLETED','SETTLED'].includes(b.status)).length;
-     return '<div class="card"><div class="row" style="justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px">'+
+     return hdr+'<div class="card"><div class="row" style="justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px">'+
       '<div><div class="lrow-t" style="margin-bottom:2px">'+esc(t.name)+'</div><div class="sub">'+esc(t.city)+', '+esc(t.state)+'</div>'+
       '<div class="sub mono" style="margin-top:4px">'+users.length+' customer care login'+(users.length===1?'':'s')+' · '+open+' open booking'+(open===1?'':'s')+'</div></div>'+
       '<button class="btn btn-pri" data-act="ad-open-cc" data-v="'+t.id+'">Open '+esc(t.name)+' customer care →</button></div>'+
       (users.length?'<div style="margin-top:10px">'+users.map(userRow).join('')+'</div>':'<p class="sub" style="margin:10px 0 0">No customer care login for this temple yet.</p>')+'</div>';
    }).join('')+'</div>'+
    '<div class="grid g2" style="margin-top:14px;align-items:start">'+
-   '<div class="card"><div class="eyebrow">Add a temple in '+esc(adminState()||'—')+'</div>'+
+   '<div class="card"><div class="eyebrow">Add a temple</div>'+
    '<div class="ed"><label class="ed-l">Temple name</label><input class="inp" id="atn" placeholder="e.g. Hayagriva Madhava Temple"></div>'+
    '<div class="ed"><label class="ed-l">City / area</label><input class="inp" id="atc" placeholder="e.g. Hajo, Kamrup"></div>'+
-   '<p class="sub" style="margin:0 0 10px">Added under '+esc(adminState()||'')+' as “Onboarding”. Create its customer care login next.</p>'+
+   '<div class="ed"><label class="ed-l">State</label><select class="inp" id="ats">'+INDIA_STATES.map(x=>'<option'+(x==='Assam'?' selected':'')+'>'+esc(x)+'</option>').join('')+'</select></div>'+
+   '<p class="sub" style="margin:0 0 10px">Added as “Onboarding”. Create its customer care login next.</p>'+
    '<button class="btn btn-pri" data-act="ad-add-temple">Add temple</button></div>'+
    '<div class="card"><div class="eyebrow">Create a customer care login</div>'+
-   '<div class="ed"><label class="ed-l">Temple</label><select class="inp" id="uct">'+templesInZone().map(t=>'<option value="'+t.id+'">'+esc(t.name)+'</option>').join('')+'</select></div>'+
+   '<div class="ed"><label class="ed-l">Temple</label><select class="inp" id="uct">'+allTemples().map(t=>'<option value="'+t.id+'">'+esc(t.name)+'</option>').join('')+'</select></div>'+
    '<div class="ed"><label class="ed-l">Full name</label><input class="inp" id="ucn" placeholder="e.g. Asha Gogoi"></div>'+
    '<div class="ed"><label class="ed-l">Login ID</label><input class="inp" id="ucl" placeholder="e.g. asha.care"></div>'+
    '<div class="ed"><label class="ed-l">Password</label><input class="inp" id="ucp" placeholder="Set a password for this temple"></div>'+
    '<button class="btn btn-pri" data-act="ad-add-careuser">Create login</button></div></div>'+
    (()=>{ const a=adminUser(S.adminUser), open=!!(S.revealCred&&S.revealCred.admin);
-     return '<div class="card" style="margin-top:14px"><div class="eyebrow">Your admin login · '+esc(a.state)+'</div>'+
+     return '<div class="card" style="margin-top:14px"><div class="eyebrow">Your admin login</div>'+
       (open?'<div class="row" style="gap:10px;align-items:flex-end;flex-wrap:wrap">'+
         '<div class="ed" style="width:190px;margin:0"><label class="ed-l">Login ID</label><input class="inp mono" id="aid" value="'+esc(a.loginId)+'"></div>'+
         '<div class="ed" style="width:190px;margin:0"><label class="ed-l">Password</label><input class="inp mono" id="apw" value="'+esc(a.password)+'"></div>'+
@@ -3812,7 +3802,7 @@ const ROLE_TABS=[['user','Devotee'],['cc','Customer care'],['agent','Agent'],['p
 const SCREENS={flow:flowScreen,user:userScreen,cc:ccScreen,agent:agentScreen,pandit:panditScreen,admin:adminScreen};
 const DEFAULT_SUB={flow:'pipeline',user:'browse',cc:'queue',agent:'list',pandit:'list',admin:'careteam'};
 const MOBILE_ROLES=['user','agent','pandit'];
-const STORAGE_KEY='namonamaha-care-demo-v13';
+const STORAGE_KEY='namonamaha-care-demo-v15';
 function saveDemo(){
   try{window.localStorage.setItem(STORAGE_KEY,JSON.stringify({SIM,SEQ,DB,TEMPLES,PUJAS,AGENTS,PANDITS,CARE_USERS,ADMIN_USERS,BLACKOUTS}));}catch(e){}
 }
@@ -3835,7 +3825,7 @@ function render(){
   dt.querySelectorAll('button').forEach(x=>x.setAttribute('aria-selected',String(x.dataset.v===S.device)));
   document.body.classList.toggle('mobile-preview',show&&S.device==='mobile');
   document.body.classList.toggle('modal-open',!!S.modal||!!S.templeLogin);
-  document.body.classList.toggle('app-wallpaper',['user','agent','pandit'].includes(S.role)||(S.role==='cc'&&!!S.careUser));
+  document.body.classList.toggle('app-wallpaper',['user','agent','pandit'].includes(S.role)||(S.role==='cc'&&(!!S.careUser||!!S.adminUser)));
   document.body.classList.toggle('role-wide',S.role==='agent'||S.role==='pandit');
   renderEvents();
   saveDemo();
@@ -3850,10 +3840,10 @@ function maskEventText(text,bookingId){
 }
 /* a temple's customer care only sees activity for that temple's own bookings */
 function visibleEvents(){
-  const t=ccTempleId(), z=(S.role==='admin')?adminState():null;
-  if(!t&&!z) return DB.events;
+  const t=ccTempleId();
+  if(!t) return DB.events;
   return DB.events.filter(e=>{ const b=e.bookingId?bk(e.bookingId):null;
-    return b&&(t?b.templeId===t:(temple(b.templeId)||{}).state===z); });
+    return b&&b.templeId===t; });
 }
 function renderEvents(){
   const evs=visibleEvents();
@@ -3941,25 +3931,22 @@ document.addEventListener('click',e=>{
 
     /* ---------- customer care ---------- */
     case 'cc-login': {
-      const loginId=val('cli'), pw=val('clp'), st=val('clst');
-      S.loginDraft=loginId; S.stateDraft=st;
+      const loginId=val('cli'), pw=val('clp');
+      S.loginDraft=loginId;
       const fail=m=>{ S.loginError=m; S.pwDraft=''; S.pwShow=false; render(); };
-      if(!st){ fail('Select your temple location first.'); break; }
-      const wrong='Incorrect login ID or password for '+st+'.';
       const ad=ADMIN_USERS.find(x=>x.active&&x.loginId.toLowerCase()===loginId.trim().toLowerCase()&&x.password===pw);
       if(ad){
-        if(ad.state!==st){ fail(wrong); break; }
-        S.adminUser=ad.id; S.role='admin'; S.sub='careteam'; S.loginError=''; S.loginDraft=''; S.pwDraft=''; S.pwShow=false;
+        S.adminUser=ad.id; S.role='cc'; S.sub='queue'; S.loginError=''; S.loginDraft=''; S.pwDraft=''; S.pwShow=false;
         render(); toast('Welcome, '+ad.name+'.'); break;
       }
       const u=CARE_USERS.find(x=>x.active&&x.loginId.toLowerCase()===loginId.trim().toLowerCase()&&x.password===pw);
-      if(!u||(temple(u.templeId)||{}).state!==st){ fail(wrong); break; }
+      if(!u){ fail('Incorrect login ID or password.'); break; }
       S.careUser=u.id; S.fromAdmin=false;
       S.loginError=''; S.loginDraft=''; S.pwDraft=''; S.pwShow=false; S.sub='queue';
       render(); toast('Welcome back, '+u.name+'.'); break;
     }
-    case 'cc-toggle-pw': S.loginDraft=val('cli'); S.pwDraft=val('clp'); S.stateDraft=val('clst'); S.pwShow=!S.pwShow; render(); break;
-    case 'ad-open-cc': if((temple(v)||{}).state!==adminState()) break; S.templeLogin={templeId:v,error:'',idDraft:''}; render(); break;
+    case 'cc-toggle-pw': S.loginDraft=val('cli'); S.pwDraft=val('clp'); S.pwShow=!S.pwShow; render(); break;
+    case 'ad-open-cc': if(!temple(v)) break; S.templeLogin={templeId:v,error:'',idDraft:''}; render(); break;
     case 'ad-reveal-cred': S.revealCred[id]=!S.revealCred[id]; render(); break;
     case 'ad-temple-login-close': S.templeLogin=null; render(); break;
     case 'ad-temple-login': {
@@ -3971,7 +3958,7 @@ document.addEventListener('click',e=>{
     }
     case 'cc-back-admin': S.careUser=null; S.fromAdmin=false; S.role='admin'; S.sub='careteam'; S.modal=null; render(); break;
     case 'ad-logout': S.revealCred={}; S.adminUser=null; S.careUser=null; S.fromAdmin=false; S.templeLogin=null; S.role='cc'; S.sub='queue'; render(); break;
-    case 'cc-logout': S.careUser=null; S.fromAdmin=false; S.sub='queue'; render(); break;
+    case 'cc-logout': S.careUser=null; S.adminUser=null; S.fromAdmin=false; S.sub='queue'; render(); break;
     case 'cc-temple':
       S.templeFrom=id||null; S.templeId=v;
       S.modal={type:'temple',templeId:v,bookingId:id||null}; render(); break;
@@ -4171,19 +4158,19 @@ document.addEventListener('click',e=>{
       render(); toast(u.active?u.name+' can sign in again.':u.name+'’s login is deactivated.'); break;
     }
     case 'ad-save-careuser': {
-      const u=careUser(id); if(!u||(temple(u.templeId)||{}).state!==adminState()) break;
+      const u=careUser(id); if(!u) break;
       const newId=val('uid-'+id), newPw=val('upw-'+id);
       if(!newId||!newPw){ toast('Login ID and password cannot be empty.','stop'); break; }
       if(loginTaken(newId,id,null)){
         toast('That login ID is already in use.','stop'); break;
       }
       u.loginId=newId.trim(); u.password=newPw;
-      const tsel=val('utp-'+id); if(tsel&&temple(tsel)&&temple(tsel).state===adminState()) u.templeId=tsel;
+      const tsel=val('utp-'+id); if(tsel&&temple(tsel)) u.templeId=tsel;
       S.revealCred[id]=false; render(); toast('Login details updated for '+u.name+'.'); break;
     }
     case 'ad-add-temple': {
-      const name=val('atn'), city=val('atc'), st=adminState();
-      if(!name||!city){ toast('Enter the temple name and city.','stop'); break; }
+      const name=val('atn'), city=val('atc'), st=val('ats');
+      if(!name||!city||!st){ toast('Enter the temple name, city and state.','stop'); break; }
       if(TEMPLES.some(t=>t.state===st&&t.name.toLowerCase()===name.toLowerCase())){ toast('That temple already exists in '+st+'.','stop'); break; }
       const n=Math.max(0,...TEMPLES.map(t=>Number(String(t.id).slice(1))||0))+1;
       TEMPLES.push({id:'T'+n,name,city,state:st,live:false,hours:'Onboarding',meet:'—',modes:{in_person:true,subscription:false,online:false}});
@@ -4192,7 +4179,7 @@ document.addEventListener('click',e=>{
     case 'ad-add-careuser': {
       const name=val('ucn'), loginId=val('ucl'), pw=val('ucp'), tid=val('uct');
       const t=temple(tid);
-      if(!t||t.state!==adminState()){ toast('Choose a temple in your location.','stop'); break; }
+      if(!t){ toast('Choose a temple.','stop'); break; }
       if(!name||!loginId||!pw){ toast('Fill in name, login ID and password.','stop'); break; }
       if(loginTaken(loginId,null,null)){ toast('That login ID is already in use.','stop'); break; }
       CARE_USERS.push({id:'U'+(CARE_USERS.length+1)+Math.random().toString(36).slice(2,5),name,loginId:loginId.trim(),password:pw,active:true,templeId:tid});
