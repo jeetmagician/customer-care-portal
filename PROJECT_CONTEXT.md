@@ -11,6 +11,50 @@ in `admin-portal`) to give Claude the context it needs.
 
 ---
 
+## TL;DR — what's in this portal, end to end
+
+1. **One login page** (`index.html`, `localhost:8000`). Admin (`admin` / `Admin@123`)
+   and temple customer-care staff sign in on the same form.
+2. **Admin** lands on a single page, **Temple customer care**: every temple (8) with
+   its CC login(s). IDs/passwords are masked (`pr*****` / `Ka*****`) until admin
+   clicks *Show / change*; admin can edit ID, password, temple, and active flag.
+   There is **no "add login"** here (removed on purpose). Clicking a temple opens a
+   **sign-in pop-up** that accepts only that temple's own credentials.
+3. **Temple customer care** (per temple, distinct password each, e.g. Kamakhya
+   `priya.care` / `Kamakhya@101`): a CRM scoped to that temple only — Work queue,
+   All history (table + CSV export), SLA & escalations, Cancellations, Message log,
+   auto-assign agent, edit booking, confirm call, send balance link / OTP.
+   Isolation covers bookings, the Activity feed, and the (hidden) role tabs.
+4. **Devotee privacy in CC**: names `Sur**** Cho****`, phones `+91 9000*****`,
+   Internet-call only (no direct Call / WhatsApp to devotees). Agent/pandit contact stays real.
+5. Other roles (Devotee, Agent, Pandit mobile-style apps) exist in the file but are
+   only reachable by a signed-in admin via the top role tabs.
+6. All data is in-memory + `localStorage` (`namonamaha-care-demo-v11`). No backend.
+
+## What to build in the separate `admin-portal` (suggested scope)
+
+This repo already prototypes the admin side of temple customer care; the real
+`admin-portal` should own it properly. Build there:
+- **Real authentication** for admins (hashed passwords, sessions) — this repo's admin
+  login is a plaintext demo check.
+- **Temple customer care management**: list all temples with a **search box** (100s of
+  temples) and collapsible logins; create / edit / deactivate a temple's CC login;
+  admin-set passwords stored **hashed**, never displayed in full (mask by default, reset
+  instead of reveal is safer); one credential set per temple, uniqueness enforced.
+- **"Open temple CC"** as a real handoff: a signed, short-lived link/token from
+  admin-portal to this customer-care app (never a bare URL param), plus the
+  per-temple sign-in step this repo already does. Needs a shared backend.
+- A **shared backend/database** (bookings, agents, pandits, CC users, temples) so both
+  apps read the same data — today each has its own in-memory copy.
+- Admin views this repo dropped from its sidebar and that belong in admin-portal:
+  Overview, Bookings, Details of devotees (unmasked, with export), Temples, Puja
+  catalogue, Payout rules, Agents & pandits (roster, phones, capacity, temple
+  coverage), Blackout calendar, Payments & settlement, Roles & permissions, Settings.
+  (Their reference implementations still live in `index.html`: `adDash`, `adBookings`,
+  `adDevotees`, `adPeople`, `adPayments`, …)
+- Keep the **rules from this portal**: temple isolation for CC, devotee masking in CC,
+  admin sees real data.
+
 ## 1. What this is
 
 **Namonamaha** is a temple-puja booking service. A devotee books a puja online or
@@ -61,7 +105,7 @@ CONFIG → DATA → STORE → UI → SCREENS → ROUTER
 **State persistence**: everything in `S` is transient (reset on every page
 load). What persists is the demo business data — `DB`, `TEMPLES`, `PUJAS`,
 `AGENTS`, `PANDITS`, `CARE_USERS`, `ADMIN_USERS`, `BLACKOUTS` — serialized to
-`localStorage` under a versioned key, currently `namonamaha-care-demo-v8`
+`localStorage` under a versioned key, currently `namonamaha-care-demo-v11`
 (`STORAGE_KEY`). **Any change to the shape of one of those arrays must bump
 this version number**, or a browser with old cached data will silently keep
 replaying stale state forever (`seed()` always runs first, then
@@ -69,23 +113,15 @@ replaying stale state forever (`seed()` always runs first, then
 This has caused real, confusing bugs before — treat the bump as a mandatory
 part of the change, not an afterthought.
 
-One separate, **deliberately non-versioned** localStorage key exists:
-`nm_care_seats` (see §8) — it's live session-coordination state, not demo
-business data, so it isn't part of the save/restore blob.
-
 ## 4. Roles & screens
 
 Five roles, switched via top tab bar (`ROLE_TABS`): **Devotee** (`user`),
 **Customer care** (`cc`), **Agent** (`agent`), **Pandit** (`pandit`). **Admin**
-(`admin`) is a fifth role that exists but is deliberately **not** in the top
-tab bar — the only way in is a footer link on the Customer Care login screen
-("Care team access"). See §11 for what Admin can do, and the important caveat
-about it having no login gate yet.
+(`admin`) is a fifth role, not in the top tab bar — admins sign in through the
+same login form as customer care staff (see §8).
 
-The top role tabs themselves are **hidden entirely** until Customer Care is
-signed in (`S.role!=='cc' || !!S.careUser` gates whether `#roles` renders
-anything) — a deliberate choice so an unauthenticated visitor can't jump
-straight to the Agent/Pandit/Devotee views from the CC login screen.
+The top role tabs are shown **only to a signed-in admin** (`S.adminUser`); temple
+customer care staff never see them, so they can't reach other roles' screens.
 
 ## 5. Data model (the globals)
 
@@ -95,18 +131,15 @@ straight to the Agent/Pandit/Devotee views from the CC login screen.
   subscription) — id, templeId, mode, price, lead time, payout split
   (`pujari`/`samagri`/`agent`/… as fixed amounts or percentages).
 - **`AGENTS`** (20) — id, name, phone, which temples they cover, active flag,
-  shift string, and **`careTeam:'A'|'B'`** (see §8).
+  shift string.
 - **`PANDITS`** (~83) — id, name, phone, home temple, `agentIds` (which
-  agent(s) they work under), skills, daily capacity, leave flags. A pandit's
-  desk is **derived**, not stored: `panditTeam(d)` looks up
-  `agent(d.agentIds[0]).careTeam`.
+  agent(s) they work under), skills, daily capacity, leave flags.
 - **`CARE_USERS`** — Customer Care staff logins (`id`, `name`, `loginId`,
   `password` — plaintext, explicitly flagged as demo-only). Managed **only**
-  from Admin → Care team access; there is no self-service signup or password
-  change. The desk (A/B) is **not** part of a `CARE_USER` record — it's chosen
-  at sign-in time (§8).
+  from Admin → Temple customer care; there is no self-service signup or password
+  change. Everyone signs in through the same single login form.
 - **`ADMIN_USERS`** — a separate, higher-privilege account set (currently one
-  seeded account, `admin` / `Admin@123`). See §11 for the important gap here.
+  seeded account, `admin` / `Admin@123`). Admins sign in through the shared login form (§8).
 - **`BLACKOUTS`** — temple-closure date ranges that block or warn on new
   bookings.
 - **`DB.bookings`** — the actual booking records (see §6). **`DB.events`** —
@@ -118,9 +151,7 @@ A booking (`mkBooking()` factory) carries: identity (`id`, `clientId`,
 `email`, `city`, `dob`, `pob`, `wish`), which temple/puja/agent/pandit it's
 assigned to, money fields (`amount`, `advanceAmt`, `balanceAmt`, paid flags),
 status (see §6), OTP/arrival codes, `callLog`, `timeline`, `audit`,
-`reminders`, and — new — **`careTeam:'A'|'B'`**, assigned round-robin at
-creation (`bookingNo%2`) so clients are split evenly between the two desks
-the instant they book, independent of when/whether an agent gets assigned.
+`reminders`.
 
 ## 6. Booking lifecycle
 
@@ -140,62 +171,36 @@ Every person's phone number gets a small icon row (`contactIconBtns` — real
 WhatsApp link), used consistently everywhere a name appears: Devotee, Agent,
 Pandit alike — **except** for one deliberate carve-out described next.
 
-## 8. The two customer-care-desk system
+## 8. Login flow and temple-wise customer care
 
-This is the newest, largest piece of architecture in the app — read this
-whole section before changing anything CC-related.
+**One login form** (`careLoginScreen`) is the entry point. `cc-login` checks
+`ADMIN_USERS` first, then `CARE_USERS`:
+- **Admin** (seed: `admin` / `Admin@123`) → lands directly on the Admin panel,
+  which now has a **single tab, "Temple customer care"**. `adminScreen()` is
+  login-gated (`S.adminUser`); the old footer link to admin was removed and the
+  other admin tab functions (`adDash`, `adBookings`, `adPeople`, …) still exist
+  in the file but are no longer reachable from the sidebar.
+- **Temple staff** (`CARE_USERS[].templeId`) → land straight in their own
+  temple's portal.
 
-**Why it exists**: the business runs two customer-care teams against the
-same client base — "Desk A" and "Desk B" — 10 agents and roughly half the
-pandits each, so bookings, agents and pandits are split evenly across both.
-A person signed into one desk must never see the other desk's queue. Admin
-sees both, always.
+**Temple-wise**: each temple (T1–T8) has its own CC login(s), each with a
+**different password** (seeded `Kamakhya@101`, `Bagala@102`, …). A CC session is
+scoped to its temple via `ccTempleId()` / `scopeBk()` (queue, All history, SLAs,
+cancellations, auto-assign).
 
-**Roster**: `AGENTS` carry `careTeam:'A'|'B'` directly. Pandits inherit it
-from their agent (`panditTeam()`). The 6 originally hand-authored agents (and
-their 13 pandits) were kept as-is and tagged; 14 more agents (and 5 pandits
-each) were generated programmatically in a `growRosterToTwoDesks()` IIFE
-right after the hand-authored arrays, to reach 10/10 without hand-typing ~150
-records. (Total pandits landed around 83, not exactly 100, because the
-original 13 weren't evenly distributed — flagged as an approximation, not a
-bug, if you go looking for exactly 100.)
+**Admin opening a temple's portal**: Temple customer care lists every temple
+with its logins (admin sees and can edit every ID, password and temple). Clicking
+"Open <temple> customer care →" (`ad-open-cc`) shows a **sign-in pop-up**
+(`templeLoginModal`, state `S.templeLogin`) that only accepts that temple's own
+credentials (`ad-temple-login`). On success the temple's CC portal opens with
+`S.fromAdmin=true`, showing a "← Back to admin" button (`cc-back-admin`) instead
+of Log out. Admin has no bypass — by design, the temple's password gates it.
 
-**Booking → desk**: every booking gets `careTeam` at creation (`mkBooking`),
-round-robin — **not** derived from whichever agent ends up assigned. This
-means desk-scoping works even before a booking has an agent.
+History: a Desk A/B split with a seat lock was built then removed by the user;
+don't reintroduce it. Roster: 20 agents, ~83 pandits (`growRoster()`).
 
-**Isolation, enforced twice**:
-1. `seatBookings(list)` / `seatAgents(list)` helpers filter to `S.careSeat`
-   whenever `S.role==='cc'` (no-op for every other role). Used in `ccQueue`,
-   `ccHistory` (`devoteesDirectoryBody`/`filteredDevotees`), `ccSla`,
-   `ccCancel`, `ccTemple`, `agentRoster`, `agentOptions`,
-   `autoAssignOne`/`autoAssignEligible`, `panditsFor`.
-2. `agentAvailability()` **hard-rejects** an agent whose `careTeam` doesn't
-   match the booking's `careTeam`, as a second line of defence so even a
-   manual override can't cross desks.
-
-**Login — "Log in A" / "Log in B"**: the same `CARE_USERS` credentials work
-for either desk; the desk is picked at sign-in, not tied to an account.
-Occupancy is a **same-browser, cross-tab lock** — `localStorage['nm_care_seats']`
-holds `{A: {userId,name,at}|null, B: {...}|null}`. Claiming/releasing goes
-through `claimSeat()`/`releaseSeat()`. A `window.addEventListener('storage', …)`
-re-renders other tabs live when a seat changes; `beforeunload` best-effort
-releases the seat on tab close/reload.
-
-**Important, honestly-disclosed limitation**: this is a pure client-side app
-with **no backend**, so the lock can only coordinate tabs on the *same
-browser*. It cannot make a desk "occupied" across two different people's
-computers — there is no server to ask. If a real multi-machine lock is
-needed, that requires an actual backend (a small API + a real DB or even
-just a serverless key-value store), which is outside what this static
-prototype can do.
-
-**Admin oversight**: Admin → Care team access → "Both desks, live" shows both
-desks' current occupant, since-when, open-booking counts, and a **Force
-release** button per desk (for when the automatic release doesn't fire — a
-crash, a killed browser). Admin → Agents & pandits shows each agent's desk
-with a toggle to move them (pandits move with their agent automatically,
-since the desk is derived).
+The separate `admin-portal` project can't do this itself (different origin, no
+shared data); it would need a backend with real per-temple credentials/tokens.
 
 ## 9. Devotee PII masking (Customer Care only)
 
@@ -235,51 +240,44 @@ used to route around the on-screen masking.
 `care:'masked'` (was `'lock'`) in the `PERMS` table — `admin` is always
 `'edit'` regardless of this table (see `can()`), so Admin is unaffected.
 
-## 10. Admin panel — current capabilities
+## 10. Admin panel — current state
 
-Tabs (`adminScreen()`): Overview, Bookings, **Details of devotees** (same
-underlying table as CC's "All history", unmasked here), Temples, Puja
-catalogue, Payout rules, **Agents & pandits** (phone numbers, capacity,
-active flag, temple coverage, **desk A/B assignment**), **Care team access**
-(CC login management + the live desk-occupancy panel from §8), Blackout
-calendar, Payments & settlement, Roles & permissions (a read-only rendering
-of the `PERMS` table), Settings.
+Only one sidebar tab is reachable: **Temple customer care** (`adCareTeam()`), see §8
+and the TL;DR. Masked credentials with a per-person *Show / change* toggle
+(`maskCred`, `S.revealCred`); no add-login form. The other admin screens' code
+(`adDash`, `adBookings`, `adDevotees`, `adTemples`, `adPujas`, `adPayouts`,
+`adPeople`, `adBlackouts`, `adPayments`, `adPerms`, `adSettings`) is still in the
+file as reference but not wired into the sidebar.
 
-Everything Admin edits (an agent's phone, a pandit's capacity, a booking's
-temple) is read live by Customer Care/Agent/Pandit screens from the same
-in-memory arrays — there is no separate sync step, because it's the same
-objects, not a copy.
+Everything admin edits is read live by the customer care screens from the same
+in-memory arrays — no sync step, same objects.
 
 ## 11. Known gaps / open items in *this* app
 
-- **No login gate on the Admin panel itself.** `adminScreen()` — the
-  function, not just a screen — has no auth check. `ADMIN_USERS` exists as a
-  data array and the only entry point is one footer link, but anyone who
-  reaches `admin.*` gets straight into full control: CC credential
-  management, both desks' live data, every booking's full unmasked PII.
-  This is the single biggest thing to fix before this is more than a demo.
-  The shape of the fix is already scoped (mirror `careLoginScreen()`/
-  `ccScreen()`'s gate pattern exactly, with `S.adminUser` instead of
-  `S.careUser`) but not built.
+- The admin login is a client-side check against plaintext demo passwords
+  (`ADMIN_USERS`, seed `admin` / `Admin@123`) — fine for a demo, not real
+  security. Real auth needs a backend.
+- The Admin sidebar is a single tab; other admin screens are unreachable (§10).
+- Anyone reading the page source/localStorage can see the plaintext demo
+  passwords — masking is a UI measure only.
+- With 100s of temples the Temple customer care list will need a search box
+  and collapsible logins.
 - The header search bar (`.dash-search`, "Search bookings, devotees,
   pujas…") is permanently `disabled` — decorative only, never wired up.
-- The two-desk seat lock is same-browser only (§8) — a real fix needs a
-  backend.
-- Pandit count landed at ~83, not exactly 100 (§8) — cosmetic, not
+- Pandit count is ~83 rather than a round 100 (§8) — cosmetic, not
   functional.
 
 ## 12. Relationship to the separate `admin-portal` project
 
 **`admin-portal` is a completely different codebase** at
 `/Users/suranjeet/admin-portal/`, built and maintained separately by the
-user. It is *not* the "Admin panel" role described in §10/§11 above, which
+user. It is *not* the "Admin panel" role described in §8 above, which
 lives entirely inside this repo's `index.html`. Do not assume Claude working
 in `admin-portal` has any access to this repo, its `DB`/`AGENTS`/`PANDITS`
 arrays, or anything else described in this file — they're different
 origins, different processes, and were explicitly kept unsynced by the
 user's own choice ("I'll edit that admin portal separately later on"). If
-work in `admin-portal` needs to reflect concepts from here (the two-desk
-model, the masking rules, the data shapes), **read this file for the
+work in `admin-portal` needs to reflect concepts from here (the masking rules, the data shapes), **read this file for the
 concepts, then re-implement them against `admin-portal`'s own actual code**
 — don't assume any file, function or variable name here exists over there
 without checking.

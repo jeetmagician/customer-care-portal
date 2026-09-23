@@ -896,12 +896,12 @@ let PUJAS=[
 ];
 
 let AGENTS=[
- {id:'A1',name:'Pintu Sarma',phone:'+91 90000 10011',temples:['T1','T2'],active:true,shift:'6:00 AM – 2:00 PM',careTeam:'A'},
- {id:'A2',name:'Bhaskar Das',phone:'+91 90000 10012',temples:['T1','T2'],active:true,shift:'10:00 AM – 6:00 PM',careTeam:'A'},
- {id:'A3',name:'Ranjan Kalita',phone:'+91 90000 10013',temples:['T3','T4','T5','T6'],active:true,shift:'6:00 AM – 2:00 PM',careTeam:'A'},
- {id:'A4',name:'Hemanta Boro',phone:'+91 90000 10014',temples:['T1','T5'],active:false,shift:'On leave until 28 Sept',careTeam:'B'},
- {id:'A5',name:'Madhab Dutta',phone:'+91 90000 10015',temples:['T3','T4','T5','T6'],active:true,shift:'10:00 AM – 6:00 PM',careTeam:'B'},
- {id:'A6',name:'Nirmal Kalita',phone:'+91 90000 10016',temples:['T1','T2'],active:true,shift:'6:00 AM – 2:00 PM',careTeam:'B'}
+ {id:'A1',name:'Pintu Sarma',phone:'+91 90000 10011',temples:['T1','T2'],active:true,shift:'6:00 AM – 2:00 PM'},
+ {id:'A2',name:'Bhaskar Das',phone:'+91 90000 10012',temples:['T1','T2'],active:true,shift:'10:00 AM – 6:00 PM'},
+ {id:'A3',name:'Ranjan Kalita',phone:'+91 90000 10013',temples:['T3','T4','T5','T6'],active:true,shift:'6:00 AM – 2:00 PM'},
+ {id:'A4',name:'Hemanta Boro',phone:'+91 90000 10014',temples:['T1','T5'],active:false,shift:'On leave until 28 Sept'},
+ {id:'A5',name:'Madhab Dutta',phone:'+91 90000 10015',temples:['T3','T4','T5','T6'],active:true,shift:'10:00 AM – 6:00 PM'},
+ {id:'A6',name:'Nirmal Kalita',phone:'+91 90000 10016',temples:['T1','T2'],active:true,shift:'6:00 AM – 2:00 PM'}
 ];
 let PANDITS=[
  {id:'D1',name:'Dhiren Sarma',phone:'+91 90000 20021',temple:'T1',agentIds:['A1'],skills:'Sadha, Bali',cap:3,active:true,leave:[]},
@@ -918,10 +918,9 @@ let PANDITS=[
  {id:'D12',name:'Dipak Goswami',phone:'+91 90000 20032',temple:'T5',agentIds:['A5'],skills:'Navagraha Shanti',cap:2,active:true,leave:[]},
  {id:'D13',name:'Suresh Barua',phone:'+91 90000 20033',temple:'T6',agentIds:['A5'],skills:'Rudrabhishek',cap:3,active:true,leave:[]}
 ];
-/* ---- grow the roster to the two-desk target: 10 agents and 50 pandits per desk
-   (20 agents / 100 pandits total), generated so the equal-distribution and desk-isolation
-   features have real scale to run against, without hand-typing ~180 records. ---- */
-(function growRosterToTwoDesks(){
+/* ---- grow the roster to 20 agents with 5 pandits each, generated rather than hand-typed,
+   so equal-distribution has real scale to run against. ---- */
+(function growRoster(){
   const firstNames=['Ratul','Bikash','Dipankar','Mrinmoy','Kishore','Partha','Anup','Sanjib','Gautam','Pranjal',
     'Ajoy','Bhupen','Diganta','Utpal','Kamal','Hiren','Manas','Robin','Sourav','Nayan','Ankur','Bidyut','Chandan','Deepjyoti'];
   const lastNames=['Bora','Baruah','Deka','Saikia','Gogoi','Hazarika','Phukan','Bhuyan','Rajkhowa','Mahanta','Talukdar','Choudhury'];
@@ -930,13 +929,13 @@ let PANDITS=[
   const shifts=['6:00 AM – 2:00 PM','10:00 AM – 6:00 PM'];
   const templeGroups=[['T1','T2'],['T3','T4','T5','T6']];
   let seq=7, pseq=14;
-  ['A','B'].forEach(team=>{
-    const need=10-AGENTS.filter(a=>a.careTeam===team).length;
+  {
+    const need=20-AGENTS.length;
     for(let i=0;i<need;i++){
       const fn=firstNames[seq%firstNames.length], ln=lastNames[(seq*3)%lastNames.length];
       const grp=templeGroups[seq%2];
       const newAgent={id:'A'+seq,name:fn+' '+ln,phone:'+91 90000 1'+String(1000+seq).slice(-4),
-        temples:grp.slice(),active:true,shift:shifts[seq%2],careTeam:team};
+        temples:grp.slice(),active:true,shift:shifts[seq%2]};
       AGENTS.push(newAgent);
       for(let j=0;j<5;j++){
         const dfn=firstNames[(pseq*5)%firstNames.length], dln=lastNames[(pseq*7)%lastNames.length];
@@ -947,13 +946,18 @@ let PANDITS=[
       }
       seq++;
     }
-  });
+  }
 })();
 /* customer care staff logins — created and reset from Admin panel → Care team access */
 let CARE_USERS=[
- {id:'U1',name:'Priya Sharma',loginId:'priya.care',password:'Namo@123',active:true},
- {id:'U2',name:'Rahul Verma',loginId:'rahul.care',password:'Namo@123',active:true},
- {id:'U3',name:'Nibedita Gogoi',loginId:'nibedita.care',password:'Namo@123',active:false}
+ {id:'U1',name:'Priya Sharma',loginId:'priya.care',password:'Kamakhya@101',active:true,templeId:'T1'},
+ {id:'U2',name:'Rahul Verma',loginId:'rahul.care',password:'Bagala@102',active:true,templeId:'T2'},
+ {id:'U3',name:'Nibedita Gogoi',loginId:'nibedita.care',password:'Umananda@103',active:false,templeId:'T3'},
+ {id:'U4',name:'Asha Gogoi',loginId:'asha.care',password:'Ugratara@104',active:true,templeId:'T4'},
+ {id:'U5',name:'Bikash Deka',loginId:'bikash.care',password:'Navagraha@105',active:true,templeId:'T5'},
+ {id:'U6',name:'Manas Bora',loginId:'manas.care',password:'Lankeshwar@106',active:true,templeId:'T6'},
+ {id:'U7',name:'Ratul Saikia',loginId:'ratul.care',password:'Jagannath@107',active:true,templeId:'T7'},
+ {id:'U8',name:'Dipa Talukdar',loginId:'dipa.care',password:'Kalighat@108',active:true,templeId:'T8'}
 ];
 /* admin logins — a separate, higher-privilege account set from customer care staff */
 let ADMIN_USERS=[
@@ -984,16 +988,16 @@ const pandit=id=>PANDITS.find(d=>d.id===id);
 const careUser=id=>CARE_USERS.find(u=>u.id===id);
 const adminUser=id=>ADMIN_USERS.find(u=>u.id===id);
 const bk    =id=>DB.bookings.find(b=>b.id===id);
-/* a pandit's care desk is inherited from the team of their (first) agent */
-function panditTeam(d){ const a=(d.agentIds||[]).map(agent).find(Boolean); return a?a.careTeam:null; }
-/* bookings for the seat currently signed in to Customer care; everyone else (admin) sees all */
-function seatBookings(list){
-  return (S.role==='cc'&&S.careSeat)?list.filter(b=>b.careTeam===S.careSeat):list;
+/* Customer care is temple-wise: a CC login (or an admin opening a temple's portal) only
+   works the bookings of that one temple. No temple on the login = sees every temple. */
+function ccTempleId(){
+  if(S.role!=='cc') return null;
+  const u=S.careUser?careUser(S.careUser):null;
+  return (u&&u.templeId)||null;
 }
-/* agents visible to the current care seat; admin and other roles see everyone */
-function seatAgents(list){
-  return (S.role==='cc'&&S.careSeat)?list.filter(a=>a.careTeam===S.careSeat):list;
-}
+function scopeBk(list){ const t=ccTempleId(); return t?list.filter(b=>b.templeId===t):list; }
+const ccScopeLabel=()=>{ const t=ccTempleId(); return t?temple(t).name:'All temples'; };
+
 
 const fmtDate=ts=>new Date(ts).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
 const fmtTime=ts=>new Date(ts).toLocaleTimeString('en-IN',{hour:'numeric',minute:'2-digit',hour12:true});
@@ -1005,6 +1009,7 @@ function mask(p){return String(p).replace(/(\+91 \d{2})\d{3} \d{2}(\d{3})/,'$1�
 /* Devotee PII masking for customer care — keeps the first few characters/digits so a
    handler can still recognise a repeat caller, but never sees enough to reuse the data
    outside the platform. See PERMS['booking.devotee.name'/'phone'] care:'masked'. */
+function maskCred(v){ return String(v||'').slice(0,2)+'*****'; }
 function maskName(name){
   return String(name||'').split(' ').filter(Boolean).map(w=>w.length<=3?w:w.slice(0,3)+'****').join(' ')||'—';
 }
@@ -1048,7 +1053,6 @@ function templeOpenAt(templeId,ts){
 }
 function agentAvailability(b,a,ts){
   if(!a) return {free:false,reason:'Agent not found'};
-  if(b.careTeam&&a.careTeam&&b.careTeam!==a.careTeam) return {free:false,reason:'On the other customer care desk'};
   if(!a.temples.includes(b.templeId)) return {free:false,reason:'Does not cover this temple'};
   if(!a.active) return {free:false,reason:a.shift.startsWith('On leave')?a.shift:'Off duty'};
   const match=a.shift.match(/(\d{1,2}):(\d{2}) (AM|PM) – (\d{1,2}):(\d{2}) (AM|PM)/);
@@ -1070,7 +1074,7 @@ const whatsappUrl=(phone,text)=>'https://wa.me/'+String(phone).replace(/\D/g,'')
 const agentNameId=id=>id?esc(agent(id).name)+' <span class="mono sub">('+esc(id)+')</span>':'Not assigned';
 const panditNameId=id=>id?esc(pandit(id).name)+' <span class="mono sub">('+esc(id)+')</span>':'Not assigned';
 function agentRoster(b,ts,interactive=true){
-  const members=AGENTS.filter(a=>a.temples.includes(b.templeId)&&(!b.careTeam||!a.careTeam||a.careTeam===b.careTeam));
+  const members=AGENTS.filter(a=>a.temples.includes(b.templeId));
   return members.map(a=>{
     const status=agentAvailability(b,a,ts);
     const count=PANDITS.filter(d=>d.temple===b.templeId&&(d.agentIds||[]).includes(a.id)).length;
@@ -1082,7 +1086,7 @@ function agentRoster(b,ts,interactive=true){
   }).join('')||'<div class="sub">No agents cover this temple yet.</div>';
 }
 function agentOptions(b,ts,selectedId=b.agentId,preserveId=null){
-  return '<option value="">— choose —</option>'+AGENTS.filter(a=>a.temples.includes(b.templeId)&&(!b.careTeam||!a.careTeam||a.careTeam===b.careTeam)).map(a=>{
+  return '<option value="">— choose —</option>'+AGENTS.filter(a=>a.temples.includes(b.templeId)).map(a=>{
     const st=agentAvailability(b,a,ts);
     const keep=a.id===preserveId;
     return '<option value="'+a.id+'"'+(a.id===selectedId&&(st.free||keep)?' selected':'')+(st.free||keep?'':' disabled')+'>'+esc(a.name)+' ('+esc(a.id)+') · '+(st.free?'available':keep?'currently assigned · '+esc(st.reason):esc(st.reason))+'</option>';
@@ -1090,8 +1094,7 @@ function agentOptions(b,ts,selectedId=b.agentId,preserveId=null){
 }
 function panditsFor(b,agentId){
   const day=dstr(b.pujaAt);
-  return PANDITS.filter(d=>d.temple===b.templeId&&(!agentId||(d.agentIds||[]).includes(agentId))&&
-    (!b.careTeam||!panditTeam(d)||panditTeam(d)===b.careTeam)).map(d=>{
+  return PANDITS.filter(d=>d.temple===b.templeId&&(!agentId||(d.agentIds||[]).includes(agentId))).map(d=>{
     const booked=DB.bookings.filter(x=>x.pandaId===d.id&&x.id!==b.id&&dstr(x.pujaAt)===day&&x.status!=='CANCELLED').length;
     const clash=DB.bookings.some(x=>x.pandaId===d.id&&x.id!==b.id&&x.status!=='CANCELLED'&&Math.abs(x.pujaAt-b.pujaAt)<90*MIN);
     const onLeave=d.leave.includes('absent-today')&&day===dstr(SIM);
@@ -1187,8 +1190,6 @@ function mkBooking(o){
   return Object.assign({
     id:'NMH-'+bookingNo, clientId:sameClient?sameClient.clientId:'CL-'+bookingNo, poojaBookingId:'PJ-'+bookingNo,
     source:'Website', mode:p.mode, createdAt:SIM,
-    /* every client is split evenly between the two customer care desks at the moment of booking */
-    careTeam:bookingNo%2===0?'A':'B',
     devotee:{name:'',gotra:'',phone:'',email:'',city:'',dob:'',pob:'',wish:''},
     sankalpaNames:[], language:'English',
     templeId:p.templeId, pujaId:p.id,
@@ -1319,9 +1320,9 @@ function reassignAgent(b,agentId,role){
   return true;
 }
 /* ---- auto-assign agent (bulk) ---- */
-const autoAssignEligible=()=>seatBookings(DB.bookings).filter(b=>b.balancePaid&&!b.agentId&&b.status!=='CANCELLED'&&MODES[b.mode].needsAgent);
+const autoAssignEligible=()=>scopeBk(DB.bookings).filter(b=>b.balancePaid&&!b.agentId&&b.status!=='CANCELLED'&&MODES[b.mode].needsAgent);
 function autoAssignOne(b,role){
-  const covering=AGENTS.filter(a=>a.temples.includes(b.templeId)&&(!b.careTeam||!a.careTeam||a.careTeam===b.careTeam));
+  const covering=AGENTS.filter(a=>a.temples.includes(b.templeId));
   const available=covering.filter(a=>agentAvailability(b,a,b.pujaAt).free);
   if(!available.length) return {bookingId:b.id,ok:false,reason:'No agent at '+temple(b.templeId).name+' is available for this pooja time.'};
   const withPandit=available.filter(a=>panditsFor(b,a.id).some(x=>x.free));
@@ -1723,7 +1724,7 @@ function seed(){
   ev('Push','Escalation raised — NMH-1038','No pandit free for this puja. Puja is in 23h. Routed to customer care.','NMH-1038','nm_escalation');
   DB.events.sort((a,c)=>c.at-a.at);
   S={role:'cc',sub:'queue',id:null,draft:{},device:'desktop',open:null,noteDraft:'',modal:null,
-    careUser:null,careSeat:null,loginError:'',loginDraft:'',pwDraft:'',pwShow:false,
+    careUser:null,fromAdmin:false,templeLogin:null,revealCred:{},loginError:'',loginDraft:'',pwDraft:'',pwShow:false,
     adminUser:null,adminLoginError:'',adminLoginDraft:'',adminPwDraft:'',adminPwShow:false,
     devFilter:{type:'all',pay:'all',from:'',to:'',q:'',letter:'',expFrom:'',expTo:''}};
   ME_AGENT='A1'; ME_PANDIT='D1';
@@ -1782,7 +1783,7 @@ function devoteeContactCC(maskedName){
 }
 function filteredDevotees(from,to){
   const f=S.devFilter;
-  return seatBookings(DB.bookings).filter(b=>{
+  return scopeBk(DB.bookings).filter(b=>{
     if(f.type!=='all'&&b.mode!==f.type) return false;
     if(f.pay!=='all'&&devoteeStatus(b)!==f.pay) return false;
     if(from&&dstr(b.pujaAt)<from) return false;
@@ -2296,23 +2297,20 @@ function uFeedback(){
    ========================================================================== */
 function ccScreen(){
   const user=S.careUser?careUser(S.careUser):null;
-  if(!user||!user.active||!S.careSeat){ if(S.careSeat) releaseSeat(S.careSeat); S.careUser=null; S.careSeat=null; return careLoginScreen(); }
+  if(!user||!user.active){ S.careUser=null; return careLoginScreen(); }
   const tabs=[['queue','Work queue'],['history','All history'],['sla','SLA & escalations'],['cancellations','Cancellations'],['templates','Message log']];
   const sub=S.sub||'queue';
   const body = sub==='booking'?ccBooking():sub==='temple'?ccTemple():sub==='agent'?ccAgentView():
     sub==='sla'?ccSla():sub==='cancellations'?ccCancel():sub==='templates'?ccTemplates():sub==='history'?ccHistory():ccQueue();
-  const userBadge='<div class="cc-user-badge"><span class="who">Signed in as <b>'+esc(user.name)+'</b> <span class="pill p-flow">Desk '+esc(S.careSeat)+'</span></span>'+
+  const userBadge=S.fromAdmin?
+    '<div class="cc-user-badge"><span class="who">'+esc(temple(user.templeId).name)+' · opened by <b>Admin</b></span>'+
+    '<button class="btn btn-sm" data-act="cc-back-admin">← Back to admin</button></div>':
+    '<div class="cc-user-badge"><span class="who">Signed in as <b>'+esc(user.name)+'</b></span>'+
     '<button class="btn btn-sm" data-act="cc-logout">Log out</button></div>';
   return dashShell('cc','Care CRM',tabs,['booking','temple','agent'].includes(sub)?'queue':sub,body,{logo:true,userHtml:userBadge,wallpaper:true})+
     (S.modal?ccModal():'')+autoAssignPanel();
 }
 function careLoginScreen(){
-  const seats=readSeats();
-  const seatBtn=seat=>{
-    const occ=seats[seat];
-    return '<button type="button" class="btn btn-pri btn-wide seat-btn" style="margin-top:6px" data-act="cc-login" data-v="'+seat+'"'+(occ?' disabled':'')+'>'+
-      (occ?'Desk '+seat+' — occupied by '+esc(occ.name):'Log in '+seat)+'</button>';
-  };
   return '<div class="care-login-wrap">'+
    '<div class="sky"><div class="nebula"></div><div class="moon"></div><div class="stars"></div><div class="stars2"></div></div>'+
    '<div class="care-login-card">'+
@@ -2320,7 +2318,7 @@ function careLoginScreen(){
    '<img src="logo-transparent.png?v=2" alt="Namonamaha" class="care-login-logo">'+
    '<div class="eyebrow" style="text-align:center">Customer care portal</div>'+
    '<h1 class="h-page" style="text-align:center">Staff sign in</h1>'+
-   '<p class="sub" style="text-align:center;margin:0 0 18px">Use the login ID and password issued by your admin, then choose a free desk. Both desks share the same logins; each desk only sees its own clients.</p>'+
+   '<p class="sub" style="text-align:center;margin:0 0 18px">Sign in with the login ID and password issued to you. Admins sign in here too.</p>'+
    (S.loginError?'<div class="stopbox" style="margin-bottom:14px"><h4>'+esc(S.loginError)+'</h4></div>':'')+
    '<div class="fld"><label class="f" for="cli">Login ID</label><input class="inp" id="cli" autocomplete="username" placeholder="e.g. priya.care" value="'+esc(S.loginDraft||'')+'"></div>'+
    '<div class="fld"><label class="f" for="clp">Password</label><div class="pw-wrap">'+
@@ -2330,10 +2328,8 @@ function careLoginScreen(){
      '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 19c-7 0-11-7-11-7a21.3 21.3 0 0 1 5.06-5.94M9.9 4.24A10.94 10.94 0 0 1 12 4c7 0 11 7 11 7a21.3 21.3 0 0 1-3.22 4.19M14.12 14.12a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>'
      :'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"/><circle cx="12" cy="12" r="3"/></svg>')+
    '</button></div></div>'+
-   '<div class="grid g2" style="gap:8px">'+seatBtn('A')+seatBtn('B')+'</div>'+
-   '<p class="sub" style="text-align:center;margin:10px 0 0">A desk already in use is locked to everyone else until that person logs out — it frees up live, on this browser, without a refresh.</p>'+
-   '<p class="sub" style="text-align:center;margin:12px 0 0">Login IDs and passwords are created and reset by '+who('Admin')+' — '+
-   '<button class="text-link" data-act="go" data-go="admin.careteam">Care team access</button>.</p>'+
+   '<button class="btn btn-pri btn-wide" style="margin-top:6px" data-act="cc-login">Log in</button>'+
+   '<p class="sub" style="text-align:center;margin:16px 0 0">Login IDs and passwords are created and reset by '+who('Admin')+'.</p>'+
    '</div></div>';
 }
 function ccModal(){
@@ -2365,8 +2361,8 @@ function ccTemple(){
   const inModal=S.modal&&S.modal.type==='temple';
   const t=temple(inModal?S.modal.templeId:S.id); if(!t) return ccQueue();
   const target=bk(S.templeFrom), context=target&&target.templeId===t.id?target:{id:'preview',templeId:t.id,pujaAt:SIM};
-  const agents=seatAgents(AGENTS.filter(a=>a.temples.includes(t.id)));
-  const active=seatBookings(DB.bookings).filter(b=>b.templeId===t.id&&!['CANCELLED','COMPLETED','SETTLED'].includes(b.status));
+  const agents=AGENTS.filter(a=>a.temples.includes(t.id));
+  const active=scopeBk(DB.bookings).filter(b=>b.templeId===t.id&&!['CANCELLED','COMPLETED','SETTLED'].includes(b.status));
   return (inModal?'':crumb([{t:'Work queue',go:'cc.queue'},...(target?[{t:devDisplayName(target),go:'cc.booking',id:target.id}]:[]),{t:t.name}]))+
    (inModal&&S.modal.notice?'<div class="okbox" role="status"><h4>'+esc(S.modal.notice)+'</h4></div>':'')+
    '<div class="eyebrow">Temple staffing · '+esc(t.city)+', '+esc(t.state)+'</div><h1 class="h-page">'+esc(t.name)+'</h1>'+
@@ -2513,7 +2509,7 @@ function ccRow(b){
    '</div></div>';
 }
 function ccQueue(){
-  const A=seatBookings(DB.bookings);
+  const A=scopeBk(DB.bookings);
   const used=new Set();
   const pick=predicate=>{const rows=A.filter(b=>!used.has(b.id)&&predicate(b));rows.forEach(b=>used.add(b.id));return rows;};
   const running=pick(isPujaRunning);
@@ -2527,7 +2523,7 @@ function ccQueue(){
     '<p class="sub" style="margin:0 0 10px">'+esc(n)+'</p><div class="stack">'+l.map(ccRow).join('')+'</div>';
   const noAgent=autoAssignEligible();
   return '<div class="row" style="justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px">'+
-   '<div><div class="eyebrow">Customer care · Desk '+esc(S.careSeat||'')+'</div><h1 class="h-page">Work queue</h1></div>'+
+   '<div><div class="eyebrow">Customer care · '+esc(ccScopeLabel())+'</div><h1 class="h-page">Work queue</h1></div>'+
    '<button class="btn btn-pri" data-act="cc-auto-assign-start"'+(noAgent.length?'':' disabled')+'>Auto assign agent'+
    (noAgent.length?' <span class="pill p-mute" style="margin-left:6px;vertical-align:middle">'+noAgent.length+'</span>':'')+'</button></div>'+
    '<div class="grid g4" style="margin-top:12px">'+
@@ -2549,8 +2545,8 @@ function ccQueue(){
    sec('In progress and closed',rest,'No action pending from customer care.','p-mute');
 }
 function ccSla(){
-  const rows=seatBookings(DB.bookings).map(b=>({b,st:slaState(b)})).filter(x=>x.st.length);
-  return '<div class="eyebrow">Customer care · Desk '+esc(S.careSeat||'')+'</div><h1 class="h-page">SLA & escalations</h1>'+
+  const rows=scopeBk(DB.bookings).map(b=>({b,st:slaState(b)})).filter(x=>x.st.length);
+  return '<div class="eyebrow">Customer care · '+esc(ccScopeLabel())+'</div><h1 class="h-page">SLA & escalations</h1>'+
    trig(['Every SLA is measured from a real event, not from a shift start.',
          'A breach does not just colour a row — it fires '+code('nm_escalation')+' to the care lead over push and WhatsApp.',
          'The pandit-assignment SLA auto-escalates without anyone pressing anything.'])+
@@ -2571,8 +2567,8 @@ function ccSla(){
      '<td><span class="pill '+(r.sev==='high'?'p-stop':r.sev==='med'?'p-warn':'p-mute')+'">'+r.sev+'</span></td></tr>').join('')+'</tbody></table></div></div>';
 }
 function ccCancel(){
-  const cancelled=seatBookings(DB.bookings).filter(b=>b.cancellation);
-  return '<div class="eyebrow">Customer care · Desk '+esc(S.careSeat||'')+'</div><h1 class="h-page">Cancellations & refunds</h1>'+
+  const cancelled=scopeBk(DB.bookings).filter(b=>b.cancellation);
+  return '<div class="eyebrow">Customer care · '+esc(ccScopeLabel())+'</div><h1 class="h-page">Cancellations & refunds</h1>'+
    trig(['The refund band is computed from hours remaining before the puja. Care approves; '+who('Accounts')+' issues the Razorpay refund.',
          'A reschedule is always offered first — it keeps the revenue and the devotee.',
          'Refunds must settle within 5 working days, which is its own SLA.'])+
@@ -2606,7 +2602,7 @@ function ccBooking(){
   const b=bk(S.id); if(!b) return ccQueue();
   const p=puja(b.pujaId), t=temple(b.templeId), m=MODES[b.mode], role='care';
   const dName=devDisplayName(b), dPhone=devDisplayPhone(b);
-  const avail=AGENTS.filter(a=>a.temples.includes(b.templeId)&&(!b.careTeam||!a.careTeam||a.careTeam===b.careTeam));
+  const avail=AGENTS.filter(a=>a.temples.includes(b.templeId));
   const bo=blackoutOn(b.templeId,b.pujaAt);
   let panel='';
 
@@ -2990,14 +2986,25 @@ function pdBooking(){
    SCREENS — admin panel
    ========================================================================== */
 function adminScreen(){
-  const tabs=[['dash','Overview'],['bookings','Bookings'],['devotees','Details of devotees'],['temples','Temples'],['pujas','Puja catalogue'],
-    ['payouts','Payout rules'],['people','Agents & pandits'],['careteam','Care team access'],['blackouts','Blackout calendar'],
-    ['payments','Payments & settlement'],['perms','Roles & permissions'],['settings','Settings']];
-  const sub=S.sub||'dash';
-  const m={dash:adDash,bookings:adBookings,devotees:adDevotees,temples:adTemples,pujas:adPujas,payouts:adPayouts,people:adPeople,
-    careteam:adCareTeam,blackouts:adBlackouts,payments:adPayments,perms:adPerms,settings:adSettings,
-    pujaedit:adPujaEdit,bookedit:adBookEdit};
-  return dashShell('admin','Admin panel',tabs,(sub==='pujaedit'?'pujas':sub==='bookedit'?'bookings':sub),(m[sub]||adDash)());
+  const au=S.adminUser?adminUser(S.adminUser):null;
+  if(!au||!au.active){ S.adminUser=null; return careLoginScreen(); }
+  const m={careteam:adCareTeam,pujaedit:adPujaEdit,bookedit:adBookEdit};
+  const badge='<div class="cc-user-badge"><span class="who">Signed in as <b>'+esc(au.name)+'</b></span>'+
+    '<button class="btn btn-sm" data-act="ad-logout">Log out</button></div>';
+  return dashShell('admin','Admin panel',[['careteam','Temple customer care']],'careteam',(m[S.sub]||adCareTeam)(),
+    {logo:true,userHtml:badge,wallpaper:true})+(S.templeLogin?templeLoginModal():'');
+}
+function templeLoginModal(){
+  const t=temple(S.templeLogin.templeId);
+  return '<div class="care-modal" role="dialog" aria-modal="true" aria-label="Temple customer care sign in">'+
+    '<div class="care-modal-backdrop" data-act="ad-temple-login-close"></div>'+
+    '<section class="care-modal-panel edit" style="max-width:460px">'+
+    '<div class="care-modal-top"><strong>'+esc(t.name)+' · customer care</strong><button class="btn btn-sm" data-act="ad-temple-login-close" aria-label="Close">✕ Close</button></div>'+
+    '<div class="care-modal-content"><p class="sub" style="margin:0 0 14px">Enter this temple’s customer care login ID and password to open its portal. Each temple has its own.</p>'+
+    (S.templeLogin.error?'<div class="stopbox" style="margin-bottom:14px"><h4>'+esc(S.templeLogin.error)+'</h4></div>':'')+
+    '<div class="fld"><label class="f" for="tlid">Login ID</label><input class="inp" id="tlid" autocomplete="off" value="'+esc(S.templeLogin.idDraft||'')+'"></div>'+
+    '<div class="fld"><label class="f" for="tlpw">Password</label><input class="inp" id="tlpw" type="password" autocomplete="off"></div>'+
+    '<button class="btn btn-pri btn-wide" data-act="ad-temple-login">Open portal</button></div></section></div>';
 }
 function adDevotees(){ return devoteesDirectoryBody(); }
 function ccHistory(){ return devoteesDirectoryBody(); }
@@ -3006,14 +3013,13 @@ function devoteesDirectoryBody(){
   const letters='ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
   const cols=['Devotee','Pooja','Agent','Pandit','Pooja rate','Advance payment','Due','Full payment','Total','Date & time'];
   return '<div class="row" style="justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px">'+
-   '<div><div class="eyebrow">'+(S.role==='admin'?'Admin — both desks':'Customer care · Desk '+esc(S.careSeat||''))+' · directory</div><h1 class="h-page">All history — details of devotees</h1></div>'+
+   '<div><div class="eyebrow">'+(S.role==='admin'?'Admin':'Customer care · '+esc(ccScopeLabel()))+' · directory</div><h1 class="h-page">All history — details of devotees</h1></div>'+
    '<button class="btn btn-pri" data-act="ad-devotees-csv">Export CSV</button></div>'+
    '<p class="sub" style="max-width:70ch;margin:6px 0 0">Every offline, online and subscription booking in one searchable, filterable list — built for hundreds of devotees and repeat bookings, not a handful. Live payment status, a countdown to the pooja, and one-tap contact for the devotee, their agent and their pandit.</p>'+
    trig(['A booking counts as <b>fully paid</b> only once the balance has actually cleared — Full payment and Total never show for one that still has a Due amount, however close the date.',
          'A pooja the '+who('Onsite agent')+' or '+who('Pandit')+' has marked as started, but not yet closed with the completion code, shows a pulsing dot and <b>RUNNING</b> here.',
          isCareMasked()?'The devotee’s name and number are partially masked here, and only Internet call is offered — customer care never sees or dials the real number. Agent and pandit contact stay real.':
            'Call, Internet call and WhatsApp are all real, one-tap icons on every name — devotee, agent and pandit alike.',
-         isCareMasked()?'This list and its export only ever show your own desk’s bookings.':'',
          'Export has its own date range, separate from the filters above — leave it blank to export exactly what the filters currently show.'].filter(Boolean))+
    '<div class="card" style="margin-top:12px"><div class="grid g3">'+
    '<div class="ed"><label class="ed-l">Booking type</label><select class="inp" id="devtype">'+
@@ -3252,12 +3258,11 @@ function adPeople(){
   return '<h1 class="h-page">Agents & pandits</h1>'+
    trig(['Agents are mapped to temples. '+who('Customer care')+' can only assign an agent who covers that temple and is active.',
          'Pandits carry a daily capacity and a leave flag, so an absent or fully-booked pandit never appears in the '+who('Agent')+' picker.',
-         'Each agent belongs to Desk A or Desk B — 10 a side. A pandit inherits their desk from their agent, so a client is never handed from one desk’s agent to the other desk’s pandit.',
          'Ratings roll up from devotee feedback, per person — that is what makes them actionable.',
          'Deactivating someone removes them from every picker without deleting their history.'])+
-   '<h3 class="h-sec" style="margin:20px 0 10px">Onsite agents · '+AGENTS.filter(a=>a.careTeam==='A').length+' on Desk A, '+AGENTS.filter(a=>a.careTeam==='B').length+' on Desk B</h3><div class="stack">'+
+   '<h3 class="h-sec" style="margin:20px 0 10px">Onsite agents · '+AGENTS.length+'</h3><div class="stack">'+
    AGENTS.map(a=>'<div class="card"><div class="row" style="justify-content:space-between;align-items:flex-start">'+
-    '<div style="flex:1;min-width:0"><div class="lrow-t">'+esc(a.name)+' <span class="pill p-flow">Desk '+esc(a.careTeam||'—')+'</span></div><div class="lrow-s mono">'+esc(a.phone)+'</div>'+
+    '<div style="flex:1;min-width:0"><div class="lrow-t">'+esc(a.name)+'</div><div class="lrow-s mono">'+esc(a.phone)+'</div>'+
     contactLine(a.name,a.phone)+
     '<div class="sub" style="margin-top:4px">Shift: '+esc(a.shift)+'</div>'+
     '<div class="row" style="margin-top:7px;gap:5px">'+a.temples.map(id=>'<span class="pill p-mute">'+esc(temple(id).name)+'</span>').join('')+'</div></div>'+
@@ -3269,13 +3274,12 @@ function adPeople(){
     '<button class="btn btn-sm" data-act="ad-save-agent-phone" data-id="'+a.id+'">Save number</button></div>'+
     '<div class="chips" style="margin-top:10px">'+
     '<button class="chip-tog" aria-pressed="'+a.active+'" data-act="tg-agent" data-id="'+a.id+'">Active '+(a.active?'✓':'')+'</button>'+
-    '<button class="chip-tog" aria-pressed="false" data-act="tg-agent-team" data-id="'+a.id+'">Move to Desk '+(a.careTeam==='A'?'B':'A')+'</button>'+
     TEMPLES.filter(t=>t.live).map(t=>'<button class="chip-tog" aria-pressed="'+a.temples.includes(t.id)+'" data-act="tg-agent-temple" data-id="'+a.id+'" data-v="'+t.id+'">'+esc(t.name)+'</button>').join('')+
     '</div></div>').join('')+'</div>'+
    '<p class="sub" style="margin:10px 0 0">Numbers saved here are what every screen calls — Customer care, the agent and pandit boards, and the Devotees directory all read the same record, so there is nothing separate to keep in sync.</p>'+
    '<h3 class="h-sec" style="margin:20px 0 10px">Temple pandits</h3><div class="stack">'+
    PANDITS.map(d=>'<div class="card"><div class="row" style="justify-content:space-between;align-items:flex-start">'+
-    '<div style="flex:1;min-width:0"><div class="lrow-t">'+esc(d.name)+' '+(panditTeam(d)?'<span class="pill p-mute">Desk '+esc(panditTeam(d))+'</span>':'')+'</div><div class="lrow-s">'+esc(d.skills)+'</div>'+
+    '<div style="flex:1;min-width:0"><div class="lrow-t">'+esc(d.name)+'</div><div class="lrow-s">'+esc(d.skills)+'</div>'+
     contactLine(d.name,d.phone)+
     '<div class="row" style="margin-top:7px;gap:5px"><span class="pill p-mute">'+esc(temple(d.temple).name)+'</span>'+
     '<span class="pill p-mute">'+d.cap+' pujas/day</span>'+
@@ -3292,42 +3296,38 @@ function adPeople(){
     '</div></div>').join('')+'</div>';
 }
 function adCareTeam(){
-  const seats=readSeats();
-  const deskCard=seat=>{
-    const occ=seats[seat];
-    const live=DB.bookings.filter(b=>b.careTeam===seat&&!['CANCELLED','COMPLETED','SETTLED'].includes(b.status));
-    return '<div class="card"><div class="row" style="justify-content:space-between;align-items:flex-start">'+
-     '<div><div class="eyebrow">Desk '+seat+'</div>'+
-     (occ?'<div class="lrow-t">'+esc(occ.name)+'</div><div class="sub">Signed in since '+fmtDT(occ.at)+'</div>':'<div class="sub">Nobody signed in</div>')+
-     '<div class="sub mono" style="margin-top:6px">'+live.length+' open booking'+(live.length===1?'':'s')+' on this desk</div></div>'+
-     (occ?'<span class="pill '+(occ?'p-ok':'p-mute')+'">Occupied</span>':'<span class="pill p-mute">Free</span>')+'</div>'+
-     (occ?'<button class="btn btn-sm" style="margin-top:10px" data-act="ad-release-seat" data-v="'+seat+'">Force release</button>':'')+'</div>';
+  const userRow=u=>{
+    const open=!!(S.revealCred&&S.revealCred[u.id]);
+    return '<div class="row" style="justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:10px;padding:10px 0;border-top:1px solid var(--line)">'+
+    '<div style="flex:1;min-width:150px"><div class="lrow-t" style="margin:0">'+esc(u.name)+'</div>'+
+    '<div class="sub">'+(u.active?'<span class="pill p-ok">Active</span>':'<span class="pill p-stop">Inactive</span>')+'</div></div>'+
+    (open?
+      '<div class="ed" style="width:160px"><label class="ed-l">Login ID</label><input class="inp mono" id="uid-'+u.id+'" value="'+esc(u.loginId)+'"></div>'+
+      '<div class="ed" style="width:160px"><label class="ed-l">Password</label><input class="inp mono" id="upw-'+u.id+'" value="'+esc(u.password)+'"></div>'+
+      '<div class="ed" style="width:190px"><label class="ed-l">Temple</label><select class="inp" id="utp-'+u.id+'">'+
+        TEMPLES.map(t=>'<option value="'+t.id+'"'+(t.id===u.templeId?' selected':'')+'>'+esc(t.name)+'</option>').join('')+'</select></div>'+
+      '<div class="row" style="gap:6px"><button class="btn btn-sm btn-pri" data-act="ad-save-careuser" data-id="'+u.id+'">Save</button>'+
+      '<button class="btn btn-sm" data-act="ad-reveal-cred" data-id="'+u.id+'">Hide</button></div>':
+      '<div class="ed" style="width:160px"><div class="ed-l">Login ID</div><div class="mono" style="padding:9px 0">'+esc(maskCred(u.loginId))+'</div></div>'+
+      '<div class="ed" style="width:160px"><div class="ed-l">Password</div><div class="mono" style="padding:9px 0">'+esc(maskCred(u.password))+'</div></div>'+
+      '<div class="row" style="gap:6px"><button class="btn btn-sm" data-act="ad-reveal-cred" data-id="'+u.id+'">Show / change</button>'+
+      '<button class="chip-tog" aria-pressed="'+u.active+'" data-act="tg-careuser" data-id="'+u.id+'">Active '+(u.active?'✓':'')+'</button></div>')+
+    '</div>';
   };
-  return '<h1 class="h-page">Care team access</h1>'+
-   trig(['Every customer care login is created and reset here — there is no self-signup.',
-         'Deactivating someone blocks their next sign-in immediately without deleting their call history or audit trail.',
-         'A login ID must be unique across the team; the portal checks this the moment you save.',
-         'Both desks share this same login list — the desk (A/B) is chosen at sign-in, not tied to a particular account.',
-         'Passwords are shown in the clear here only because this is a demo — a live build would hash them and never display them again.'])+
-   '<h3 class="h-sec" style="margin:20px 0 10px">Both desks, live</h3>'+
-   '<p class="sub" style="margin:0 0 10px">Admin sees both customer care desks at once — customer care staff on one desk never see the other’s queue. Occupancy updates live across tabs on this browser; force-release a desk if someone closed their tab without logging out.</p>'+
-   '<div class="grid g2">'+deskCard('A')+deskCard('B')+'</div>'+
-   '<h3 class="h-sec" style="margin:20px 0 10px">Logins</h3>'+
-   '<div class="stack">'+CARE_USERS.map(u=>
-    '<div class="card"><div class="row" style="justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:10px">'+
-    '<div style="flex:1;min-width:160px"><div class="lrow-t">'+esc(u.name)+'</div>'+
-    '<div class="sub" style="margin-top:2px">'+(u.active?'<span class="pill p-ok">Active</span>':'<span class="pill p-stop">Inactive</span>')+'</div></div>'+
-    '<div class="ed" style="width:170px"><label class="ed-l">Login ID</label><input class="inp mono" id="uid-'+u.id+'" value="'+esc(u.loginId)+'"></div>'+
-    '<div class="ed" style="width:170px"><label class="ed-l">Password</label><input class="inp mono" id="upw-'+u.id+'" value="'+esc(u.password)+'"></div>'+
-    '<div class="row" style="gap:6px">'+
-    '<button class="btn btn-sm" data-act="ad-save-careuser" data-id="'+u.id+'">Save</button>'+
-    '<button class="chip-tog" aria-pressed="'+u.active+'" data-act="tg-careuser" data-id="'+u.id+'">Active '+(u.active?'✓':'')+'</button>'+
-    '</div></div></div>').join('')+'</div>'+
-   '<div class="card" style="margin-top:14px"><div class="eyebrow">Add a customer care login</div><div class="grid g3">'+
-   '<div class="ed"><label class="ed-l">Full name</label><input class="inp" id="ucn" placeholder="e.g. Asha Gogoi"></div>'+
-   '<div class="ed"><label class="ed-l">Login ID</label><input class="inp" id="ucl" placeholder="e.g. asha.care"></div>'+
-   '<div class="ed"><label class="ed-l">Temporary password</label><input class="inp" id="ucp" placeholder="Given to the agent to change later"></div>'+
-   '</div><button class="btn btn-pri" style="margin-top:10px" data-act="ad-add-careuser">Add login</button></div>';
+  return '<h1 class="h-page">Temple customer care</h1>'+
+   trig(['Customer care is organised temple by temple. Click a temple to open its portal: a sign-in pop-up asks for that temple’s own login ID and password, then you see exactly that temple’s queue, history, SLAs and cancellations.',
+         'Change a customer care person’s login ID, password or temple right here; it takes effect on their next sign-in. Deactivating blocks sign-in without deleting call history.',
+         'A login ID must be unique across all temples. Each temple has its own password, so staff of one temple cannot open another’s portal. Only Admin sees every ID and password here.',
+         'IDs and passwords are masked (e.g. pr***** / Ka*****) until an admin clicks Show / change; the temple pop-up never displays them.'])+
+   '<div class="stack" style="margin-top:12px">'+TEMPLES.map(t=>{
+     const users=CARE_USERS.filter(u=>u.templeId===t.id);
+     const open=DB.bookings.filter(b=>b.templeId===t.id&&!['CANCELLED','COMPLETED','SETTLED'].includes(b.status)).length;
+     return '<div class="card"><div class="row" style="justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px">'+
+      '<div><div class="lrow-t" style="margin-bottom:2px">'+esc(t.name)+'</div><div class="sub">'+esc(t.city)+', '+esc(t.state)+'</div>'+
+      '<div class="sub mono" style="margin-top:4px">'+users.length+' customer care login'+(users.length===1?'':'s')+' · '+open+' open booking'+(open===1?'':'s')+'</div></div>'+
+      '<button class="btn btn-pri" data-act="ad-open-cc" data-v="'+t.id+'">Open '+esc(t.name)+' customer care →</button></div>'+
+      (users.length?'<div style="margin-top:10px">'+users.map(userRow).join('')+'</div>':'<p class="sub" style="margin:10px 0 0">No customer care login for this temple yet.</p>')+'</div>';
+   }).join('')+'</div>';
 }
 function adBlackouts(){
   return '<h1 class="h-page">Blackout calendar</h1>'+
@@ -3776,9 +3776,9 @@ function fmStates(){
    ========================================================================== */
 const ROLE_TABS=[['user','Devotee'],['cc','Customer care'],['agent','Agent'],['pandit','Pandit']];
 const SCREENS={flow:flowScreen,user:userScreen,cc:ccScreen,agent:agentScreen,pandit:panditScreen,admin:adminScreen};
-const DEFAULT_SUB={flow:'pipeline',user:'browse',cc:'queue',agent:'list',pandit:'list',admin:'dash'};
+const DEFAULT_SUB={flow:'pipeline',user:'browse',cc:'queue',agent:'list',pandit:'list',admin:'careteam'};
 const MOBILE_ROLES=['user','agent','pandit'];
-const STORAGE_KEY='namonamaha-care-demo-v8';
+const STORAGE_KEY='namonamaha-care-demo-v11';
 function saveDemo(){
   try{window.localStorage.setItem(STORAGE_KEY,JSON.stringify({SIM,SEQ,DB,TEMPLES,PUJAS,AGENTS,PANDITS,CARE_USERS,ADMIN_USERS,BLACKOUTS}));}catch(e){}
 }
@@ -3791,32 +3791,18 @@ function restoreDemo(){
   }catch(e){}
 }
 
-/* ---- customer care desk seats — a same-browser, cross-tab occupancy lock. Only one
-   signed-in person can hold Desk A (or B) at a time; a second sign-in to the same desk
-   is blocked until it's released. This is a client-only app with no server, so "live" here
-   means live across tabs on this browser via localStorage + the storage event — it cannot
-   coordinate across different browsers or devices without a real backend. ---- */
-const SEAT_KEY='nm_care_seats';
-function readSeats(){
-  try{ const s=JSON.parse(window.localStorage.getItem(SEAT_KEY)||'null'); return (s&&typeof s==='object')?s:{A:null,B:null}; }
-  catch(e){ return {A:null,B:null}; }
-}
-function writeSeats(seats){ try{ window.localStorage.setItem(SEAT_KEY,JSON.stringify(seats)); }catch(e){} }
-function claimSeat(seat,userId,name){ const s=readSeats(); s[seat]={userId,name,at:Date.now()}; writeSeats(s); }
-function releaseSeat(seat){ if(!seat) return; const s=readSeats(); s[seat]=null; writeSeats(s); }
-
 function render(){
-  const signedIntoCare=S.role!=='cc'||!!S.careUser;
+  const signedIntoCare=!!S.adminUser;
   document.getElementById('roles').innerHTML=signedIntoCare?ROLE_TABS.map(([k,l])=>
    '<button class="role" role="tab" aria-selected="'+(S.role===k)+'" data-act="role" data-v="'+k+'"><span class="dot"></span>'+esc(l)+'</button>').join(''):'';
   document.getElementById('app').innerHTML=(SCREENS[S.role]||flowScreen)();
   document.getElementById('clock').textContent='Simulated: '+fmtDate(SIM)+', '+fmtTime(SIM);
-  document.getElementById('evcount').textContent=DB.events.length;
+  document.getElementById('evcount').textContent=visibleEvents().length;
   const show=MOBILE_ROLES.includes(S.role);
   const dt=document.getElementById('devtoggle'); dt.hidden=!show;
   dt.querySelectorAll('button').forEach(x=>x.setAttribute('aria-selected',String(x.dataset.v===S.device)));
   document.body.classList.toggle('mobile-preview',show&&S.device==='mobile');
-  document.body.classList.toggle('modal-open',!!S.modal);
+  document.body.classList.toggle('modal-open',!!S.modal||!!S.templeLogin);
   document.body.classList.toggle('app-wallpaper',['user','agent','pandit'].includes(S.role)||(S.role==='cc'&&!!S.careUser));
   document.body.classList.toggle('role-wide',S.role==='agent'||S.role==='pandit');
   renderEvents();
@@ -3830,8 +3816,14 @@ function maskEventText(text,bookingId){
   const b=bk(bookingId); if(!b||!b.devotee.name) return text;
   return text.split(b.devotee.name).join(maskName(b.devotee.name));
 }
+/* a temple's customer care only sees activity for that temple's own bookings */
+function visibleEvents(){
+  const t=ccTempleId(); if(!t) return DB.events;
+  return DB.events.filter(e=>{ const b=e.bookingId?bk(e.bookingId):null; return b&&b.templeId===t; });
+}
 function renderEvents(){
-  document.getElementById('evlist').innerHTML=DB.events.length?DB.events.map(e=>{
+  const evs=visibleEvents();
+  document.getElementById('evlist').innerHTML=evs.length?evs.map(e=>{
     const c=CH[e.channel]||CH.System;
     return '<div class="ev"><div class="ev-i" style="background:'+c.bg+';color:'+c.fg+'">'+c.t+'</div><div class="ev-b">'+
      '<div class="ev-t">'+esc(maskEventText(e.title,e.bookingId))+'</div><div class="ev-m">'+esc(maskEventText(e.body,e.bookingId))+'</div>'+
@@ -3858,10 +3850,6 @@ function tsFrom(dateId,timeId,fallback){
   return isFinite(ts)?ts:fallback;
 }
 
-/* live, cross-tab: when another tab on this browser claims/releases a seat, this tab's
-   login screen (or admin oversight panel) updates without a manual refresh. */
-window.addEventListener('storage',e=>{ if(e.key===SEAT_KEY) render(); });
-window.addEventListener('beforeunload',()=>{ if(S.careUser&&S.careSeat) releaseSeat(S.careSeat); });
 
 document.addEventListener('click',e=>{
   const el=e.target.closest('[data-act]'); if(!el||el.disabled) return;
@@ -3919,17 +3907,33 @@ document.addEventListener('click',e=>{
 
     /* ---------- customer care ---------- */
     case 'cc-login': {
-      const seat=v, loginId=val('cli'), pw=val('clp');
+      const loginId=val('cli'), pw=val('clp');
       S.loginDraft=loginId;
+      const ad=ADMIN_USERS.find(x=>x.active&&x.loginId.toLowerCase()===loginId.trim().toLowerCase()&&x.password===pw);
+      if(ad){
+        S.adminUser=ad.id; S.role='admin'; S.sub='careteam'; S.loginError=''; S.loginDraft=''; S.pwDraft=''; S.pwShow=false;
+        render(); toast('Welcome, '+ad.name+'.'); break;
+      }
       const u=CARE_USERS.find(x=>x.active&&x.loginId.toLowerCase()===loginId.trim().toLowerCase()&&x.password===pw);
       if(!u){ S.loginError='Incorrect login ID or password.'; S.pwDraft=''; S.pwShow=false; render(); break; }
-      if(readSeats()[seat]){ S.loginError='Desk '+seat+' was just taken by someone else. Choose the other desk.'; S.pwDraft=''; S.pwShow=false; render(); break; }
-      S.careUser=u.id; S.careSeat=seat; claimSeat(seat,u.id,u.name);
+      S.careUser=u.id; S.fromAdmin=false;
       S.loginError=''; S.loginDraft=''; S.pwDraft=''; S.pwShow=false; S.sub='queue';
-      render(); toast('Welcome back, '+u.name+' — Desk '+seat+'.'); break;
+      render(); toast('Welcome back, '+u.name+'.'); break;
     }
     case 'cc-toggle-pw': S.loginDraft=val('cli'); S.pwDraft=val('clp'); S.pwShow=!S.pwShow; render(); break;
-    case 'cc-logout': releaseSeat(S.careSeat); S.careUser=null; S.careSeat=null; S.sub='queue'; render(); break;
+    case 'ad-open-cc': S.templeLogin={templeId:v,error:'',idDraft:''}; render(); break;
+    case 'ad-reveal-cred': S.revealCred[id]=!S.revealCred[id]; render(); break;
+    case 'ad-temple-login-close': S.templeLogin=null; render(); break;
+    case 'ad-temple-login': {
+      const tl=S.templeLogin; if(!tl) break;
+      const lid=val('tlid'), pwd=document.getElementById('tlpw')?document.getElementById('tlpw').value:'';
+      const u=CARE_USERS.find(x=>x.active&&x.templeId===tl.templeId&&x.loginId.toLowerCase()===lid.trim().toLowerCase()&&x.password===pwd);
+      if(!u){ tl.error='Incorrect login ID or password for '+temple(tl.templeId).name+'.'; tl.idDraft=lid; render(); break; }
+      S.templeLogin=null; S.careUser=u.id; S.fromAdmin=true; S.role='cc'; S.sub='queue'; S.modal=null; render(); break;
+    }
+    case 'cc-back-admin': S.careUser=null; S.fromAdmin=false; S.role='admin'; S.sub='careteam'; S.modal=null; render(); break;
+    case 'ad-logout': S.revealCred={}; S.adminUser=null; S.careUser=null; S.fromAdmin=false; S.templeLogin=null; S.role='cc'; S.sub='queue'; render(); break;
+    case 'cc-logout': S.careUser=null; S.fromAdmin=false; S.sub='queue'; render(); break;
     case 'cc-temple':
       S.templeFrom=id||null; S.templeId=v;
       S.modal={type:'temple',templeId:v,bookingId:id||null}; render(); break;
@@ -4106,8 +4110,6 @@ document.addEventListener('click',e=>{
     case 'tg-agent': { const ag=agent(id); ag.active=!ag.active; render(); break; }
     case 'tg-agent-temple': { const ag=agent(id);
       ag.temples=ag.temples.includes(v)?ag.temples.filter(x=>x!==v):ag.temples.concat(v); render(); break; }
-    case 'tg-agent-team': { const ag=agent(id); ag.careTeam=ag.careTeam==='A'?'B':'A';
-      render(); toast(ag.name+' moved to Desk '+ag.careTeam+'. Their pandits move with them.'); break; }
     case 'tg-pandit': { const d=pandit(id); d.active=!d.active; render(); break; }
     case 'tg-pandit-leave': { const d=pandit(id);
       d.leave=d.leave.includes('absent-today')?[]:['absent-today']; render(); break; }
@@ -4124,14 +4126,10 @@ document.addEventListener('click',e=>{
     case 'dev-letter': S.devFilter.letter=(S.devFilter.letter===v?'':v); render(); break;
     case 'ad-devotees-csv': downloadDevoteesCsv(); break;
     case 'masked-call': toast('Connecting to '+esc(v)+' on a masked line — neither side sees the other’s real number. (Simulated)'); break;
-    case 'ad-release-seat': {
-      releaseSeat(v);
-      render(); toast('Desk '+v+' released. It is free for the next sign-in.'); break;
-    }
     case 'tg-careuser': {
       const u=careUser(id); if(!u) break;
       u.active=!u.active;
-      if(!u.active&&S.careUser===u.id){ releaseSeat(S.careSeat); S.careUser=null; S.careSeat=null; }
+      if(!u.active&&S.careUser===u.id) S.careUser=null;
       render(); toast(u.active?u.name+' can sign in again.':u.name+'’s login is deactivated.'); break;
     }
     case 'ad-save-careuser': {
@@ -4142,17 +4140,8 @@ document.addEventListener('click',e=>{
         toast('That login ID is already in use.','stop'); break;
       }
       u.loginId=newId.trim(); u.password=newPw;
-      render(); toast('Login details updated for '+u.name+'.'); break;
-    }
-    case 'ad-add-careuser': {
-      const name=val('ucn'), loginId=val('ucl'), pw=val('ucp');
-      if(!name||!loginId||!pw){ toast('Fill in name, login ID and password.','stop'); break; }
-      if(CARE_USERS.some(x=>x.loginId.toLowerCase()===loginId.trim().toLowerCase())){
-        toast('That login ID is already in use.','stop'); break;
-      }
-      CARE_USERS.push({id:'U'+(CARE_USERS.length+1)+Math.random().toString(36).slice(2,5),
-        name,loginId:loginId.trim(),password:pw,active:true});
-      render(); toast('Login created for '+name+'.'); break;
+      const tsel=val('utp-'+id); if(tsel&&temple(tsel)) u.templeId=tsel;
+      S.revealCred[id]=false; render(); toast('Login details updated for '+u.name+'.'); break;
     }
     case 'ad-add-payout': { const p=puja(id); p.payout.push({p:'helper',b:'fixed',v:1000}); render(); break; }
     case 'ad-del-payout': { const p=puja(id); p.payout.splice(Number(v),1); render(); break; }
@@ -4245,8 +4234,13 @@ document.addEventListener('input',e=>{
   if(e.target.id==='devq'){ S.devFilter.q=e.target.value; patchDevList(); }
 });
 document.addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&e.target&&e.target.id){
+    const go={cli:'cc-login',clp:'cc-login',tlid:'ad-temple-login',tlpw:'ad-temple-login'}[e.target.id];
+    if(go){ const b=document.querySelector('[data-act="'+go+'"]'); if(b) b.click(); return; }
+  }
   if(e.key==='Escape'){
-    if(S.modal){S.modal=null;render();}
+    if(S.templeLogin){S.templeLogin=null;render();}
+    else if(S.modal){S.modal=null;render();}
     else document.getElementById('drawer').dataset.open='false';
   }
 });
