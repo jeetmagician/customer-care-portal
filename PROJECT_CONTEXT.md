@@ -13,47 +13,54 @@ in `admin-portal`) to give Claude the context it needs.
 
 ## TL;DR — what's in this portal, end to end
 
-1. **One login page** (`index.html`, `localhost:8000`). Admin (`admin` / `Admin@123`)
-   and temple customer-care staff sign in on the same form.
-2. **Admin** lands on a single page, **Temple customer care**: every temple (8) with
-   its CC login(s). IDs/passwords are masked (`pr*****` / `Ka*****`) until admin
-   clicks *Show / change*; admin can edit ID, password, temple, and active flag.
-   There is **no "add login"** here (removed on purpose). Clicking a temple opens a
-   **sign-in pop-up** that accepts only that temple's own credentials.
-3. **Temple customer care** (per temple, distinct password each, e.g. Kamakhya
-   `priya.care` / `Kamakhya@101`): a CRM scoped to that temple only — Work queue,
-   All history (table + CSV export), SLA & escalations, Cancellations, Message log,
-   auto-assign agent, edit booking, confirm call, send balance link / OTP.
-   Isolation covers bookings, the Activity feed, and the (hidden) role tabs.
-4. **Devotee privacy in CC**: names `Sur**** Cho****`, phones `+91 9000*****`,
-   Internet-call only (no direct Call / WhatsApp to devotees). Agent/pandit contact stays real.
-5. Other roles (Devotee, Agent, Pandit mobile-style apps) exist in the file but are
-   only reachable by a signed-in admin via the top role tabs.
-6. All data is in-memory + `localStorage` (`namonamaha-care-demo-v11`). No backend.
+1. **One login page** (`index.html`, `localhost:8000`). First pick **"Select temple location"**
+   (state/UT from `INDIA_STATES`), then ID + password; a login only works for its own
+   location. Admins are **zone admins** (`ADMIN_USERS[].state`): `admin` / `Admin@123`
+   = Assam, `odisha.admin` / `Odisha@Admin1`, `wb.admin` / `WestBengal@Admin1`.
+   Temple customer-care staff use the same form (their temple's state must match).
+2. **Admin** lands on one page, **Temple customer care**, showing only their state's
+   temples (list, pop-up and Activity feed are zone-scoped; other states are invisible).
+   From it an admin can:
+   - **Change any customer-care login ID / password / temple / active flag** — shown masked
+     (`pr*****` / `Ka*****`) until *Show / change* is clicked.
+   - **Add a temple** in their own state (created as "Onboarding", `live:false`).
+   - **Create a customer-care login** for any temple in their state (login IDs are unique
+     across customer care *and* admin logins).
+   - **Change their own admin ID / password.**
+   - Click a temple → **sign-in pop-up** accepting only that temple's own credentials
+     (no admin bypass) → that temple's portal, with a "Back to admin" button.
+3. **Temple customer care** (distinct password per temple, e.g. Kamakhya `priya.care` /
+   `Kamakhya@101`): a CRM scoped to that temple only — Work queue, All history (table +
+   CSV export), SLA & escalations, Cancellations, Message log, auto-assign agent, edit
+   booking, confirm call, send balance link / OTP. Isolation covers bookings, the Activity
+   feed, and the role tabs (hidden for everyone; the Devotee/Agent/Pandit screens are
+   unreachable because they list every booking).
+4. **Devotee privacy in CC**: names `Sur**** Cho****`, phones `+91 9000*****`, Internet-call
+   only (no direct Call / WhatsApp to devotees). Agent/pandit contact stays real.
+5. All data is in-memory + `localStorage` (`namonamaha-care-demo-v13`). No backend, so
+   logins are a client-side check against plaintext demo passwords.
 
 ## What to build in the separate `admin-portal` (suggested scope)
 
-This repo already prototypes the admin side of temple customer care; the real
-`admin-portal` should own it properly. Build there:
-- **Real authentication** for admins (hashed passwords, sessions) — this repo's admin
-  login is a plaintext demo check.
-- **Temple customer care management**: list all temples with a **search box** (100s of
-  temples) and collapsible logins; create / edit / deactivate a temple's CC login;
-  admin-set passwords stored **hashed**, never displayed in full (mask by default, reset
-  instead of reveal is safer); one credential set per temple, uniqueness enforced.
-- **"Open temple CC"** as a real handoff: a signed, short-lived link/token from
-  admin-portal to this customer-care app (never a bare URL param), plus the
-  per-temple sign-in step this repo already does. Needs a shared backend.
-- A **shared backend/database** (bookings, agents, pandits, CC users, temples) so both
-  apps read the same data — today each has its own in-memory copy.
-- Admin views this repo dropped from its sidebar and that belong in admin-portal:
-  Overview, Bookings, Details of devotees (unmasked, with export), Temples, Puja
-  catalogue, Payout rules, Agents & pandits (roster, phones, capacity, temple
-  coverage), Blackout calendar, Payments & settlement, Roles & permissions, Settings.
-  (Their reference implementations still live in `index.html`: `adDash`, `adBookings`,
-  `adDevotees`, `adPeople`, `adPayments`, …)
-- Keep the **rules from this portal**: temple isolation for CC, devotee masking in CC,
-  admin sees real data.
+This app prototypes the admin side of temple customer care; the real `admin-portal`
+should own it properly. Build there:
+- **Real authentication** for admins (hashed passwords, sessions, per-state/zone roles) —
+  here it is a plaintext demo check.
+- **Temple management**: add/edit/deactivate temples in any state, with a **search box and
+  state filter** (100s of temples). Adding a *state/zone* and its admin is a job for a
+  super-admin in admin-portal (here zone admins are hard-coded in `ADMIN_USERS`).
+- **Customer-care login management**: create/reset/deactivate one login per temple; store
+  passwords **hashed**, prefer *reset* over *reveal*; enforce unique IDs.
+- **"Open temple CC"** as a real handoff: signed, short-lived token/link from admin-portal
+  into this app, plus the per-temple sign-in this app already does. Needs a shared backend.
+- A **shared backend/database** (temples, bookings, agents, pandits, CC users) so both apps
+  read the same data — today each has its own in-memory copy.
+- Admin screens this app dropped from its sidebar that belong in admin-portal: Overview,
+  Bookings, Details of devotees (unmasked, export), Puja catalogue, Payout rules, Agents &
+  pandits (roster, phones, capacity, coverage), Blackout calendar, Payments & settlement,
+  Roles & permissions, Settings. Reference code still in `index.html`: `adDash`,
+  `adBookings`, `adDevotees`, `adPeople`, `adPayments`, …
+- Keep this app's **rules**: zone/temple isolation, devotee masking in CC, admin sees real data.
 
 ## 1. What this is
 
@@ -105,7 +112,7 @@ CONFIG → DATA → STORE → UI → SCREENS → ROUTER
 **State persistence**: everything in `S` is transient (reset on every page
 load). What persists is the demo business data — `DB`, `TEMPLES`, `PUJAS`,
 `AGENTS`, `PANDITS`, `CARE_USERS`, `ADMIN_USERS`, `BLACKOUTS` — serialized to
-`localStorage` under a versioned key, currently `namonamaha-care-demo-v11`
+`localStorage` under a versioned key, currently `namonamaha-care-demo-v13`
 (`STORAGE_KEY`). **Any change to the shape of one of those arrays must bump
 this version number**, or a browser with old cached data will silently keep
 replaying stale state forever (`seed()` always runs first, then
@@ -120,8 +127,8 @@ Five roles, switched via top tab bar (`ROLE_TABS`): **Devotee** (`user`),
 (`admin`) is a fifth role, not in the top tab bar — admins sign in through the
 same login form as customer care staff (see §8).
 
-The top role tabs are shown **only to a signed-in admin** (`S.adminUser`); temple
-customer care staff never see them, so they can't reach other roles' screens.
+The top role tabs are hidden for everyone (`#roles` is always empty), so no one can reach
+the Devotee/Agent/Pandit screens, which list every booking.
 
 ## 5. Data model (the globals)
 
@@ -171,36 +178,37 @@ Every person's phone number gets a small icon row (`contactIconBtns` — real
 WhatsApp link), used consistently everywhere a name appears: Devotee, Agent,
 Pandit alike — **except** for one deliberate carve-out described next.
 
-## 8. Login flow and temple-wise customer care
+## 8. Login flow and temple-wise customer care (details)
 
-**One login form** (`careLoginScreen`) is the entry point. `cc-login` checks
-`ADMIN_USERS` first, then `CARE_USERS`:
-- **Admin** (seed: `admin` / `Admin@123`) → lands directly on the Admin panel,
-  which now has a **single tab, "Temple customer care"**. `adminScreen()` is
-  login-gated (`S.adminUser`); the old footer link to admin was removed and the
-  other admin tab functions (`adDash`, `adBookings`, `adPeople`, …) still exist
-  in the file but are no longer reachable from the sidebar.
-- **Temple staff** (`CARE_USERS[].templeId`) → land straight in their own
-  temple's portal.
+**One login form** (`careLoginScreen`) is the entry point. The user first picks a
+state/UT (`#clst`, `S.stateDraft`); `cc-login` then checks `ADMIN_USERS` first, then
+`CARE_USERS`, and the account's state must equal the picked one (an admin's own
+`state`, or the state of a customer-care user's temple). Otherwise: "Incorrect login ID
+or password for <state>".
+- **Zone admin** → the Admin panel, a single tab "Temple customer care" (`adCareTeam`),
+  gated by `S.adminUser`. `templesInZone()` limits everything to that admin's state;
+  `ad-open-cc`, `ad-save-careuser`, `ad-add-temple`, `ad-add-careuser` all re-check the zone.
+  The other admin screen functions (`adDash`, `adBookings`, …) remain as reference code only.
+- **Temple staff** (`CARE_USERS[].templeId`) → straight into their own temple's portal.
 
-**Temple-wise**: each temple (T1–T8) has its own CC login(s), each with a
-**different password** (seeded `Kamakhya@101`, `Bagala@102`, …). A CC session is
-scoped to its temple via `ccTempleId()` / `scopeBk()` (queue, All history, SLAs,
-cancellations, auto-assign).
+**Temple-wise**: each temple has its own CC login(s) with different passwords (seeded
+`Kamakhya@101`, `Bagala@102`, …). A CC session is scoped by `ccTempleId()` / `scopeBk()`
+(queue, All history, SLAs, cancellations, auto-assign) and `visibleEvents()` (Activity feed).
 
-**Admin opening a temple's portal**: Temple customer care lists every temple
-with its logins (admin sees and can edit every ID, password and temple). Clicking
-"Open <temple> customer care →" (`ad-open-cc`) shows a **sign-in pop-up**
-(`templeLoginModal`, state `S.templeLogin`) that only accepts that temple's own
-credentials (`ad-temple-login`). On success the temple's CC portal opens with
-`S.fromAdmin=true`, showing a "← Back to admin" button (`cc-back-admin`) instead
-of Log out. Admin has no bypass — by design, the temple's password gates it.
+**Admin opening a temple's portal**: "Open <temple> customer care →" (`ad-open-cc`) shows a
+sign-in pop-up (`templeLoginModal`, `S.templeLogin`) accepting only that temple's
+credentials (`ad-temple-login`); on success the portal opens with `S.fromAdmin=true` and a
+"← Back to admin" button (`cc-back-admin`). No admin bypass.
 
-History: a Desk A/B split with a seat lock was built then removed by the user;
-don't reintroduce it. Roster: 20 agents, ~83 pandits (`growRoster()`).
+**New temples** (`ad-add-temple`) are pushed to `TEMPLES` as `live:false`, hours
+"Onboarding" (the same shape as the seeded T7/T8), ids `T<n+1>`. Login IDs are unique across
+`CARE_USERS` and `ADMIN_USERS` (`loginTaken()`).
 
-The separate `admin-portal` project can't do this itself (different origin, no
-shared data); it would need a backend with real per-temple credentials/tokens.
+History: a Desk A/B split with a seat lock was built then removed by the user; don't
+reintroduce it. Roster: 20 agents, ~83 pandits (`growRoster()`).
+
+The separate `admin-portal` project can't do this itself (different origin, no shared
+data); it needs a backend with real credentials/tokens (see the TL;DR).
 
 ## 9. Devotee PII masking (Customer Care only)
 
@@ -244,7 +252,7 @@ used to route around the on-screen masking.
 
 Only one sidebar tab is reachable: **Temple customer care** (`adCareTeam()`), see §8
 and the TL;DR. Masked credentials with a per-person *Show / change* toggle
-(`maskCred`, `S.revealCred`); no add-login form. The other admin screens' code
+(`maskCred`, `S.revealCred`); plus add-temple, create-CC-login and change-own-login forms. The other admin screens' code
 (`adDash`, `adBookings`, `adDevotees`, `adTemples`, `adPujas`, `adPayouts`,
 `adPeople`, `adBlackouts`, `adPayments`, `adPerms`, `adSettings`) is still in the
 file as reference but not wired into the sidebar.
