@@ -50,37 +50,48 @@
   --shadow:0 1px 2px rgba(0,0,0,.4),0 4px 14px rgba(0,0,0,.3);
 }
 *{box-sizing:border-box}
-body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 h1,h2,h3,h4{font-family:var(--disp);margin:0;text-wrap:balance;letter-spacing:-.01em}
 button,input,select,textarea{font:inherit;color:inherit}
 a{color:var(--accent)}
 
 /* ---------- chrome ---------- */
 .top{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;background:var(--surface);border-bottom:1px solid var(--line)}
-.top-in{display:flex;align-items:center;gap:12px;padding:10px 16px;flex-wrap:wrap}
-.brand{display:flex;align-items:center;gap:9px;font-family:var(--disp);font-weight:700;font-size:15px;letter-spacing:-.02em;white-space:nowrap}
+.top-in{display:flex;align-items:center;gap:15px;padding:15px 24px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--disp);font-weight:700;font-size:17px;letter-spacing:-.02em;white-space:nowrap;
+  background:none;border:none;padding:0;cursor:pointer}
+.brand:hover .brand-logo{filter:brightness(1.1)}
+.brand:hover .om-mark{filter:brightness(1.15) drop-shadow(0 0 6px rgba(157,34,53,.35))}
 .om{width:26px;height:26px;border-radius:7px;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font-size:14px;flex:none}
-.brand-logo{height:27px;width:auto;display:block}
+.brand-logo{height:40px;width:auto;display:block}
 .om-mark{font-family:var(--sans);font-weight:600;line-height:1;flex:none;
   background:linear-gradient(160deg,#F3B267,var(--accent) 55%,#7A1526);-webkit-background-clip:text;background-clip:text;color:transparent;
   filter:drop-shadow(0 0 6px rgba(157,34,53,.35))}
-.brand .om-mark{font-size:22px}
-.dash-logo-img{height:21px;width:auto;flex:none}
-.cc-user-badge{display:flex;align-items:center;gap:9px;margin-left:auto}
-.cc-user-badge .who{font-size:12.5px;color:var(--ink-2);white-space:nowrap}
-body.cc-wallpaper{
+.brand .om-mark{font-size:32px}
+.dash-logo-img{height:30px;width:auto;flex:none}
+.cc-user-badge{display:flex;align-items:center;gap:12px;margin-left:auto}
+.cc-user-badge .who{font-size:15.5px;color:var(--ink-2);white-space:nowrap}
+body.app-wallpaper{
   background-image:linear-gradient(180deg,rgba(8,6,15,.84),rgba(16,10,20,.88) 60%,rgba(8,6,15,.90)),url('wallpaper.jpg');
   background-position:center,center 22%;background-size:cover,cover;background-repeat:no-repeat,no-repeat;
   background-attachment:fixed,fixed}
-body.cc-wallpaper .top{background:rgba(20,16,28,.72);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,.09)}
-body.cc-wallpaper .clock{color:#EDEAE6}
-body.cc-wallpaper .dash-side.wallpaper{background:rgba(14,11,22,.60);backdrop-filter:blur(6px);border-right:1px solid rgba(255,255,255,.08)}
-body.cc-wallpaper .dash-side.wallpaper .site-logo span{color:#F4EFE8}
-body.cc-wallpaper .dash-side.wallpaper .dl{color:#C9C2D8}
-body.cc-wallpaper .dash-side.wallpaper .dl[aria-current="true"]{background:rgba(255,255,255,.16);color:#FBD9A8}
-body.cc-wallpaper .dash-side.wallpaper .dl:hover{background:rgba(255,255,255,.10)}
-@media (max-width:760px){body.cc-wallpaper{background-attachment:scroll,scroll}}
-.care-login-wrap{position:relative;min-height:calc(100vh - 140px);display:grid;place-items:center;padding:36px 16px;overflow:hidden;
+body.app-wallpaper .top{background:rgba(20,16,28,.72);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,.09)}
+body.app-wallpaper .clock{color:#EDEAE6}
+body.app-wallpaper .dash-side.wallpaper{background:rgba(14,11,22,.60);backdrop-filter:blur(6px);border-right:1px solid rgba(255,255,255,.08)}
+body.app-wallpaper .dash-side.wallpaper .site-logo span{color:#F4EFE8}
+body.app-wallpaper .dash-side.wallpaper .dl{color:#C9C2D8}
+body.app-wallpaper .dash-side.wallpaper .dl[aria-current="true"]{background:rgba(255,255,255,.16);color:#FBD9A8}
+body.app-wallpaper .dash-side.wallpaper .dl:hover{background:rgba(255,255,255,.10)}
+/* non-CRM pages (devotee/agent/pandit) have no sidebar chrome of their own —
+   float their content on a solid card over the wallpaper instead, so text stays
+   legible in any theme without hand-tuning every heading's color */
+body.app-wallpaper .wrap:not(:has(.dash)){
+  background:var(--ground);border-radius:20px;box-shadow:0 30px 90px rgba(0,0,0,.4);
+  margin-top:24px;margin-bottom:24px}
+@media (max-width:760px){body.app-wallpaper{background-attachment:scroll,scroll}
+  body.app-wallpaper .wrap:not(:has(.dash)){border-radius:0;margin:0;box-shadow:none}}
+.care-login-wrap{position:relative;left:50%;width:100vw;margin-left:-50vw;box-sizing:border-box;
+  min-height:calc(100vh - 140px);display:grid;place-items:center;padding:36px 16px;overflow:hidden;
   background:linear-gradient(180deg,#0A0918 0%,#161235 45%,#1E1A3E 100%)}
 .care-login-wrap .sky{position:absolute;inset:0;overflow:hidden;pointer-events:none}
 .care-login-wrap .nebula{position:absolute;inset:-10%;
@@ -104,52 +115,63 @@ body.cc-wallpaper .dash-side.wallpaper .dl:hover{background:rgba(255,255,255,.10
   background-size:260px 260px;background-repeat:repeat;opacity:.8;animation:twinkle 4.5s ease-in-out infinite}
 .care-login-wrap .stars2{background-size:190px 190px;opacity:.5;animation-duration:3.2s;animation-delay:.8s}
 @keyframes twinkle{0%,100%{opacity:.3}50%{opacity:1}}
-.om-mark.lg{position:relative;z-index:1;display:block;text-align:center;font-size:34px;margin:0 0 4px;
+.om-mark.lg{position:relative;z-index:1;display:block;text-align:center;font-size:56px;margin:0 0 6px;
   filter:drop-shadow(0 0 14px rgba(232,105,127,.35))}
-.care-login-card{position:relative;z-index:1;width:100%;max-width:380px;background:var(--surface);border:1px solid var(--line);
-  border-radius:var(--r);box-shadow:0 30px 80px rgba(0,0,0,.45);padding:30px 26px}
-.care-login-logo{display:block;max-width:220px;width:100%;height:auto;margin:0 auto 6px;filter:drop-shadow(0 4px 14px rgba(0,0,0,.12))}
+.care-login-card{position:relative;z-index:1;width:100%;max-width:640px;background:var(--surface);border:1px solid var(--line);
+  border-radius:calc(var(--r) + 4px);box-shadow:0 30px 80px rgba(0,0,0,.45);padding:52px 56px}
+.care-login-logo{display:block;max-width:340px;width:100%;height:auto;margin:0 auto 10px;filter:drop-shadow(0 4px 14px rgba(0,0,0,.12))}
+.care-login-card .eyebrow{font-size:13px}
+.care-login-card h1.h-page{font-size:32px;margin:6px 0 8px}
+.care-login-card .sub{font-size:16px}
+.care-login-card .fld{margin-bottom:18px}
+.care-login-card label.f{font-size:15px;margin-bottom:7px}
+.care-login-card .inp{font-size:18px;padding:15px 17px}
+.care-login-card .pw-wrap .inp{padding-right:48px}
+.care-login-card .pw-eye{width:38px;height:38px;right:4px}
+.care-login-card .pw-eye svg{width:21px;height:21px}
+.care-login-card .btn-wide{font-size:18px;padding:16px;margin-top:10px}
+.care-login-card > .sub:last-child{font-size:14px;margin-top:22px}
 .pw-wrap{position:relative}
 .pw-wrap .inp{padding-right:38px}
 .pw-eye{position:absolute;right:2px;top:50%;transform:translateY(-50%);width:30px;height:30px;display:grid;place-items:center;
   background:none;border:none;border-radius:var(--r-sm);color:var(--ink-3);cursor:pointer}
 .pw-eye:hover{color:var(--ink-2);background:var(--surface-2)}
 .pw-eye[aria-pressed="true"]{color:var(--accent)}
-.tagpill{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.09em;color:var(--flow);background:var(--flow-soft);border:1px solid var(--flow-line);padding:2px 7px;border-radius:99px;white-space:nowrap}
+.tagpill{font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.09em;color:var(--flow);background:var(--flow-soft);border:1px solid var(--flow-line);padding:4px 9px;border-radius:99px;white-space:nowrap}
 .top-sp{flex:1 1 auto}
-.clock{font-family:var(--mono);font-size:11.5px;color:var(--ink-2);background:var(--surface-2);border:1px solid var(--line);padding:4px 9px;border-radius:var(--r-sm);white-space:nowrap}
+.clock{font-family:var(--mono);font-size:14px;color:var(--ink-2);background:var(--surface-2);border:1px solid var(--line);padding:6px 11px;border-radius:var(--r-sm);white-space:nowrap}
 
-.roles{display:flex;gap:6px;overflow-x:auto;padding:0 16px 10px;scrollbar-width:thin}
-.role{flex:none;display:flex;align-items:center;gap:7px;background:var(--surface-2);border:1px solid var(--line);color:var(--ink-2);padding:7px 12px;border-radius:99px;cursor:pointer;font-weight:500;font-size:13px;white-space:nowrap}
+.roles{display:flex;gap:7px;overflow-x:auto;padding:0 16px 12px;scrollbar-width:thin}
+.role{flex:none;display:flex;align-items:center;gap:7px;background:var(--surface-2);border:1px solid var(--line);color:var(--ink-2);padding:10px 17px;border-radius:99px;cursor:pointer;font-weight:500;font-size:16px;white-space:nowrap}
 .role:hover{border-color:var(--line-2);color:var(--ink)}
 .role[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
 .role .dot{width:7px;height:7px;border-radius:99px;background:currentColor;opacity:.55;flex:none}
 
-.wrap{max-width:1080px;margin:0 auto;padding:18px 16px 96px}
+.wrap{max-width:1160px;margin:0 auto;padding:22px 18px 96px}
 
 /* ---------- primitives ---------- */
-.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px}
-.card+.card{margin-top:12px}
-.stack{display:flex;flex-direction:column;gap:12px}
-.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-.grid{display:grid;gap:12px}
-.roster-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px}
+.card+.card{margin-top:16px}
+.stack{display:flex;flex-direction:column;gap:16px}
+.row{display:flex;gap:11px;flex-wrap:wrap;align-items:center}
+.grid{display:grid;gap:16px}
+.roster-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
 .roster-row:last-child{border-bottom:0}
 .roster-row>div{min-width:0}
-.g2{grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr))}
-.g3{grid-template-columns:repeat(auto-fit,minmax(min(100%,190px),1fr))}
-.g4{grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr))}
-.eyebrow{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-3);margin-bottom:5px}
-.h-page{font-size:22px;font-weight:700}
-.h-sec{font-size:15px;font-weight:600}
-.sub{color:var(--ink-2);font-size:13px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(min(100%,225px),1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(min(100%,185px),1fr))}
+.eyebrow{font-family:var(--mono);font-size:13px;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-3);margin-bottom:7px}
+.h-page{font-size:31px;font-weight:700}
+.h-sec{font-size:20px;font-weight:600}
+.sub{color:var(--ink-2);font-size:16px}
 .mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
 .muted{color:var(--ink-3)}
-.crumb{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--ink-2);margin-bottom:12px;flex-wrap:wrap}
-.crumb button{background:none;border:none;color:var(--accent);cursor:pointer;padding:0;font-size:12.5px;text-decoration:underline;text-underline-offset:2px}
-hr.sep{border:none;border-top:1px solid var(--line);margin:14px 0}
+.crumb{display:flex;align-items:center;gap:6px;font-size:15px;color:var(--ink-2);margin-bottom:15px;flex-wrap:wrap}
+.crumb button{background:none;border:none;color:var(--accent);cursor:pointer;padding:0;font-size:15px;text-decoration:underline;text-underline-offset:2px}
+hr.sep{border:none;border-top:1px solid var(--line);margin:18px 0}
 
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;background:var(--surface-2);border:1px solid var(--line-2);color:var(--ink);padding:9px 14px;border-radius:var(--r-sm);cursor:pointer;font-weight:500;font-size:13.5px;text-align:center}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;background:var(--surface-2);border:1px solid var(--line-2);color:var(--ink);padding:12px 19px;border-radius:var(--r-sm);cursor:pointer;font-weight:500;font-size:16.5px;text-align:center}
 .btn:hover{background:var(--surface-3)}
 .btn:disabled{opacity:.45;cursor:not-allowed}
 .btn-pri{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
@@ -157,11 +179,11 @@ hr.sep{border:none;border-top:1px solid var(--line);margin:14px 0}
 .btn-ok{background:var(--ok);border-color:var(--ok);color:#fff}
 .btn-ok:hover{filter:brightness(1.08);background:var(--ok)}
 :root[data-theme="dark"] .btn-ok,@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .btn-ok{color:#0A1A0F}}
-.btn-sm{padding:6px 10px;font-size:12.5px}
+.btn-sm{padding:9px 14px;font-size:14.5px}
 .btn-wide{width:100%}
 .btn:focus-visible,.role:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--flow);outline-offset:2px}
 
-.pill{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;padding:3px 8px;border-radius:99px;border:1px solid;white-space:nowrap}
+.pill{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:12.5px;text-transform:uppercase;letter-spacing:.07em;padding:5px 10px;border-radius:99px;border:1px solid;white-space:nowrap}
 .p-ok{color:var(--ok);background:var(--ok-soft);border-color:var(--ok-line)}
 .p-warn{color:var(--warn);background:var(--warn-soft);border-color:var(--warn-line)}
 .p-stop{color:var(--stop);background:var(--stop-soft);border-color:var(--stop-line)}
@@ -169,39 +191,39 @@ hr.sep{border:none;border-top:1px solid var(--line);margin:14px 0}
 .p-flow{color:var(--flow);background:var(--flow-soft);border-color:var(--flow-line)}
 .p-mute{color:var(--ink-3);background:var(--surface-2);border-color:var(--line)}
 
-label.f{display:block;font-size:12px;font-weight:500;color:var(--ink-2);margin-bottom:5px}
-.inp{width:100%;background:var(--surface);border:1px solid var(--line-2);border-radius:var(--r-sm);padding:9px 11px;font-size:14px}
+label.f{display:block;font-size:15px;font-weight:500;color:var(--ink-2);margin-bottom:7px}
+.inp{width:100%;background:var(--surface);border:1px solid var(--line-2);border-radius:var(--r-sm);padding:12px 14px;font-size:17px}
 .inp:focus{border-color:var(--flow)}
-.fld{margin-bottom:12px}
+.fld{margin-bottom:16px}
 
 /* ---------- trigger annotation ---------- */
-.trig{background:var(--flow-soft);border:1px solid var(--flow-line);border-left:3px solid var(--flow);border-radius:var(--r-sm);padding:12px 14px;margin:12px 0}
-.trig h4{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--flow);margin-bottom:8px}
-.trig ul{margin:0;padding-left:16px;display:flex;flex-direction:column;gap:5px}
-.trig li{font-size:12.5px;color:var(--ink-2);line-height:1.5}
+.trig{background:var(--flow-soft);border:1px solid var(--flow-line);border-left:3px solid var(--flow);border-radius:var(--r-sm);padding:16px 18px;margin:16px 0}
+.trig h4{font-family:var(--mono);font-size:12.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--flow);margin-bottom:10px}
+.trig ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:7px}
+.trig li{font-size:15.5px;color:var(--ink-2);line-height:1.55}
 .trig li b{color:var(--ink);font-weight:600}
-.trig .who{font-family:var(--mono);font-size:10.5px;color:var(--flow);background:var(--surface);border:1px solid var(--flow-line);padding:1px 5px;border-radius:4px;white-space:nowrap}
+.trig .who{font-family:var(--mono);font-size:12.5px;color:var(--flow);background:var(--surface);border:1px solid var(--flow-line);padding:1px 6px;border-radius:4px;white-space:nowrap}
 
-.warnbox{background:var(--warn-soft);border:1px solid var(--warn-line);border-left:3px solid var(--warn);border-radius:var(--r-sm);padding:12px 14px;margin:12px 0}
-.warnbox h4{font-size:13px;font-weight:600;color:var(--warn);margin-bottom:5px;font-family:var(--sans)}
-.warnbox p{margin:0;font-size:12.5px;color:var(--ink-2)}
-.okbox{background:var(--ok-soft);border:1px solid var(--ok-line);border-left:3px solid var(--ok);border-radius:var(--r-sm);padding:12px 14px;margin:12px 0}
-.okbox h4{font-size:13px;font-weight:600;color:var(--ok);margin-bottom:5px;font-family:var(--sans)}
-.okbox p{margin:0;font-size:12.5px;color:var(--ink-2)}
-.stopbox{background:var(--stop-soft);border:1px solid var(--stop-line);border-left:3px solid var(--stop);border-radius:var(--r-sm);padding:12px 14px;margin:12px 0}
-.stopbox h4{font-size:13px;font-weight:600;color:var(--stop);margin-bottom:5px;font-family:var(--sans)}
-.stopbox p{margin:0;font-size:12.5px;color:var(--ink-2)}
+.warnbox{background:var(--warn-soft);border:1px solid var(--warn-line);border-left:3px solid var(--warn);border-radius:var(--r-sm);padding:16px 18px;margin:16px 0}
+.warnbox h4{font-size:16.5px;font-weight:600;color:var(--warn);margin-bottom:7px;font-family:var(--sans)}
+.warnbox p{margin:0;font-size:15.5px;color:var(--ink-2)}
+.okbox{background:var(--ok-soft);border:1px solid var(--ok-line);border-left:3px solid var(--ok);border-radius:var(--r-sm);padding:16px 18px;margin:16px 0}
+.okbox h4{font-size:16.5px;font-weight:600;color:var(--ok);margin-bottom:7px;font-family:var(--sans)}
+.okbox p{margin:0;font-size:15.5px;color:var(--ink-2)}
+.stopbox{background:var(--stop-soft);border:1px solid var(--stop-line);border-left:3px solid var(--stop);border-radius:var(--r-sm);padding:16px 18px;margin:16px 0}
+.stopbox h4{font-size:16.5px;font-weight:600;color:var(--stop);margin-bottom:7px;font-family:var(--sans)}
+.stopbox p{margin:0;font-size:15.5px;color:var(--ink-2)}
 
 /* ---------- list rows ---------- */
-.lrow{display:flex;gap:12px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:13px 14px;cursor:pointer;text-align:left;width:100%}
+.lrow{display:flex;gap:16px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;cursor:pointer;text-align:left;width:100%}
 .lrow:hover{border-color:var(--line-2);box-shadow:var(--shadow)}
 .lrow-main{flex:1 1 auto;min-width:0}
-.lrow-t{font-weight:600;font-size:14px;margin-bottom:3px}
-.lrow-s{font-size:12.5px;color:var(--ink-2)}
-.lrow-r{flex:none;text-align:right;display:flex;flex-direction:column;gap:5px;align-items:flex-end}
+.lrow-t{font-weight:600;font-size:17.5px;margin-bottom:4px}
+.lrow-s{font-size:15px;color:var(--ink-2)}
+.lrow-r{flex:none;text-align:right;display:flex;flex-direction:column;gap:6px;align-items:flex-end}
 .cc-booking-row{cursor:default}
 .cc-name-link,.text-link{border:0;background:none;padding:0;color:var(--accent);font:inherit;font-weight:600;text-align:left;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
-.cc-name-link{font-size:14px;text-decoration:none}
+.cc-name-link{font-size:17.5px;text-decoration:none}
 .cc-name-link:hover,.text-link:hover{text-decoration:underline}
 .running-dot{display:inline-block;width:9px;height:9px;margin-right:7px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px var(--ok-soft),0 0 12px var(--ok);animation:running-pulse 1.6s ease-in-out infinite;vertical-align:middle}
 @keyframes running-pulse{50%{box-shadow:0 0 0 6px var(--ok-soft),0 0 18px var(--ok);opacity:.75}}
@@ -213,40 +235,40 @@ label.f{display:block;font-size:12px;font-weight:500;color:var(--ink-2);margin-b
 .countdown.done{background:var(--surface-2);color:var(--ink-3);border:1px solid var(--line)}
 .care-modal{position:fixed;inset:0;z-index:75;display:grid;place-items:center;padding:16px}
 .care-modal-backdrop{position:absolute;inset:0;background:rgba(15,12,10,.62);backdrop-filter:blur(3px)}
-.care-modal-panel{position:relative;width:min(100%,960px);max-height:min(92vh,900px);display:flex;flex-direction:column;background:var(--ground);border:1px solid var(--line);border-radius:14px;box-shadow:0 24px 80px rgba(0,0,0,.28);overflow:hidden}
-.care-modal-panel.edit{width:min(100%,760px)}
-.care-modal-top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;background:var(--surface);border-bottom:1px solid var(--line)}
-.care-modal-content{padding:18px;overflow-y:auto;min-height:0}
+.care-modal-panel{position:relative;width:min(100%,1080px);max-height:min(92vh,940px);display:flex;flex-direction:column;background:var(--ground);border:1px solid var(--line);border-radius:16px;box-shadow:0 24px 80px rgba(0,0,0,.28);overflow:hidden}
+.care-modal-panel.edit{width:min(100%,840px)}
+.care-modal-top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 20px;background:var(--surface);border-bottom:1px solid var(--line);font-size:16px}
+.care-modal-content{padding:24px;overflow-y:auto;min-height:0}
 body.modal-open{overflow:hidden}
 @media (max-width:560px){.care-modal{padding:0}.care-modal-panel{width:100%;height:100%;max-height:100%;border-radius:0}.care-modal-content{padding:14px}}
 .aa-panel{position:fixed;right:18px;bottom:18px;z-index:70;width:min(400px,calc(100vw - 36px));max-height:min(74vh,640px);display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:0 18px 48px rgba(0,0,0,.22)}
 .aa-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:13px 14px;border-bottom:1px solid var(--line)}
-.aa-head h4{font-family:var(--disp);font-size:14px;margin:0 0 3px}
+.aa-head h4{font-family:var(--disp);font-size:16px;margin:0 0 3px}
 .aa-controls{display:flex;gap:5px;flex-shrink:0}
 .aa-icon-btn{width:26px;height:26px;display:grid;place-items:center;border-radius:var(--r-sm);border:1px solid var(--line);background:var(--surface-2);color:var(--ink-2);cursor:pointer;font-size:12px;line-height:1;padding:0}
 .aa-icon-btn:hover{background:var(--surface-3)}
 .aa-progress{height:3px;background:var(--surface-3)}
 .aa-bar{height:100%;background:var(--flow);transition:width .3s ease}
-.aa-status{padding:9px 14px 0;font-size:12.5px;color:var(--ink-2)}
+.aa-status{padding:9px 14px 0;font-size:14px;color:var(--ink-2)}
 .aa-list{overflow-y:auto;padding:10px 14px 14px;display:flex;flex-direction:column;gap:8px}
-.aa-row{border:1px solid var(--line);border-radius:var(--r-sm);padding:10px 11px;display:flex;align-items:flex-start;justify-content:space-between;gap:10px;background:var(--ground);animation:aa-enter .25s ease}
+.aa-row{border:1px solid var(--line);border-radius:var(--r-sm);padding:11px 13px;display:flex;align-items:flex-start;justify-content:space-between;gap:10px;background:var(--ground);animation:aa-enter .25s ease;font-size:14px}
 .aa-row.warn{border-color:var(--warn-line);background:var(--warn-soft)}
-.aa-row.pending{align-items:center;color:var(--ink-3);font-size:12.5px}
+.aa-row.pending{align-items:center;color:var(--ink-3);font-size:14px}
 .aa-dot{display:inline-block;width:7px;height:7px;margin-right:8px;border-radius:50%;background:var(--flow);animation:running-pulse 1.2s ease-in-out infinite;vertical-align:middle}
 @keyframes aa-enter{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
 .aa-mini{position:fixed;right:18px;bottom:18px;z-index:70;display:flex;align-items:center;gap:9px;padding:9px 12px;background:var(--surface);border:1px solid var(--line);border-radius:99px;box-shadow:0 10px 28px rgba(0,0,0,.2);font-size:12.5px}
 @media (max-width:560px){.aa-panel{right:10px;left:10px;bottom:10px;width:auto}.aa-mini{right:10px;bottom:10px}}
-.staff-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:15px}
+.staff-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px}
 .staff-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}
-.staff-name{font-family:var(--disp);font-size:15px;font-weight:600}
-.workload-badge{display:inline-flex;align-items:center;gap:5px;border-radius:99px;padding:5px 9px;background:var(--flow-soft);color:var(--flow);border:1px solid var(--flow-line);font-family:var(--mono);font-size:11px;font-weight:600;white-space:nowrap}
-.staff-meta{display:flex;gap:8px 14px;align-items:center;flex-wrap:wrap;margin:9px 0;font-size:12.5px;color:var(--ink-2)}
+.staff-name{font-family:var(--disp);font-size:19px;font-weight:600}
+.workload-badge{display:inline-flex;align-items:center;gap:5px;border-radius:99px;padding:6px 10px;background:var(--flow-soft);color:var(--flow);border:1px solid var(--flow-line);font-family:var(--mono);font-size:13px;font-weight:600;white-space:nowrap}
+.staff-meta{display:flex;gap:8px 14px;align-items:center;flex-wrap:wrap;margin:10px 0;font-size:15.5px;color:var(--ink-2)}
 .staff-flow{border-left:2px solid var(--flow-line);margin:12px 0 0 11px;padding-left:17px;display:flex;flex-direction:column;gap:10px}
-.staff-flow-item{position:relative;background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-sm);padding:11px 12px}
+.staff-flow-item{position:relative;background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-sm);padding:12px 14px;font-size:14px}
 .staff-flow-item::before{content:"";position:absolute;left:-23px;top:15px;width:10px;height:10px;border-radius:99px;background:var(--flow);border:2px solid var(--surface)}
-.flow-arrow{color:var(--ink-3);font-size:12px;margin:6px 0}
+.flow-arrow{color:var(--ink-3);font-size:13px;margin:6px 0}
 
-.kv{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px solid var(--line);font-size:13px}
+.kv{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:16px}
 .kv:last-child{border-bottom:none}
 .kv dt{color:var(--ink-2);flex:none}
 .kv dd{margin:0;text-align:right;font-weight:500;min-width:0;overflow-wrap:anywhere}
@@ -258,15 +280,25 @@ body.modal-open{overflow:hidden}
 .tl .tdot.pend{background:var(--surface-3);box-shadow:0 0 0 1px var(--line-2)}
 .tl .tdot.now{background:var(--accent);box-shadow:0 0 0 1px var(--accent)}
 .tl-b{flex:1;min-width:0}
-.tl-t{font-size:13px;font-weight:600}
-.tl-d{font-size:12px;color:var(--ink-2)}
-.tl-w{font-family:var(--mono);font-size:10.5px;color:var(--ink-3)}
+.tl-t{font-size:16px;font-weight:600}
+.tl-d{font-size:15px;color:var(--ink-2)}
+.tl-w{font-family:var(--mono);font-size:13px;color:var(--ink-3)}
 
-table.t{width:100%;border-collapse:collapse;font-size:13px}
-table.t th{text-align:left;font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-3);font-weight:500;padding:7px 10px;border-bottom:1px solid var(--line-2);white-space:nowrap}
-table.t td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+table.t{width:100%;border-collapse:collapse;font-size:16px}
+table.t th{text-align:left;font-family:var(--mono);font-size:12.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-3);font-weight:500;padding:10px 13px;border-bottom:1px solid var(--line-2);white-space:nowrap}
+table.t td{padding:12px 13px;border-bottom:1px solid var(--line);vertical-align:top}
 table.t tr:last-child td{border-bottom:none}
+.icon-row{display:flex;gap:4px;margin-top:4px;align-items:center}
+.icon-btn{width:26px;height:26px;flex:none;display:grid;place-items:center;border-radius:var(--r-sm);border:1px solid var(--line-2);background:var(--surface-2);color:var(--ink-2);cursor:pointer;text-decoration:none}
+.icon-btn:hover{background:var(--surface-3);color:var(--ink)}
 .scroll-x{overflow-x:auto;-webkit-overflow-scrolling:touch}
+/* Devotees directory table — fixed column widths (via <colgroup>) so every row's columns
+   line up at the same x position regardless of how much a given cell stacks; long names
+   truncate with an ellipsis (full value in the title tooltip) instead of wrapping onto a
+   second line and throwing the row height off. */
+table.dev-table{table-layout:fixed;min-width:1360px}
+table.dev-table .cell-name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+table.dev-table td{vertical-align:top}
 
 /* ---------- phone frame ---------- */
 .phone{max-width:420px;margin:0 auto;background:var(--surface);border:1px solid var(--line-2);border-radius:18px;overflow:hidden;box-shadow:var(--shadow)}
@@ -296,11 +328,11 @@ table.t tr:last-child td{border-bottom:none}
 .drawer-l{flex:1;overflow-y:auto;padding:12px 16px}
 .ev{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
 .ev:last-child{border-bottom:none}
-.ev-i{width:26px;height:26px;border-radius:7px;flex:none;display:grid;place-items:center;font-size:11px;font-weight:600;font-family:var(--mono)}
+.ev-i{width:28px;height:28px;border-radius:7px;flex:none;display:grid;place-items:center;font-size:12px;font-weight:600;font-family:var(--mono)}
 .ev-b{flex:1;min-width:0}
-.ev-t{font-size:12.5px;font-weight:500;line-height:1.45}
-.ev-m{font-size:11.5px;color:var(--ink-2);margin-top:3px;background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-sm);padding:7px 9px;overflow-wrap:anywhere}
-.ev-w{font-family:var(--mono);font-size:10px;color:var(--ink-3);margin-top:4px}
+.ev-t{font-size:14px;font-weight:500;line-height:1.45}
+.ev-m{font-size:13px;color:var(--ink-2);margin-top:3px;background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-sm);padding:8px 10px;overflow-wrap:anywhere}
+.ev-w{font-family:var(--mono);font-size:11px;color:var(--ink-3);margin-top:4px}
 
 /* ---------- flow map ---------- */
 .fm{display:flex;flex-direction:column;gap:0}
@@ -316,8 +348,8 @@ table.t tr:last-child td{border-bottom:none}
 
 .photo{aspect-ratio:4/3;max-width:100%;border-radius:var(--r-sm);border:1px solid var(--line);background:linear-gradient(135deg,var(--surface-2),var(--surface-3));display:grid;place-items:center;font-family:var(--mono);font-size:11px;color:var(--ink-3);text-align:center;padding:8px}
 
-.otpbig{font-family:var(--mono);font-size:30px;font-weight:600;letter-spacing:.14em;color:var(--accent);text-align:center;padding:10px 0}
-.empty{text-align:center;padding:30px 16px;color:var(--ink-3);font-size:13px}
+.otpbig{font-family:var(--mono);font-size:34px;font-weight:600;letter-spacing:.14em;color:var(--accent);text-align:center;padding:10px 0}
+.empty{text-align:center;padding:30px 16px;color:var(--ink-3);font-size:14.5px}
 @media (max-width:560px){
   .h-page{font-size:19px}
   .lrow{flex-wrap:wrap}
@@ -336,16 +368,27 @@ table.t tr:last-child td{border-bottom:none}
 @media (max-width:460px){.site-hd-in{flex-wrap:wrap;gap:8px 12px}.site-logo{order:1}.site-acc{order:2;margin-left:auto}.site-nav{order:3;width:100%;overflow-x:auto;flex-wrap:nowrap;gap:4px}.site-nav button{white-space:nowrap}}
 
 /* dashboard shell (admin / customer care) */
-.dash{display:flex;align-items:flex-start;margin:-18px -16px;min-height:calc(100vh - 132px)}
-.dash-side{width:196px;flex:none;background:var(--surface);border-right:1px solid var(--line);padding:14px 8px;position:sticky;top:97px;align-self:flex-start}
-.dash-side .dl{display:block;width:100%;text-align:left;background:none;border:none;padding:8px 11px;border-radius:var(--r-sm);font-size:12.5px;color:var(--ink-2);cursor:pointer;font-weight:500;margin-bottom:1px}
+.dash{display:flex;align-items:flex-start;position:relative;left:50%;width:100vw;margin-left:-50vw;margin-top:-18px;
+  min-height:calc(100vh - 132px);padding:0 28px;box-sizing:border-box}
+.dash-side{width:256px;flex:none;background:var(--surface);border-right:1px solid var(--line);padding:18px 12px;position:sticky;top:97px;align-self:flex-start}
+.dash-side .dl{display:block;width:100%;text-align:left;background:none;border:none;padding:11px 15px;border-radius:var(--r-sm);font-size:16px;color:var(--ink-2);cursor:pointer;font-weight:500;margin-bottom:2px}
 .dash-side .dl[aria-current="true"]{background:var(--accent-soft);color:var(--accent);font-weight:600}
 .dash-side .dl:hover{background:var(--surface-2)}
 .dash-main{flex:1;min-width:0}
-.dash-top{display:flex;align-items:center;gap:12px;padding:11px 20px;border-bottom:1px solid var(--line);background:var(--surface)}
-.dash-search{flex:1;max-width:300px;background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-sm);padding:6px 11px;font-size:12px;color:var(--ink-3)}
-.dash-body{padding:18px 20px}
-@media (max-width:760px){.dash{display:block;margin:-18px -16px 0}.dash-side{position:static;width:100%;display:flex;overflow-x:auto;border-right:none;border-bottom:1px solid var(--line);padding:8px}.dash-side .dl{width:auto;white-space:nowrap;margin:0 4px 0 0}.dash-body{padding:14px}}
+.dash-top{display:flex;align-items:center;gap:12px;padding:16px 30px;border-bottom:1px solid var(--line);background:var(--surface)}
+.dash-search{flex:1;max-width:360px;background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-sm);padding:9px 14px;font-size:15.5px;color:var(--ink-3)}
+.dash-body{padding:30px 34px}
+@media (max-width:760px){.dash{display:block;position:static;left:auto;width:auto;margin:-18px -16px 0;padding:0}.dash-side{position:static;width:100%;display:flex;overflow-x:auto;border-right:none;border-bottom:1px solid var(--line);padding:8px}.dash-side .dl{width:auto;white-space:nowrap;margin:0 4px 0 0}.dash-body{padding:14px}}
+
+/* ---------- agent/pandit: full-bleed like the CC dashboard, not a centered card ---------- */
+body.role-wide.app-wallpaper .wrap{
+  background:none;box-shadow:none;border-radius:0;margin-top:0;margin-bottom:0;
+  position:relative;left:50%;width:100vw;margin-left:-50vw;max-width:none;
+  box-sizing:border-box;padding:28px 40px 60px}
+body.role-wide.app-wallpaper .wrap>.eyebrow{color:#E4DECF}
+body.role-wide.app-wallpaper .wrap>h1.h-page{color:#FBF8F3}
+body.role-wide.app-wallpaper .wrap>p.sub,body.role-wide.app-wallpaper .wrap>.row>label.sub{color:#D3CCE0}
+@media (max-width:760px){body.role-wide.app-wallpaper .wrap{padding:14px 16px 60px}}
 
 /* mobile/desktop preview toggle (devotee, agent, pandit) */
 .devtoggle{display:flex;gap:2px;background:var(--surface-2);border:1px solid var(--line);border-radius:99px;padding:2px}
@@ -358,26 +401,26 @@ body.mobile-preview #app{max-width:412px;margin:0 auto;background:var(--ground);
 
 /* ===== v3 additions ===== */
 /* editable field rows */
-.ed{display:grid;grid-template-columns:1fr;gap:5px;margin-bottom:11px}
-.ed-l{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:500;color:var(--ink-2)}
-.lock{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);background:var(--surface-2);border:1px solid var(--line);padding:1px 6px;border-radius:99px}
-.ed-ro{background:var(--surface-2);border:1px dashed var(--line-2);border-radius:var(--r-sm);padding:9px 11px;font-size:13.5px;color:var(--ink-2)}
-.ed-why{font-size:11.5px;color:var(--ink-3)}
+.ed{display:grid;grid-template-columns:1fr;gap:6px;margin-bottom:13px}
+.ed-l{display:flex;align-items:center;gap:6px;font-size:15px;font-weight:500;color:var(--ink-2)}
+.lock{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);background:var(--surface-2);border:1px solid var(--line);padding:1px 6px;border-radius:99px}
+.ed-ro{background:var(--surface-2);border:1px dashed var(--line-2);border-radius:var(--r-sm);padding:12px 14px;font-size:16.5px;color:var(--ink-2)}
+.ed-why{font-size:14px;color:var(--ink-3)}
 
 /* audit trail */
 .aud{display:flex;flex-direction:column;gap:0;margin:0;padding:0;list-style:none}
-.aud li{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:12.5px}
+.aud li{display:flex;gap:10px;padding:11px 0;border-bottom:1px solid var(--line);font-size:15.5px}
 .aud li:last-child{border-bottom:none}
-.aud .ai{width:22px;height:22px;border-radius:6px;flex:none;display:grid;place-items:center;font-family:var(--mono);font-size:9.5px;font-weight:600;background:var(--flow-soft);color:var(--flow)}
+.aud .ai{width:24px;height:24px;border-radius:6px;flex:none;display:grid;place-items:center;font-family:var(--mono);font-size:10.5px;font-weight:600;background:var(--flow-soft);color:var(--flow)}
 .aud .ab{flex:1;min-width:0}
 .aud .af{font-weight:600}
 .aud .av{color:var(--ink-2);overflow-wrap:anywhere}
-.aud .aw{font-family:var(--mono);font-size:10px;color:var(--ink-3);margin-top:2px}
+.aud .aw{font-family:var(--mono);font-size:11px;color:var(--ink-3);margin-top:2px}
 .del{text-decoration:line-through;color:var(--ink-3)}
 
 /* sub tabs */
 .subtabs{display:flex;gap:4px;overflow-x:auto;border-bottom:1px solid var(--line);margin-bottom:16px;padding-bottom:0}
-.subtabs button{flex:none;background:none;border:none;border-bottom:2px solid transparent;padding:9px 12px;font-size:13px;font-weight:500;color:var(--ink-2);cursor:pointer;white-space:nowrap}
+.subtabs button{flex:none;background:none;border:none;border-bottom:2px solid transparent;padding:11px 16px;font-size:16px;font-weight:500;color:var(--ink-2);cursor:pointer;white-space:nowrap}
 .subtabs button[aria-selected="true"]{color:var(--accent);border-bottom-color:var(--accent)}
 .subtabs button:hover{color:var(--ink)}
 
@@ -404,16 +447,16 @@ table.mx th:first-child,table.mx td:first-child{text-align:left;position:sticky;
 .modal{position:fixed;inset:0;z-index:70;display:none;padding:16px}
 .modal[data-open="true"]{display:grid;place-items:center}
 .modal-sc{position:absolute;inset:0;background:rgba(15,12,10,.5)}
-.modal-p{position:relative;background:var(--surface);border:1px solid var(--line-2);border-radius:var(--r);width:min(100%,520px);max-height:86vh;overflow-y:auto;padding:18px;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+.modal-p{position:relative;background:var(--surface);border:1px solid var(--line-2);border-radius:var(--r);width:min(100%,560px);max-height:86vh;overflow-y:auto;padding:22px;box-shadow:0 20px 60px rgba(0,0,0,.25)}
 
 /* misc */
-.chips{display:flex;gap:5px;flex-wrap:wrap}
-.chip-tog{background:var(--surface-2);border:1px solid var(--line-2);color:var(--ink-2);padding:6px 11px;border-radius:99px;font-size:12px;cursor:pointer;font-weight:500}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip-tog{background:var(--surface-2);border:1px solid var(--line-2);color:var(--ink-2);padding:9px 15px;border-radius:99px;font-size:15px;cursor:pointer;font-weight:500}
 .chip-tog[aria-pressed="true"]{background:var(--ok-soft);border-color:var(--ok-line);color:var(--ok)}
 .sla-ok{color:var(--ok)}.sla-warn{color:var(--warn)}.sla-late{color:var(--stop);font-weight:600}
-.big{font-family:var(--disp);font-size:21px;font-weight:700;line-height:1.15}
-.note-auto{background:var(--flow-soft);border:1px solid var(--flow-line);border-radius:var(--r-sm);padding:10px 12px;font-size:12.5px;color:var(--ink-2);margin-bottom:8px}
-.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:11.5px;color:var(--ink-3)}
+.big{font-family:var(--disp);font-size:29px;font-weight:700;line-height:1.15}
+.note-auto{background:var(--flow-soft);border:1px solid var(--flow-line);border-radius:var(--r-sm);padding:13px 15px;font-size:15.5px;color:var(--ink-2);margin-bottom:8px}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:14.5px;color:var(--ink-3)}
 .legend span{display:flex;align-items:center;gap:5px}
 .sw{width:9px;height:9px;border-radius:2px;display:inline-block}
 /* flow-map nodes reuse .lrow-* but must not adopt its phone stacking */
@@ -427,7 +470,7 @@ table.mx th:first-child,table.mx td:first-child{text-align:left;position:sticky;
 
 <header class="top">
   <div class="top-in">
-    <div class="brand"><span class="om-mark" aria-hidden="true">ॐ</span><img src="logo-transparent.png" alt="Namonamaha" class="brand-logo"></div>
+    <button class="brand" data-act="brand-home" aria-label="Go to your home screen"><span class="om-mark" aria-hidden="true">ॐ</span><img src="logo-transparent.png?v=2" alt="Namonamaha" class="brand-logo"></button>
     <span class="tagpill">Customer care demo</span>
     <span class="top-sp"></span>
     <span class="clock" id="clock">—</span>
@@ -481,8 +524,8 @@ const ROLES={
    Single source for who may change what. UI reads this; Supabase RLS
    plus a DB trigger must enforce the same list server-side.          */
 const PERMS={
-  'booking.devotee.name'   :{care:'lock',agent:'hide',  pandit:'read',admin:'edit',why:'Identity on the receipt and the sankalpa. Changing it after payment breaks the audit trail — admin only, and audited.'},
-  'booking.devotee.phone'  :{care:'lock',agent:'masked',pandit:'masked',admin:'edit',why:'The payment, the OTP and the masked line are all bound to this number.'},
+  'booking.devotee.name'   :{care:'masked',agent:'hide',  pandit:'read',admin:'edit',why:'Full identity is reserved for the receipt and the sankalpa. Customer care only sees a partially masked name, so a handler cannot walk away with the full record.'},
+  'booking.devotee.phone'  :{care:'masked',agent:'masked',pandit:'masked',admin:'edit',why:'The payment, the OTP and the masked line are all bound to this number. Customer care only ever sees the first few digits — the rest never leaves the platform.'},
   'booking.templeId'       :{care:'edit',agent:'read',  pandit:'read',admin:'edit',why:'Care may change the temple before the puja starts. Agent and pandit availability is checked again.'},
   'booking.pujaId'         :{care:'edit',agent:'read',  pandit:'read',admin:'edit',why:'Care may change the package before the puja starts. The balance or credit is recalculated and audited.'},
   'booking.amount'         :{care:'lock',agent:'hide',  pandit:'hide',admin:'edit',why:'Derived from the puja price. Admin may override for a goodwill adjustment, which is audited.'},
@@ -853,12 +896,12 @@ let PUJAS=[
 ];
 
 let AGENTS=[
- {id:'A1',name:'Pintu Sarma',phone:'+91 90000 10011',temples:['T1','T2'],active:true,shift:'6:00 AM – 2:00 PM'},
- {id:'A2',name:'Bhaskar Das',phone:'+91 90000 10012',temples:['T1','T2'],active:true,shift:'10:00 AM – 6:00 PM'},
- {id:'A3',name:'Ranjan Kalita',phone:'+91 90000 10013',temples:['T3','T4','T5','T6'],active:true,shift:'6:00 AM – 2:00 PM'},
- {id:'A4',name:'Hemanta Boro',phone:'+91 90000 10014',temples:['T1','T5'],active:false,shift:'On leave until 28 Sept'},
- {id:'A5',name:'Madhab Dutta',phone:'+91 90000 10015',temples:['T3','T4','T5','T6'],active:true,shift:'10:00 AM – 6:00 PM'},
- {id:'A6',name:'Nirmal Kalita',phone:'+91 90000 10016',temples:['T1','T2'],active:true,shift:'6:00 AM – 2:00 PM'}
+ {id:'A1',name:'Pintu Sarma',phone:'+91 90000 10011',temples:['T1','T2'],active:true,shift:'6:00 AM – 2:00 PM',careTeam:'A'},
+ {id:'A2',name:'Bhaskar Das',phone:'+91 90000 10012',temples:['T1','T2'],active:true,shift:'10:00 AM – 6:00 PM',careTeam:'A'},
+ {id:'A3',name:'Ranjan Kalita',phone:'+91 90000 10013',temples:['T3','T4','T5','T6'],active:true,shift:'6:00 AM – 2:00 PM',careTeam:'A'},
+ {id:'A4',name:'Hemanta Boro',phone:'+91 90000 10014',temples:['T1','T5'],active:false,shift:'On leave until 28 Sept',careTeam:'B'},
+ {id:'A5',name:'Madhab Dutta',phone:'+91 90000 10015',temples:['T3','T4','T5','T6'],active:true,shift:'10:00 AM – 6:00 PM',careTeam:'B'},
+ {id:'A6',name:'Nirmal Kalita',phone:'+91 90000 10016',temples:['T1','T2'],active:true,shift:'6:00 AM – 2:00 PM',careTeam:'B'}
 ];
 let PANDITS=[
  {id:'D1',name:'Dhiren Sarma',phone:'+91 90000 20021',temple:'T1',agentIds:['A1'],skills:'Sadha, Bali',cap:3,active:true,leave:[]},
@@ -875,11 +918,46 @@ let PANDITS=[
  {id:'D12',name:'Dipak Goswami',phone:'+91 90000 20032',temple:'T5',agentIds:['A5'],skills:'Navagraha Shanti',cap:2,active:true,leave:[]},
  {id:'D13',name:'Suresh Barua',phone:'+91 90000 20033',temple:'T6',agentIds:['A5'],skills:'Rudrabhishek',cap:3,active:true,leave:[]}
 ];
+/* ---- grow the roster to the two-desk target: 10 agents and 50 pandits per desk
+   (20 agents / 100 pandits total), generated so the equal-distribution and desk-isolation
+   features have real scale to run against, without hand-typing ~180 records. ---- */
+(function growRosterToTwoDesks(){
+  const firstNames=['Ratul','Bikash','Dipankar','Mrinmoy','Kishore','Partha','Anup','Sanjib','Gautam','Pranjal',
+    'Ajoy','Bhupen','Diganta','Utpal','Kamal','Hiren','Manas','Robin','Sourav','Nayan','Ankur','Bidyut','Chandan','Deepjyoti'];
+  const lastNames=['Bora','Baruah','Deka','Saikia','Gogoi','Hazarika','Phukan','Bhuyan','Rajkhowa','Mahanta','Talukdar','Choudhury'];
+  const skillSets=['Sadha, Bali','Jaap, Chandi Path','Bagala rites','Rudrabhishek','Sadha, Navagraha, online',
+    'Shiv Abhishek','Tara Puja','Navagraha Shanti','Ugratara rites','Weekly abhishek'];
+  const shifts=['6:00 AM – 2:00 PM','10:00 AM – 6:00 PM'];
+  const templeGroups=[['T1','T2'],['T3','T4','T5','T6']];
+  let seq=7, pseq=14;
+  ['A','B'].forEach(team=>{
+    const need=10-AGENTS.filter(a=>a.careTeam===team).length;
+    for(let i=0;i<need;i++){
+      const fn=firstNames[seq%firstNames.length], ln=lastNames[(seq*3)%lastNames.length];
+      const grp=templeGroups[seq%2];
+      const newAgent={id:'A'+seq,name:fn+' '+ln,phone:'+91 90000 1'+String(1000+seq).slice(-4),
+        temples:grp.slice(),active:true,shift:shifts[seq%2],careTeam:team};
+      AGENTS.push(newAgent);
+      for(let j=0;j<5;j++){
+        const dfn=firstNames[(pseq*5)%firstNames.length], dln=lastNames[(pseq*7)%lastNames.length];
+        PANDITS.push({id:'D'+pseq,name:dfn+' '+dln,phone:'+91 90000 2'+String(1000+pseq).slice(-4),
+          temple:grp[j%grp.length],agentIds:[newAgent.id],skills:skillSets[pseq%skillSets.length],
+          cap:2+(pseq%3),active:true,leave:[]});
+        pseq++;
+      }
+      seq++;
+    }
+  });
+})();
 /* customer care staff logins — created and reset from Admin panel → Care team access */
 let CARE_USERS=[
  {id:'U1',name:'Priya Sharma',loginId:'priya.care',password:'Namo@123',active:true},
  {id:'U2',name:'Rahul Verma',loginId:'rahul.care',password:'Namo@123',active:true},
  {id:'U3',name:'Nibedita Gogoi',loginId:'nibedita.care',password:'Namo@123',active:false}
+];
+/* admin logins — a separate, higher-privilege account set from customer care staff */
+let ADMIN_USERS=[
+ {id:'AD1',name:'Namonamaha Admin',loginId:'admin',password:'Admin@123',active:true}
 ];
 let BLACKOUTS=[
  {id:'B1',templeId:'T1',from:'2027-06-22',to:'2027-06-26',reason:'Ambubachi Mela — temple doors closed, no pujas performed',blocks:true},
@@ -904,7 +982,18 @@ const puja  =id=>PUJAS.find(p=>p.id===id);
 const agent =id=>AGENTS.find(a=>a.id===id);
 const pandit=id=>PANDITS.find(d=>d.id===id);
 const careUser=id=>CARE_USERS.find(u=>u.id===id);
+const adminUser=id=>ADMIN_USERS.find(u=>u.id===id);
 const bk    =id=>DB.bookings.find(b=>b.id===id);
+/* a pandit's care desk is inherited from the team of their (first) agent */
+function panditTeam(d){ const a=(d.agentIds||[]).map(agent).find(Boolean); return a?a.careTeam:null; }
+/* bookings for the seat currently signed in to Customer care; everyone else (admin) sees all */
+function seatBookings(list){
+  return (S.role==='cc'&&S.careSeat)?list.filter(b=>b.careTeam===S.careSeat):list;
+}
+/* agents visible to the current care seat; admin and other roles see everyone */
+function seatAgents(list){
+  return (S.role==='cc'&&S.careSeat)?list.filter(a=>a.careTeam===S.careSeat):list;
+}
 
 const fmtDate=ts=>new Date(ts).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
 const fmtTime=ts=>new Date(ts).toLocaleTimeString('en-IN',{hour:'numeric',minute:'2-digit',hour12:true});
@@ -913,6 +1002,21 @@ const dstr   =ts=>new Date(ts).toISOString().slice(0,10);
 function rel(ts){const d=ts-SIM;const h=Math.round(Math.abs(d)/HOUR);
   const s=h<24?h+'h':Math.round(Math.abs(d)/DAY)+'d';return d<0?s+' ago':'in '+s;}
 function mask(p){return String(p).replace(/(\+91 \d{2})\d{3} \d{2}(\d{3})/,'$1••• ••$2');}
+/* Devotee PII masking for customer care — keeps the first few characters/digits so a
+   handler can still recognise a repeat caller, but never sees enough to reuse the data
+   outside the platform. See PERMS['booking.devotee.name'/'phone'] care:'masked'. */
+function maskName(name){
+  return String(name||'').split(' ').filter(Boolean).map(w=>w.length<=3?w:w.slice(0,3)+'****').join(' ')||'—';
+}
+function maskPhoneDisplay(phone){
+  const s=String(phone||''); if(!s) return '—';
+  const m=s.match(/^(\+\d{1,3}\s?)(.*)$/);
+  const cc=m?m[1]:'', digits=(m?m[2]:s).replace(/\D/g,'');
+  return (cc+digits.slice(0,4)+'*****').trim();
+}
+const isCareMasked=()=>S.role==='cc';
+function devDisplayName(b){ return isCareMasked()?maskName(b.devotee.name):b.devotee.name; }
+function devDisplayPhone(b){ return isCareMasked()?maskPhoneDisplay(b.devotee.phone):b.devotee.phone; }
 const newOtp=()=>String(Math.floor(1000+Math.random()*9000));
 const newArrival=()=>'NM'+String(Math.floor(10+Math.random()*89));
 
@@ -944,6 +1048,7 @@ function templeOpenAt(templeId,ts){
 }
 function agentAvailability(b,a,ts){
   if(!a) return {free:false,reason:'Agent not found'};
+  if(b.careTeam&&a.careTeam&&b.careTeam!==a.careTeam) return {free:false,reason:'On the other customer care desk'};
   if(!a.temples.includes(b.templeId)) return {free:false,reason:'Does not cover this temple'};
   if(!a.active) return {free:false,reason:a.shift.startsWith('On leave')?a.shift:'Off duty'};
   const match=a.shift.match(/(\d{1,2}):(\d{2}) (AM|PM) – (\d{1,2}):(\d{2}) (AM|PM)/);
@@ -965,7 +1070,7 @@ const whatsappUrl=(phone,text)=>'https://wa.me/'+String(phone).replace(/\D/g,'')
 const agentNameId=id=>id?esc(agent(id).name)+' <span class="mono sub">('+esc(id)+')</span>':'Not assigned';
 const panditNameId=id=>id?esc(pandit(id).name)+' <span class="mono sub">('+esc(id)+')</span>':'Not assigned';
 function agentRoster(b,ts,interactive=true){
-  const members=AGENTS.filter(a=>a.temples.includes(b.templeId));
+  const members=AGENTS.filter(a=>a.temples.includes(b.templeId)&&(!b.careTeam||!a.careTeam||a.careTeam===b.careTeam));
   return members.map(a=>{
     const status=agentAvailability(b,a,ts);
     const count=PANDITS.filter(d=>d.temple===b.templeId&&(d.agentIds||[]).includes(a.id)).length;
@@ -977,7 +1082,7 @@ function agentRoster(b,ts,interactive=true){
   }).join('')||'<div class="sub">No agents cover this temple yet.</div>';
 }
 function agentOptions(b,ts,selectedId=b.agentId,preserveId=null){
-  return '<option value="">— choose —</option>'+AGENTS.filter(a=>a.temples.includes(b.templeId)).map(a=>{
+  return '<option value="">— choose —</option>'+AGENTS.filter(a=>a.temples.includes(b.templeId)&&(!b.careTeam||!a.careTeam||a.careTeam===b.careTeam)).map(a=>{
     const st=agentAvailability(b,a,ts);
     const keep=a.id===preserveId;
     return '<option value="'+a.id+'"'+(a.id===selectedId&&(st.free||keep)?' selected':'')+(st.free||keep?'':' disabled')+'>'+esc(a.name)+' ('+esc(a.id)+') · '+(st.free?'available':keep?'currently assigned · '+esc(st.reason):esc(st.reason))+'</option>';
@@ -985,7 +1090,8 @@ function agentOptions(b,ts,selectedId=b.agentId,preserveId=null){
 }
 function panditsFor(b,agentId){
   const day=dstr(b.pujaAt);
-  return PANDITS.filter(d=>d.temple===b.templeId&&(!agentId||(d.agentIds||[]).includes(agentId))).map(d=>{
+  return PANDITS.filter(d=>d.temple===b.templeId&&(!agentId||(d.agentIds||[]).includes(agentId))&&
+    (!b.careTeam||!panditTeam(d)||panditTeam(d)===b.careTeam)).map(d=>{
     const booked=DB.bookings.filter(x=>x.pandaId===d.id&&x.id!==b.id&&dstr(x.pujaAt)===day&&x.status!=='CANCELLED').length;
     const clash=DB.bookings.some(x=>x.pandaId===d.id&&x.id!==b.id&&x.status!=='CANCELLED'&&Math.abs(x.pujaAt-b.pujaAt)<90*MIN);
     const onLeave=d.leave.includes('absent-today')&&day===dstr(SIM);
@@ -1059,7 +1165,7 @@ function autoNote(b,since){
 function aiNote(b){
   const p=puja(b.pujaId), m=MODES[b.mode];
   const bits=[
-   'Spoke to '+b.devotee.name+' about booking '+b.id+' — '+p.name+' at '+temple(b.templeId).name+'.',
+   'Spoke to '+devDisplayName(b)+' about booking '+b.id+' — '+p.name+' at '+temple(b.templeId).name+'.',
    'Confirmed the '+m.short.toLowerCase()+' format and walked through what happens on the day.',
    'Date and reporting time agreed as '+fmtDT(b.pujaAt)+'.',
    b.agentId?('Onsite agent '+agent(b.agentId).name+' assigned and introduced.'):'',
@@ -1081,6 +1187,8 @@ function mkBooking(o){
   return Object.assign({
     id:'NMH-'+bookingNo, clientId:sameClient?sameClient.clientId:'CL-'+bookingNo, poojaBookingId:'PJ-'+bookingNo,
     source:'Website', mode:p.mode, createdAt:SIM,
+    /* every client is split evenly between the two customer care desks at the moment of booking */
+    careTeam:bookingNo%2===0?'A':'B',
     devotee:{name:'',gotra:'',phone:'',email:'',city:'',dob:'',pob:'',wish:''},
     sankalpaNames:[], language:'English',
     templeId:p.templeId, pujaId:p.id,
@@ -1211,9 +1319,9 @@ function reassignAgent(b,agentId,role){
   return true;
 }
 /* ---- auto-assign agent (bulk) ---- */
-const autoAssignEligible=()=>DB.bookings.filter(b=>b.balancePaid&&!b.agentId&&b.status!=='CANCELLED'&&MODES[b.mode].needsAgent);
+const autoAssignEligible=()=>seatBookings(DB.bookings).filter(b=>b.balancePaid&&!b.agentId&&b.status!=='CANCELLED'&&MODES[b.mode].needsAgent);
 function autoAssignOne(b,role){
-  const covering=AGENTS.filter(a=>a.temples.includes(b.templeId));
+  const covering=AGENTS.filter(a=>a.temples.includes(b.templeId)&&(!b.careTeam||!a.careTeam||a.careTeam===b.careTeam));
   const available=covering.filter(a=>agentAvailability(b,a,b.pujaAt).free);
   if(!available.length) return {bookingId:b.id,ok:false,reason:'No agent at '+temple(b.templeId).name+' is available for this pooja time.'};
   const withPandit=available.filter(a=>panditsFor(b,a.id).some(x=>x.free));
@@ -1262,7 +1370,7 @@ function autoAssignPanel(){
     '<div class="aa-list">'+
     st.results.slice().reverse().map(r=>{
       const b=bk(r.bookingId); if(!b) return '';
-      return '<div class="aa-row'+(r.ok?'':' warn')+'"><div><b>'+esc(b.devotee.name)+'</b> <span class="mono sub">'+esc(b.id)+'</span>'+
+      return '<div class="aa-row'+(r.ok?'':' warn')+'"><div><b>'+esc(devDisplayName(b))+'</b> <span class="mono sub">'+esc(b.id)+'</span>'+
         '<div class="sub">'+esc(temple(b.templeId).name)+' · '+fmtDT(b.pujaAt)+'</div>'+
         '<div class="sub" style="margin-top:3px">'+(r.ok?
           '<span class="pill p-ok">Assigned</span> '+agentNameId(r.agentId)+'<br>'+(r.panditFree?'A pandit is free in their team right now.':'No pandit free in their team yet — the agent still has the 24-hour window.')
@@ -1615,7 +1723,9 @@ function seed(){
   ev('Push','Escalation raised — NMH-1038','No pandit free for this puja. Puja is in 23h. Routed to customer care.','NMH-1038','nm_escalation');
   DB.events.sort((a,c)=>c.at-a.at);
   S={role:'cc',sub:'queue',id:null,draft:{},device:'desktop',open:null,noteDraft:'',modal:null,
-    careUser:null,loginError:'',loginDraft:'',pwDraft:'',pwShow:false};
+    careUser:null,careSeat:null,loginError:'',loginDraft:'',pwDraft:'',pwShow:false,
+    adminUser:null,adminLoginError:'',adminLoginDraft:'',adminPwDraft:'',adminPwShow:false,
+    devFilter:{type:'all',pay:'all',from:'',to:'',q:'',letter:'',expFrom:'',expTo:''}};
   ME_AGENT='A1'; ME_PANDIT='D1';
 }
 
@@ -1626,6 +1736,118 @@ function trig(items){return '<div class="trig"><h4>What happens on this screen</
 const who=t=>'<span class="who">'+esc(t)+'</span>';
 const code=t=>'<span class="code">'+esc(t)+'</span>';
 const isPujaRunning=b=>!!b.startedAt&&!b.otpVerified&&b.status!=='CANCELLED';
+/* ---- devotee directory (admin) ---- */
+function devoteeStatus(b){
+  if(isPujaRunning(b)) return 'running';
+  if(b.status==='CANCELLED') return 'cancelled';
+  if(b.otpVerified) return 'completed';
+  if(b.balancePaid) return 'ready';
+  return 'awaiting';
+}
+const DEV_STATUS_LABEL={running:'Running',cancelled:'Cancelled',completed:'Completed',ready:'Ready — fully paid',awaiting:'Awaiting balance'};
+const DEV_STATUS_PILL={running:'p-stop',cancelled:'p-mute',completed:'p-ok',ready:'p-info',awaiting:'p-warn'};
+function daysLeftLabel(b){
+  const days=Math.ceil((b.pujaAt-SIM)/DAY);
+  if(days<0) return '';
+  return '<span class="'+(days<=3?'sla-late':'sub')+'" style="font-weight:600">'+days+' day'+(days===1?'':'s')+' left</span>';
+}
+/* Contact icons — real number, used everywhere a name is shown. Icon-based (not text
+   buttons) so it stays compact whether it's a dense list row or a detail-page field.
+   contactLine/contactIcons are kept as two names only because call sites already read
+   naturally either way ("...+contactLine(...)+" inline vs a labelled kv() row) — both
+   render identically via contactIconBtns, defined further down. */
+function contactIcons(name,phone){ return phone?contactIconBtns(name,phone):'<span class="sub">No number on file</span>'; }
+function contactLine(name,phone){ return phone?contactIconBtns(name,phone):''; }
+/* Small monochrome icons — call / internet call / WhatsApp — for dense table rows. */
+const DEV_ICON={
+  call:'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>',
+  net:'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3v5ZM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3v5Z"/></svg>',
+  chat:'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>'
+};
+function contactIconBtns(name,phone){
+  if(!phone) return '<span class="sub">No number</span>';
+  const tel='tel:'+phone.replace(/\s/g,'');
+  return '<div class="icon-row">'+
+   '<a href="'+esc(tel)+'" class="icon-btn" aria-label="Call '+esc(name)+'" title="Call">'+DEV_ICON.call+'</a>'+
+   '<button class="icon-btn" data-act="masked-call" data-v="'+esc(name)+'" aria-label="Internet call '+esc(name)+'" title="Internet call">'+DEV_ICON.net+'</button>'+
+   '<a href="'+whatsappUrl(phone)+'" target="_blank" rel="noopener noreferrer" class="icon-btn" aria-label="WhatsApp '+esc(name)+'" title="WhatsApp">'+DEV_ICON.chat+'</a>'+
+   '</div>';
+}
+/* Devotee contact from inside customer care: internet call only — no real number is ever
+   exposed to a handler, so there is nothing to dial directly and nothing to add on WhatsApp. */
+function devoteeContactCC(maskedName){
+  return '<div class="icon-row">'+
+   '<button class="icon-btn" data-act="masked-call" data-v="'+esc(maskedName)+'" aria-label="Internet call '+esc(maskedName)+'" title="Internet call — number stays masked">'+DEV_ICON.net+'</button>'+
+   '<span class="sub" style="align-self:center">Number masked</span></div>';
+}
+function filteredDevotees(from,to){
+  const f=S.devFilter;
+  return seatBookings(DB.bookings).filter(b=>{
+    if(f.type!=='all'&&b.mode!==f.type) return false;
+    if(f.pay!=='all'&&devoteeStatus(b)!==f.pay) return false;
+    if(from&&dstr(b.pujaAt)<from) return false;
+    if(to&&dstr(b.pujaAt)>to) return false;
+    if(f.letter&&!b.devotee.name.toUpperCase().startsWith(f.letter)) return false;
+    if(f.q){
+      const q=f.q.toLowerCase();
+      if(!(b.devotee.name.toLowerCase().includes(q)||b.devotee.phone.toLowerCase().includes(q)||
+           b.id.toLowerCase().includes(q)||b.clientId.toLowerCase().includes(q))) return false;
+    }
+    return true;
+  }).sort((a,c)=>a.pujaAt-c.pujaAt);
+}
+const DEV_TABLE_COLGROUP='<colgroup><col style="width:220px"><col style="width:170px"><col style="width:150px"><col style="width:150px">'+
+  '<col style="width:110px"><col style="width:120px"><col style="width:100px"><col style="width:110px"><col style="width:100px"><col style="width:170px"></colgroup>';
+function devoteeTableRow(b){
+  const st=devoteeStatus(b), p=puja(b.pujaId), masked=isCareMasked();
+  const a=b.agentId?agent(b.agentId):null, d=b.pandaId?pandit(b.pandaId):null;
+  const dName=masked?maskName(b.devotee.name):b.devotee.name;
+  return '<tr>'+
+   '<td><div class="cell-name" style="font-weight:600" title="'+esc(dName)+'">'+(st==='running'?'<span class="running-dot" aria-label="Pooja running"></span>':'')+esc(dName)+'</div>'+
+   '<div class="sub mono cell-name">'+esc(b.id)+' · '+esc(b.clientId)+'</div>'+
+   (masked?devoteeContactCC(dName):contactIconBtns(b.devotee.name,b.devotee.phone))+
+   '<div class="row" style="margin-top:6px;gap:4px;flex-wrap:wrap">'+modePill(b)+'<span class="pill '+DEV_STATUS_PILL[st]+'">'+esc(DEV_STATUS_LABEL[st])+'</span></div>'+
+   (st!=='completed'&&st!=='cancelled'?'<div style="margin-top:3px">'+daysLeftLabel(b)+'</div>':'')+'</td>'+
+   '<td><div class="cell-name" title="'+esc(p.name)+'">'+esc(p.name)+'</div><div class="sub mono cell-name">'+esc(b.poojaBookingId)+'</div><div class="sub cell-name" title="'+esc(temple(b.templeId).name)+'">'+esc(temple(b.templeId).name)+'</div></td>'+
+   '<td>'+(a?'<div class="cell-name" title="'+esc(a.name)+'">'+esc(a.name)+'</div><div class="sub mono cell-name">'+esc(a.id)+'</div>'+contactIconBtns(a.name,a.phone):'<span class="sub">—</span>')+'</td>'+
+   '<td>'+(d?'<div class="cell-name" title="'+esc(d.name)+'">'+esc(d.name)+'</div><div class="sub mono cell-name">'+esc(d.id)+'</div>'+contactIconBtns(d.name,d.phone):'<span class="sub">—</span>')+'</td>'+
+   '<td class="mono" style="text-align:right">'+INR(b.amount)+'</td>'+
+   '<td class="mono" style="text-align:right">'+INR(b.advanceAmt)+'</td>'+
+   '<td class="mono" style="text-align:right">'+(b.balancePaid?'—':'<span style="color:var(--warn);font-weight:600">'+INR(b.balanceAmt)+'</span>')+'</td>'+
+   '<td class="mono" style="text-align:right">'+(b.balancePaid?INR(b.balanceAmt):'—')+'</td>'+
+   '<td class="mono" style="text-align:right;font-weight:700">'+(b.balancePaid?INR(b.amount):'—')+'</td>'+
+   '<td class="sub mono" style="white-space:nowrap">'+fmtDT(b.pujaAt)+'</td>'+
+   '</tr>';
+}
+function patchDevList(){
+  const c=document.getElementById('dev-list'), n=document.getElementById('dev-count');
+  if(!c) return;
+  const f=S.devFilter, list=filteredDevotees(f.from,f.to);
+  if(n) n.textContent=list.length+' matching booking'+(list.length===1?'':'s');
+  c.innerHTML=list.length?list.map(devoteeTableRow).join(''):'<tr><td colspan="10" class="empty">No devotees match these filters.</td></tr>';
+}
+function devoteesCsv(list){
+  const masked=isCareMasked();
+  const rows=[['Booking','Client ID','Devotee','Phone','City','Temple','Puja','Type','Pooja date','Status','Pooja rate','Advance','Due']];
+  list.forEach(b=>rows.push([b.id,b.clientId,masked?maskName(b.devotee.name):b.devotee.name,
+    masked?maskPhoneDisplay(b.devotee.phone):b.devotee.phone,b.devotee.city,temple(b.templeId).name,
+    puja(b.pujaId).name,MODES[b.mode].label,fmtDate(b.pujaAt),DEV_STATUS_LABEL[devoteeStatus(b)],
+    b.amount,b.advanceAmt,b.balancePaid?0:b.balanceAmt]));
+  return rows.map(r=>r.map(x=>'"'+String(x).replace(/"/g,'""')+'"').join(',')).join('\r\n');
+}
+function downloadDevoteesCsv(){
+  const f=S.devFilter;
+  const from=f.expFrom||f.from, to=f.expTo||f.to;
+  const list=filteredDevotees(from,to);
+  if(!list.length){ toast('No devotees match the export range and filters.','stop'); return; }
+  const blob=new Blob([devoteesCsv(list)],{type:'text/csv;charset=utf-8;'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url; a.download='namonamaha-devotees-'+(from||'all')+'_to_'+(to||dstr(SIM))+'.csv';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  toast(list.length+' booking'+(list.length===1?'':'s')+' exported'+(from||to?' for '+(from||'the start')+' – '+(to||'today'):'')+'.');
+}
 function remainingBadge(b){
   if(isPujaRunning(b)) return '<span class="countdown running">Pooja running</span>';
   if(['COMPLETED','SETTLED'].includes(b.status)) return '<span class="countdown done">Completed</span>';
@@ -1732,7 +1954,7 @@ const photoGrid=l=>'<div class="grid g3">'+l.map(t=>'<div class="photo">'+esc(t)
 function dashShell(role,label,tabs,active,body_,opts){
   opts=opts||{};
   return '<div class="dash"><nav class="dash-side'+(opts.wallpaper?' wallpaper':'')+'"><div class="site-logo" style="padding:4px 11px 14px;font-size:13px;display:flex;align-items:center;gap:8px">'+
-   (opts.logo?'<img src="logo-transparent.png" alt="Namonamaha" class="dash-logo-img">':'')+'<span>'+esc(label)+'</span></div>'+
+   (opts.logo?'<img src="logo-transparent.png?v=2" alt="Namonamaha" class="dash-logo-img">':'')+'<span>'+esc(label)+'</span></div>'+
    tabs.map(([k,l])=>'<button class="dl" aria-current="'+(k===active)+'" data-act="go" data-go="'+role+'.'+k+'">'+esc(l)+'</button>').join('')+
    '</nav><div class="dash-main"><div class="dash-top"><input class="dash-search" placeholder="Search bookings, devotees, pujas…" disabled>'+
    (opts.userHtml||'<span class="site-ava" style="margin-left:auto">'+esc(label.slice(0,2).toUpperCase())+'</span>')+'</div>'+
@@ -1991,9 +2213,9 @@ function uBooking(){
    (m.needsArrival&&SIM>=b.pujaAt-24*HOUR&&b.status!=='CANCELLED'?
      '<div class="card"><div class="eyebrow">At the temple</div><dl style="margin:0">'+
      kv('Arrival code','<span class="mono" style="font-size:16px;font-weight:700">'+esc(b.arrivalCode)+'</span>')+
-     (a?kv('Your agent',esc(a.name))+kv('Masked line','<span class="mono">'+esc(mask(a.phone))+'</span>'):'')+
-     (d?kv('Your pandit',esc(d.name)):'')+kv('Where to meet',esc(t.meet))+'</dl>'+
-     '<p class="sub" style="margin:10px 0 0">The agent will ask for your arrival code before taking you in. Calls run on a masked line, so neither side sees the other’s real number.</p></div>':'')+
+     (a?kv('Your agent',esc(a.name))+kv('Contact your agent',contactIcons(a.name,a.phone)):'')+
+     (d?kv('Your pandit',esc(d.name))+kv('Contact your pandit',contactIcons(d.name,d.phone)):'')+kv('Where to meet',esc(t.meet))+'</dl>'+
+     '<p class="sub" style="margin:10px 0 0">The agent will ask for your arrival code before taking you in.</p></div>':'')+
    (b.otpVerified?'<div class="okbox"><h4>Puja completed</h4><p>Closed with your code, verified by '+esc(b.otpBy)+'.</p></div>':'')+
    (b.photos.length?'<div class="card"><div class="eyebrow">Photographs from your puja</div>'+photoGrid(b.photos)+
      (b.media.length?'<div class="sub" style="margin-top:10px">Video: '+b.media.map(esc).join(', ')+'</div>':'')+
@@ -2074,25 +2296,31 @@ function uFeedback(){
    ========================================================================== */
 function ccScreen(){
   const user=S.careUser?careUser(S.careUser):null;
-  if(!user||!user.active){ S.careUser=null; return careLoginScreen(); }
-  const tabs=[['queue','Work queue'],['sla','SLA & escalations'],['cancellations','Cancellations'],['templates','Message log']];
+  if(!user||!user.active||!S.careSeat){ if(S.careSeat) releaseSeat(S.careSeat); S.careUser=null; S.careSeat=null; return careLoginScreen(); }
+  const tabs=[['queue','Work queue'],['history','All history'],['sla','SLA & escalations'],['cancellations','Cancellations'],['templates','Message log']];
   const sub=S.sub||'queue';
   const body = sub==='booking'?ccBooking():sub==='temple'?ccTemple():sub==='agent'?ccAgentView():
-    sub==='sla'?ccSla():sub==='cancellations'?ccCancel():sub==='templates'?ccTemplates():ccQueue();
-  const userBadge='<div class="cc-user-badge"><span class="who">Signed in as <b>'+esc(user.name)+'</b></span>'+
+    sub==='sla'?ccSla():sub==='cancellations'?ccCancel():sub==='templates'?ccTemplates():sub==='history'?ccHistory():ccQueue();
+  const userBadge='<div class="cc-user-badge"><span class="who">Signed in as <b>'+esc(user.name)+'</b> <span class="pill p-flow">Desk '+esc(S.careSeat)+'</span></span>'+
     '<button class="btn btn-sm" data-act="cc-logout">Log out</button></div>';
   return dashShell('cc','Care CRM',tabs,['booking','temple','agent'].includes(sub)?'queue':sub,body,{logo:true,userHtml:userBadge,wallpaper:true})+
     (S.modal?ccModal():'')+autoAssignPanel();
 }
 function careLoginScreen(){
+  const seats=readSeats();
+  const seatBtn=seat=>{
+    const occ=seats[seat];
+    return '<button type="button" class="btn btn-pri btn-wide seat-btn" style="margin-top:6px" data-act="cc-login" data-v="'+seat+'"'+(occ?' disabled':'')+'>'+
+      (occ?'Desk '+seat+' — occupied by '+esc(occ.name):'Log in '+seat)+'</button>';
+  };
   return '<div class="care-login-wrap">'+
    '<div class="sky"><div class="nebula"></div><div class="moon"></div><div class="stars"></div><div class="stars2"></div></div>'+
    '<div class="care-login-card">'+
    '<span class="om-mark lg" aria-hidden="true">ॐ</span>'+
-   '<img src="logo-transparent.png" alt="Namonamaha" class="care-login-logo">'+
+   '<img src="logo-transparent.png?v=2" alt="Namonamaha" class="care-login-logo">'+
    '<div class="eyebrow" style="text-align:center">Customer care portal</div>'+
-   '<h1 class="h-page" style="text-align:center;margin:4px 0 4px">Staff sign in</h1>'+
-   '<p class="sub" style="text-align:center;margin:0 0 18px">Use the login ID and password issued by your admin.</p>'+
+   '<h1 class="h-page" style="text-align:center">Staff sign in</h1>'+
+   '<p class="sub" style="text-align:center;margin:0 0 18px">Use the login ID and password issued by your admin, then choose a free desk. Both desks share the same logins; each desk only sees its own clients.</p>'+
    (S.loginError?'<div class="stopbox" style="margin-bottom:14px"><h4>'+esc(S.loginError)+'</h4></div>':'')+
    '<div class="fld"><label class="f" for="cli">Login ID</label><input class="inp" id="cli" autocomplete="username" placeholder="e.g. priya.care" value="'+esc(S.loginDraft||'')+'"></div>'+
    '<div class="fld"><label class="f" for="clp">Password</label><div class="pw-wrap">'+
@@ -2102,8 +2330,9 @@ function careLoginScreen(){
      '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 19c-7 0-11-7-11-7a21.3 21.3 0 0 1 5.06-5.94M9.9 4.24A10.94 10.94 0 0 1 12 4c7 0 11 7 11 7a21.3 21.3 0 0 1-3.22 4.19M14.12 14.12a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>'
      :'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"/><circle cx="12" cy="12" r="3"/></svg>')+
    '</button></div></div>'+
-   '<button class="btn btn-pri btn-wide" style="margin-top:6px" data-act="cc-login">Log in</button>'+
-   '<p class="sub" style="text-align:center;margin:16px 0 0">Login IDs and passwords are created and reset by '+who('Admin')+' — '+
+   '<div class="grid g2" style="gap:8px">'+seatBtn('A')+seatBtn('B')+'</div>'+
+   '<p class="sub" style="text-align:center;margin:10px 0 0">A desk already in use is locked to everyone else until that person logs out — it frees up live, on this browser, without a refresh.</p>'+
+   '<p class="sub" style="text-align:center;margin:12px 0 0">Login IDs and passwords are created and reset by '+who('Admin')+' — '+
    '<button class="text-link" data-act="go" data-go="admin.careteam">Care team access</button>.</p>'+
    '</div></div>';
 }
@@ -2123,7 +2352,7 @@ const careUnassignmentOpen=b=>!!b&&!!b.agentId&&!isPujaRunning(b)&&
 function ccUnassignModal(){
   const b=bk(S.modal.bookingId);
   if(!b||!b.agentId) return '<div class="empty">This booking has no assigned agent.</div>';
-  return '<div class="eyebrow">'+esc(b.devotee.name)+' · '+esc(b.id)+'</div>'+
+  return '<div class="eyebrow">'+esc(devDisplayName(b))+' · '+esc(b.id)+'</div>'+
     '<h1 class="h-page" style="margin:8px 0 12px">Are you sure you want to unassign?</h1>'+
     '<p class="sub">This will remove <b>'+agentNameId(b.agentId)+'</b> from the booking'+
     (b.pandaId?' and also remove <b>'+panditNameId(b.pandaId)+'</b> from that agent’s team':'')+'.</p>'+
@@ -2136,14 +2365,14 @@ function ccTemple(){
   const inModal=S.modal&&S.modal.type==='temple';
   const t=temple(inModal?S.modal.templeId:S.id); if(!t) return ccQueue();
   const target=bk(S.templeFrom), context=target&&target.templeId===t.id?target:{id:'preview',templeId:t.id,pujaAt:SIM};
-  const agents=AGENTS.filter(a=>a.temples.includes(t.id));
-  const active=DB.bookings.filter(b=>b.templeId===t.id&&!['CANCELLED','COMPLETED','SETTLED'].includes(b.status));
-  return (inModal?'':crumb([{t:'Work queue',go:'cc.queue'},...(target?[{t:target.devotee.name,go:'cc.booking',id:target.id}]:[]),{t:t.name}]))+
+  const agents=seatAgents(AGENTS.filter(a=>a.temples.includes(t.id)));
+  const active=seatBookings(DB.bookings).filter(b=>b.templeId===t.id&&!['CANCELLED','COMPLETED','SETTLED'].includes(b.status));
+  return (inModal?'':crumb([{t:'Work queue',go:'cc.queue'},...(target?[{t:devDisplayName(target),go:'cc.booking',id:target.id}]:[]),{t:t.name}]))+
    (inModal&&S.modal.notice?'<div class="okbox" role="status"><h4>'+esc(S.modal.notice)+'</h4></div>':'')+
    '<div class="eyebrow">Temple staffing · '+esc(t.city)+', '+esc(t.state)+'</div><h1 class="h-page">'+esc(t.name)+'</h1>'+
    '<p class="sub">'+esc(t.meet)+'</p>'+
    (target?'<div class="card" style="margin-top:12px"><div class="eyebrow">Availability for this client booking</div>'+
-     '<div class="row" style="justify-content:space-between"><div><b>'+esc(target.devotee.name)+'</b> · <span class="mono">'+esc(target.id)+'</span>'+
+     '<div class="row" style="justify-content:space-between"><div><b>'+esc(devDisplayName(target))+'</b> · <span class="mono">'+esc(target.id)+'</span>'+
      '<div class="sub">'+esc(puja(target.pujaId).name)+' · '+fmtDT(target.pujaAt)+' · Client '+esc(target.clientId)+' · Pooja '+esc(target.poojaBookingId)+'</div>'+
      '<div class="sub">Assigned: '+agentNameId(target.agentId)+' → '+panditNameId(target.pandaId)+'</div></div>'+
      '<div class="row"><button class="btn btn-sm" data-act="go" data-go="cc.booking" data-id="'+target.id+'">Open booking</button>'+
@@ -2160,8 +2389,7 @@ function ccTemple(){
      const pool=panditsFor(context,a.id);
      return '<div class="staff-card"><div class="staff-head"><div><button class="text-link staff-name" data-act="cc-agent-view" data-v="'+a.id+'" data-temple="'+t.id+'"'+(target?' data-id="'+target.id+'"':'')+'>'+esc(a.name)+'</button> <span class="mono sub">Agent ID '+esc(a.id)+'</span>'+
        '<div class="sub">'+esc(a.shift)+' · '+work.length+' at this temple · '+assigned+' with pandit</div></div><span class="workload-badge">'+total.length+' active pooja'+(total.length===1?'':'s')+'</span></div>'+
-       '<div class="staff-meta"><span>Phone <a href="tel:'+esc(a.phone.replace(/\s/g,''))+'">'+esc(a.phone)+'</a></span>'+
-       '<a href="'+whatsappUrl(a.phone)+'" target="_blank" rel="noopener noreferrer" aria-label="Open WhatsApp chat with '+esc(a.name)+'">WhatsApp direct ↗</a>'+
+       '<div class="staff-meta"><span>Phone <span class="mono">'+esc(a.phone)+'</span></span>'+contactIconBtns(a.name,a.phone)+
        '<span class="pill '+(availability.free?'p-ok':'p-stop')+'">'+(availability.free?'Available':'Unavailable')+'</span><span>'+esc(availability.reason)+'</span></div>'+
        '<div class="sub">Pandits in this agent’s team: '+(pool.length?pool.map(x=>esc(x.d.name)+' <span class="mono">('+esc(x.d.id)+')</span> · '+runningBookingsForPandit(x.d.id).length+' active · '+(x.free?'free':'unavailable')).join(' &nbsp;|&nbsp; '):'None assigned')+'</div>'+
        '<div class="row" style="margin-top:12px"><button class="btn btn-sm" data-act="cc-agent-view" data-v="'+a.id+'" data-temple="'+t.id+'"'+(target?' data-id="'+target.id+'"':'')+'>View pooja flow and pandits</button>'+
@@ -2182,16 +2410,15 @@ function ccAgentView(){
   const pool=panditsFor(context,a.id);
   const available=agentAvailability(context,a,context.pujaAt);
   return (inModal?'<button class="btn btn-sm" style="margin-bottom:12px" data-act="cc-modal-back">← Back to '+esc(t.name)+'</button>':crumb([{t:'Work queue',go:'cc.queue'},
-    ...(target?[{t:target.devotee.name,go:'cc.booking',id:target.id}]:[]),
+    ...(target?[{t:devDisplayName(target),go:'cc.booking',id:target.id}]:[]),
     {t:t.name,go:'cc.temple',id:t.id},{t:a.name}]))+
    '<div class="eyebrow">Agent team · '+esc(t.name)+'</div><div class="staff-head"><div><h1 class="h-page">'+esc(a.name)+'</h1>'+
    '<div class="mono sub">Agent ID '+esc(a.id)+' · '+work.length+' at this temple · '+assigned+' with pandit</div></div><span class="workload-badge">'+total.length+' active pooja'+(total.length===1?'':'s')+'</span></div>'+
-   '<div class="staff-meta"><span>Phone <a href="tel:'+esc(a.phone.replace(/\s/g,''))+'">'+esc(a.phone)+'</a></span>'+
-   '<a href="'+whatsappUrl(a.phone)+'" target="_blank" rel="noopener noreferrer">WhatsApp direct ↗</a>'+
+   '<div class="staff-meta"><span>Phone <span class="mono">'+esc(a.phone)+'</span></span>'+contactIconBtns(a.name,a.phone)+
    '<span class="pill '+(available.free?'p-ok':'p-stop')+'">'+(available.free?'Available':'Unavailable')+'</span><span>'+esc(available.reason)+'</span></div>'+
    '<div class="card"><div class="eyebrow">Pooja flow under this agent</div>'+
    (work.length?'<div class="staff-flow">'+work.map(b=>'<div class="staff-flow-item">'+
-     '<div class="row" style="justify-content:space-between"><button class="text-link" data-act="go" data-go="cc.booking" data-id="'+b.id+'">'+esc(b.devotee.name)+' · '+esc(b.id)+'</button>'+statusPill(b)+'</div>'+
+     '<div class="row" style="justify-content:space-between"><button class="text-link" data-act="go" data-go="cc.booking" data-id="'+b.id+'">'+esc(devDisplayName(b))+' · '+esc(b.id)+'</button>'+statusPill(b)+'</div>'+
      '<div class="sub mono">Client '+esc(b.clientId)+' · Pooja '+esc(b.poojaBookingId)+'</div>'+
      '<div class="sub">'+esc(puja(b.pujaId).name)+' · '+fmtDT(b.pujaAt)+' · from '+esc(b.devotee.city)+'</div>'+
      '<div class="flow-arrow">↓ Assigned pandit</div>'+
@@ -2203,7 +2430,7 @@ function ccAgentView(){
      '<div class="sub">'+esc(x.d.skills)+' · '+runningBookingsForPandit(x.d.id).length+' active pooja(s) · '+x.booked+' of '+x.d.cap+' slots on this date</div></div>'+
      '<span class="pill '+(x.free?'p-ok':'p-stop')+'">'+(x.free?'Available':!x.d.active?'Inactive':x.onLeave?'On leave':x.clash?'Booked at this time':'At capacity')+'</span></div>').join(''):'<p class="sub">No pandits linked to this agent at this temple.</p>')+'</div>'+
    (target&&target.agentId===a.id&&target.balancePaid&&!target.pandaId?
-     '<div class="card"><div class="eyebrow">Assign a pandit to '+esc(target.id)+'</div><p class="sub">'+esc(target.devotee.name)+' · '+esc(puja(target.pujaId).name)+' · '+fmtDT(target.pujaAt)+'</p>'+
+     '<div class="card"><div class="eyebrow">Assign a pandit to '+esc(target.id)+'</div><p class="sub">'+esc(devDisplayName(target))+' · '+esc(puja(target.pujaId).name)+' · '+fmtDT(target.pujaAt)+'</p>'+
      '<div class="row">'+(pool.some(x=>x.free)?pool.filter(x=>x.free).map(x=>'<button class="btn btn-sm btn-pri" data-act="cc-pandit" data-id="'+target.id+'" data-v="'+x.d.id+'">Assign '+esc(x.d.name)+' ('+esc(x.d.id)+')</button>').join(''):
        '<span class="sub">No pandit in this agent’s team is free for this pooja time. Choose another agent or reschedule.</span>')+'</div></div>':'');
 }
@@ -2213,7 +2440,7 @@ function ccEditModal(){
   const closed=['CANCELLED','COMPLETED','SETTLED'].includes(b.status)||isPujaRunning(b);
   if(closed) return '<div class="stopbox"><h4>This booking is already running or closed</h4><p>Change requests need to be handled before the pooja starts. The audit record is preserved.</p></div>';
   const time=String(new Date(b.pujaAt).getHours()).padStart(2,'0')+':'+String(new Date(b.pujaAt).getMinutes()).padStart(2,'0');
-  return '<div class="eyebrow">Customer request · '+esc(b.id)+'</div><h1 class="h-page">Edit '+esc(b.devotee.name)+'</h1>'+
+  return '<div class="eyebrow">Customer request · '+esc(b.id)+'</div><h1 class="h-page">Edit '+esc(devDisplayName(b))+'</h1>'+
    '<p class="sub mono" style="margin:4px 0 14px">Client '+esc(b.clientId)+' · Pooja '+esc(b.poojaBookingId)+'</p>'+
    '<div class="grid g2">'+
    '<div class="fld"><label class="f" for="edit-temple">Temple</label><select class="inp" id="edit-temple">'+
@@ -2266,13 +2493,17 @@ function refreshEditModal(changedId){
   if(roster) roster.innerHTML=agentRoster(preview,ts,false);
 }
 function ccRow(b){
-  const p=puja(b.pujaId), st=slaState(b).find(x=>x.late);
+  const p=puja(b.pujaId), st=slaState(b).find(x=>x.late), dName=devDisplayName(b);
   return '<div class="lrow cc-booking-row">'+
-   '<div class="lrow-main"><div class="lrow-t">'+(isPujaRunning(b)?'<span class="running-dot" aria-label="Pooja running"></span>':'')+'<button class="cc-name-link" data-act="go" data-go="cc.booking" data-id="'+b.id+'">'+esc(b.devotee.name)+' · <span class="mono" style="font-weight:400">'+b.id+'</span></button></div>'+
+   '<div class="lrow-main"><div class="lrow-t">'+(isPujaRunning(b)?'<span class="running-dot" aria-label="Pooja running"></span>':'')+'<button class="cc-name-link" data-act="go" data-go="cc.booking" data-id="'+b.id+'">'+esc(dName)+' · <span class="mono" style="font-weight:400">'+b.id+'</span></button></div>'+
+   devoteeContactCC(dName)+
    '<div class="lrow-s mono">Client '+esc(b.clientId)+' · Pooja '+esc(b.poojaBookingId)+'</div>'+
    '<div class="lrow-s">From '+esc(b.devotee.city)+' · <button class="text-link" data-act="cc-temple" data-id="'+b.id+'" data-v="'+b.templeId+'">'+esc(temple(b.templeId).name)+'</button> · '+esc(p.name)+'</div>'+
    '<div class="lrow-s">Booked '+fmtDate(b.createdAt)+' · Pooja '+fmtDT(b.pujaAt)+' ('+rel(b.pujaAt)+')</div>'+
-   '<div class="lrow-s">Agent: '+agentNameId(b.agentId)+' · Pandit: '+panditNameId(b.pandaId)+'</div>'+
+   '<div class="lrow-s">Agent: '+agentNameId(b.agentId)+'</div>'+
+   (b.agentId?contactLine(agent(b.agentId).name,agent(b.agentId).phone):'')+
+   '<div class="lrow-s">Pandit: '+panditNameId(b.pandaId)+'</div>'+
+   (b.pandaId?contactLine(pandit(b.pandaId).name,pandit(b.pandaId).phone):'')+
    '<div class="row" style="margin-top:7px;gap:5px">'+srcPill(b)+modePill(b)+statusPill(b)+payPill(b)+'</div>'+
    (st?'<div class="sub sla-late" style="margin-top:5px">'+esc(st.label)+' overdue by '+Math.round((SIM-st.due)/HOUR)+'h</div>':'')+
    '</div><div class="lrow-r">'+remainingBadge(b)+'<span class="mono">'+INR(b.amount)+'</span>'+
@@ -2282,7 +2513,7 @@ function ccRow(b){
    '</div></div>';
 }
 function ccQueue(){
-  const A=DB.bookings;
+  const A=seatBookings(DB.bookings);
   const used=new Set();
   const pick=predicate=>{const rows=A.filter(b=>!used.has(b.id)&&predicate(b));rows.forEach(b=>used.add(b.id));return rows;};
   const running=pick(isPujaRunning);
@@ -2296,15 +2527,15 @@ function ccQueue(){
     '<p class="sub" style="margin:0 0 10px">'+esc(n)+'</p><div class="stack">'+l.map(ccRow).join('')+'</div>';
   const noAgent=autoAssignEligible();
   return '<div class="row" style="justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px">'+
-   '<div><div class="eyebrow">Customer care · CRM</div><h1 class="h-page">Work queue</h1></div>'+
+   '<div><div class="eyebrow">Customer care · Desk '+esc(S.careSeat||'')+'</div><h1 class="h-page">Work queue</h1></div>'+
    '<button class="btn btn-pri" data-act="cc-auto-assign-start"'+(noAgent.length?'':' disabled')+'>Auto assign agent'+
    (noAgent.length?' <span class="pill p-mute" style="margin-left:6px;vertical-align:middle">'+noAgent.length+'</span>':'')+'</button></div>'+
    '<div class="grid g4" style="margin-top:12px">'+
    [['Total client bookings',A.length,'p-info'],['Running now',running.length,'p-ok'],['Escalations',esc_.length,'p-stop'],['Needs a call',needCall.length,'p-warn'],
     ['Needs balance link',needLink.length,'p-warn'],['Balance outstanding',unpaid.length,'p-warn'],
     ['Fully paid, no agent',noAgent.length,'p-warn']].map(([l,n,c])=>
-    '<div class="card"><div class="eyebrow">'+esc(l)+'</div><div class="mono" style="font-size:24px;font-weight:600">'+n+'</div>'+
-    (n?'<span class="pill '+c+'" style="margin-top:6px">action needed</span>':'<span class="pill p-ok" style="margin-top:6px">clear</span>')+'</div>').join('')+'</div>'+
+    '<div class="card"><div class="eyebrow">'+esc(l)+'</div><div class="mono" style="font-size:34px;font-weight:600">'+n+'</div>'+
+    (n?'<span class="pill '+c+'" style="margin-top:8px">action needed</span>':'<span class="pill p-ok" style="margin-top:8px">clear</span>')+'</div>').join('')+'</div>'+
    trig(['Every booking arrives the moment the advance clears, whether from the website or from the '+who('AI voice agent')+'.',
          'Ordered by what is <b>blocking</b> each booking, not by date. A care agent should never have to decide what to work on.',
          'Rows turn red on SLA breach: 4 hours to the first call, 1 hour to send the balance link.',
@@ -2318,8 +2549,8 @@ function ccQueue(){
    sec('In progress and closed',rest,'No action pending from customer care.','p-mute');
 }
 function ccSla(){
-  const rows=DB.bookings.map(b=>({b,st:slaState(b)})).filter(x=>x.st.length);
-  return '<div class="eyebrow">Customer care</div><h1 class="h-page">SLA & escalations</h1>'+
+  const rows=seatBookings(DB.bookings).map(b=>({b,st:slaState(b)})).filter(x=>x.st.length);
+  return '<div class="eyebrow">Customer care · Desk '+esc(S.careSeat||'')+'</div><h1 class="h-page">SLA & escalations</h1>'+
    trig(['Every SLA is measured from a real event, not from a shift start.',
          'A breach does not just colour a row — it fires '+code('nm_escalation')+' to the care lead over push and WhatsApp.',
          'The pandit-assignment SLA auto-escalates without anyone pressing anything.'])+
@@ -2330,7 +2561,7 @@ function ccSla(){
    '<h3 class="h-sec" style="margin:20px 0 10px">Open right now</h3>'+
    (rows.length?'<div class="stack">'+rows.map(({b,st})=>
      '<button class="lrow" data-act="go" data-go="cc.booking" data-id="'+b.id+'"><div class="lrow-main">'+
-     '<div class="lrow-t">'+esc(b.devotee.name)+' · <span class="mono" style="font-weight:400">'+b.id+'</span></div>'+
+     '<div class="lrow-t">'+esc(devDisplayName(b))+' · <span class="mono" style="font-weight:400">'+b.id+'</span></div>'+
      '<div class="lrow-s">'+st.map(x=>'<span class="'+(x.late?'sla-late':'sla-ok')+'">'+esc(x.label)+' — '+(x.late?'overdue '+Math.round((SIM-x.due)/HOUR)+'h':'due '+rel(x.due))+'</span>').join(' · ')+'</div>'+
      '</div><div class="lrow-r">'+statusPill(b)+'</div></button>').join('')+'</div>'
     :'<div class="okbox"><h4>Nothing open</h4><p>No SLA is running against any booking.</p></div>')+
@@ -2340,8 +2571,8 @@ function ccSla(){
      '<td><span class="pill '+(r.sev==='high'?'p-stop':r.sev==='med'?'p-warn':'p-mute')+'">'+r.sev+'</span></td></tr>').join('')+'</tbody></table></div></div>';
 }
 function ccCancel(){
-  const cancelled=DB.bookings.filter(b=>b.cancellation);
-  return '<div class="eyebrow">Customer care</div><h1 class="h-page">Cancellations & refunds</h1>'+
+  const cancelled=seatBookings(DB.bookings).filter(b=>b.cancellation);
+  return '<div class="eyebrow">Customer care · Desk '+esc(S.careSeat||'')+'</div><h1 class="h-page">Cancellations & refunds</h1>'+
    trig(['The refund band is computed from hours remaining before the puja. Care approves; '+who('Accounts')+' issues the Razorpay refund.',
          'A reschedule is always offered first — it keeps the revenue and the devotee.',
          'Refunds must settle within 5 working days, which is its own SLA.'])+
@@ -2352,7 +2583,7 @@ function ccCancel(){
    '<h3 class="h-sec" style="margin:20px 0 10px">Cancelled bookings</h3>'+
    (cancelled.length?'<div class="stack">'+cancelled.map(b=>'<div class="card">'+
      '<div class="row" style="justify-content:space-between;align-items:flex-start"><div>'+
-     '<div class="lrow-t">'+esc(b.devotee.name)+' · <span class="mono" style="font-weight:400">'+b.id+'</span></div>'+
+     '<div class="lrow-t">'+esc(devDisplayName(b))+' · <span class="mono" style="font-weight:400">'+b.id+'</span></div>'+
      '<div class="lrow-s">'+esc(b.cancellation.reason)+' · '+b.cancellation.hoursBefore+'h before the puja</div></div>'+
      '<div style="text-align:right"><div class="mono" style="font-weight:600">'+INR(b.cancellation.refund)+'</div>'+
      '<div class="sub">'+b.cancellation.pct+'% refund</div></div></div></div>').join('')+'</div>'
@@ -2374,7 +2605,8 @@ function ccTemplates(){
 function ccBooking(){
   const b=bk(S.id); if(!b) return ccQueue();
   const p=puja(b.pujaId), t=temple(b.templeId), m=MODES[b.mode], role='care';
-  const avail=AGENTS.filter(a=>a.temples.includes(b.templeId));
+  const dName=devDisplayName(b), dPhone=devDisplayPhone(b);
+  const avail=AGENTS.filter(a=>a.temples.includes(b.templeId)&&(!b.careTeam||!a.careTeam||a.careTeam===b.careTeam));
   const bo=blackoutOn(b.templeId,b.pujaAt);
   let panel='';
 
@@ -2391,7 +2623,9 @@ function ccBooking(){
 
   if(b.advancePaid&&!b.ccConfirmed&&b.status!=='CANCELLED'){
     panel+='<div class="card" style="border-color:var(--accent-line)"><div class="eyebrow">Step 1 — the confirmation call</div>'+
-     '<h3 class="h-sec">Call '+esc(b.devotee.name)+' on '+esc(b.devotee.phone)+'</h3>'+
+     '<h3 class="h-sec">Call '+esc(dName)+' on the masked line</h3>'+
+     '<p class="sub" style="margin:2px 0 10px">Number on file: <span class="mono">'+esc(dPhone)+'</span>. Use Internet call below — the real number never reaches customer care.</p>'+
+     devoteeContactCC(dName)+
      '<ul class="sub" style="margin:10px 0;padding-left:18px;display:flex;flex-direction:column;gap:4px">'+
      '<li>Confirm identity, name spelling and gotra as they should be read at the sankalpa.</li>'+
      '<li>Explain exactly how the puja is performed and what happens on the day.</li>'+
@@ -2409,7 +2643,7 @@ function ccBooking(){
   if(b.ccConfirmed&&!b.linkSent&&b.status!=='CANCELLED'){
     panel+='<div class="card" style="border-color:var(--accent-line)"><div class="eyebrow">Step 2 — request the balance</div>'+
      '<h3 class="h-sec">Send the balance link for '+INR(b.balanceAmt)+'</h3>'+
-     '<p class="sub" style="margin:8px 0">Generated from this booking, so the payment can only reconcile against <span class="mono">'+b.id+'</span>. Delivered to '+esc(b.devotee.phone)+' on WhatsApp.</p>'+
+     '<p class="sub" style="margin:8px 0">Generated from this booking, so the payment can only reconcile against <span class="mono">'+b.id+'</span>. Delivered on WhatsApp to the number on file ('+esc(dPhone)+') — sent by the platform, not dialled by care.</p>'+
      '<div class="warnbox"><h4>What this triggers</h4><p>A WhatsApp message carrying a live Razorpay link. When the devotee pays, the CRM flips to <b>Awaiting pandit</b> by itself and the tax invoice is emailed. Nobody marks it received.</p></div>'+
      '<button class="btn btn-pri btn-wide" data-act="cc-link" data-id="'+b.id+'">Send payment link on WhatsApp</button></div>';
   }
@@ -2440,7 +2674,7 @@ function ccBooking(){
 
   return crumb([{t:'Work queue',go:'cc.queue'},{t:b.id}])+
    '<div class="row" style="justify-content:space-between;align-items:flex-start"><div>'+
-   '<h1 class="h-page">'+esc(b.devotee.name)+'</h1>'+
+   '<h1 class="h-page">'+esc(dName)+'</h1>'+
    '<p class="sub"><span class="mono">'+b.id+'</span> · '+esc(p.name)+' · <button class="text-link" data-act="cc-temple" data-id="'+b.id+'" data-v="'+t.id+'">'+esc(t.name)+'</button></p></div>'+
    '<div class="row" style="gap:5px">'+srcPill(b)+modePill(b)+statusPill(b)+remainingBadge(b)+payPill(b)+
    '<button class="btn btn-sm" data-act="cc-edit" data-id="'+b.id+'">Edit booking</button></div></div>'+
@@ -2466,20 +2700,23 @@ function ccBooking(){
      '<span class="pill '+(x.free?'p-ok':'p-stop')+'">'+(x.free?'Available':!x.d.active?'Inactive':x.onLeave?'On leave':x.clash?'Booked at this time':'At capacity')+'</span></div>').join('')+'</div>'+
    '<div class="grid g2" style="margin-top:14px"><div class="stack">'+
    '<div class="card"><div class="eyebrow">Devotee</div><dl style="margin:0">'+
-   kv('Name','<span>'+esc(b.devotee.name)+'</span> <span class="lock">Locked</span>')+
-   kv('Mobile','<span class="mono">'+esc(b.devotee.phone)+'</span> <span class="lock">Locked</span>')+
+   kv('Name','<span>'+esc(dName)+'</span> <span class="lock">Masked</span>')+
+   kv('Mobile','<span class="mono">'+esc(dPhone)+'</span> <span class="lock">Masked</span>')+
+   kv('Contact','<div class="row" style="gap:5px">'+devoteeContactCC(dName)+'</div>')+
    kv('Gotra',esc(b.devotee.gotra))+kv('Email',esc(b.devotee.email||'—'))+kv('City',esc(b.devotee.city))+
    kv('Language',esc(b.language))+kv('Date of birth',esc(b.devotee.dob||'— not collected'))+
    kv('Place of birth',esc(b.devotee.pob||'— not collected'))+
    kv('Wish','<span style="font-weight:400">'+esc(b.devotee.wish||'— not collected')+'</span>')+
    (b.sankalpaNames.length?kv('Also named','<span style="font-weight:400">'+b.sankalpaNames.map(x=>esc(x.name)+' ('+esc(x.rel)+', '+esc(x.gotra)+')').join('<br>')+'</span>'):'')+
-   '</dl><p class="sub" style="margin:10px 0 0">Name, mobile and the puja are locked to customer care. '+esc(permWhy('booking.devetee.name')||permWhy('booking.devotee.name'))+'</p></div>'+
+   '</dl><p class="sub" style="margin:10px 0 0">Name and mobile are masked and locked to customer care — only Internet call reaches the devotee. '+esc(permWhy('booking.devotee.name'))+'</p></div>'+
    '<div class="card"><div class="eyebrow">Money</div>'+money(b)+
    '<p class="sub" style="margin:10px 0 0">Every rupee moves through Razorpay. Care never collects cash and never marks a payment received.</p></div>'+
    '<div class="card"><div class="eyebrow">Assignment</div><dl style="margin:0">'+
    kv('Mode',esc(m.label))+
    kv('Onsite agent',b.agentId?agentNameId(b.agentId):m.needsAgent?'— not assigned':'— not required')+
+   (b.agentId?kv('Agent contact','<div class="row" style="gap:5px">'+contactIcons(agent(b.agentId).name,agent(b.agentId).phone)+'</div>'):'')+
    kv('Pandit',b.pandaId?panditNameId(b.pandaId):'— assigned within 24h')+
+   (b.pandaId?kv('Pandit contact','<div class="row" style="gap:5px">'+contactIcons(pandit(b.pandaId).name,pandit(b.pandaId).phone)+'</div>'):'')+
    kv('Completion code',b.otpIssued?
      '<span class="mono">'+esc(b.otp)+(b.otpVerified?' ✓':'')+'</span>'+
      (!b.otpVerified&&b.status!=='CANCELLED'?' <button class="btn btn-sm" data-act="cc-send-otp" data-id="'+b.id+'">Resend</button>':''):
@@ -2502,7 +2739,7 @@ function ccBooking(){
    '<div class="card"><div class="eyebrow">Reminder schedule</div>'+remindersTable(b)+'</div>'+
    '</div></div>'+
    trig(['Care owns three things: the confirmation call, the balance link, and keeping the date and agent correct afterwards.',
-         '<b>Name and mobile stay locked.</b> Customer care can change the temple, package, date and time before the puja starts. Every change is audited and assignments are checked again.',
+         '<b>Name and mobile stay masked and locked.</b> Customer care can change the temple, package, date and time before the puja starts. Every change is audited and assignments are checked again.',
          'The call note is written three ways — auto-composed from the audit diff, drafted by AI, or typed by hand. All three are stored.',
          'Care can assign a pandit directly, overriding the agent, when the clock is short.']);
 }
@@ -2514,8 +2751,8 @@ function ccEditBlock(b,role,firstCall){
   if(!hours.includes(cur)){hours.push(cur);hours.sort();}
   const tHours=temple(b.templeId).hours;
   return '<div class="grid g2">'+
-   field(role,'booking.devotee.name','Devotee name','',esc(b.devotee.name))+
-   field(role,'booking.devotee.phone','Mobile number','',esc(b.devotee.phone))+
+   field(role,'booking.devotee.name','Devotee name','',esc(devDisplayName(b)))+
+   field(role,'booking.devotee.phone','Mobile number','',esc(devDisplayPhone(b)))+
    (firstCall
      ? '<div class="ed"><label class="ed-l">Puja / package</label><select class="inp" id="ccp">'+
        PUJAS.filter(x=>x.templeId===b.templeId&&x.mode===b.mode&&x.active).map(x=>'<option value="'+x.id+'"'+(x.id===b.pujaId?' selected':'')+'>'+esc(x.name)+' — '+INR(x.price)+'</option>').join('')+
@@ -2580,15 +2817,17 @@ function agList(){
 function agRow(b){
   const p=puja(b.pujaId);
   const need=!b.pandaId&&b.balancePaid&&SIM>=b.pujaAt-24*HOUR;
-  return '<button class="lrow" data-act="go" data-go="agent.booking" data-id="'+b.id+'">'+
-   '<div class="lrow-main"><div class="lrow-t">'+(isPujaRunning(b)?'<span class="running-dot"></span>':'')+esc(b.devotee.name)+' · <span style="font-weight:400" class="sub">'+esc(b.devotee.gotra)+' gotra</span></div>'+
+  return '<div class="lrow cc-booking-row">'+
+   '<div class="lrow-main"><div class="lrow-t">'+(isPujaRunning(b)?'<span class="running-dot"></span>':'')+
+   '<button class="cc-name-link" data-act="go" data-go="agent.booking" data-id="'+b.id+'">'+esc(b.devotee.name)+' · <span style="font-weight:400" class="sub">'+esc(b.devotee.gotra)+' gotra</span></button></div>'+
+   contactLine(b.devotee.name,b.devotee.phone)+
    '<div class="lrow-s mono">Client '+esc(b.clientId)+' · Pooja '+esc(b.poojaBookingId)+'</div>'+
    '<div class="lrow-s">'+esc(p.name)+' · '+esc(temple(b.templeId).name)+' · '+fmtDT(b.pujaAt)+'</div>'+
    '<div class="row" style="margin-top:7px;gap:5px">'+
    (b.pandaId?'<span class="pill p-ok">'+esc(pandit(b.pandaId).name)+' · '+esc(b.pandaId)+'</span>':need?'<span class="pill p-stop">Assign a pandit</span>':'<span class="pill p-mute">Pandit not yet due</span>')+
    (b.escalated?'<span class="pill p-stop">Bypassed</span>':'')+(b.otpVerified?'<span class="pill p-ok">Completed</span>':'')+
    (!b.balancePaid?'<span class="pill p-warn">Balance due</span>':'')+'</div></div>'+
-   '<div class="lrow-r">'+remainingBadge(b)+'</div></button>';
+   '<div class="lrow-r">'+remainingBadge(b)+'</div></div>';
 }
 function agBooking(){
   const b=bk(S.id); if(!b) return agList();
@@ -2653,9 +2892,11 @@ function agBooking(){
    kv('Package',esc(p.name)+' · '+esc(p.dur))+kv('Booking date',fmtDT(b.createdAt))+
    kv('Pooja date',fmtDT(b.pujaAt))+kv('Temple',esc(t.name)+' · '+esc(t.city))+
    kv('Pandit',panditNameId(b.pandaId))+
+   (b.pandaId?kv('Contact pandit',contactIcons(pandit(b.pandaId).name,pandit(b.pandaId).phone)):'')+
    kv('Arrival code','<span class="mono" style="font-size:15px;font-weight:700">'+esc(b.arrivalCode)+'</span>')+
    kv('Meeting point',esc(t.meet))+kv('Coming from',esc(b.devotee.city))+
-   kv('Devotee’s masked line','<span class="mono">'+esc(mask(b.devotee.phone))+'</span>')+
+   kv('Devotee’s number','<span class="mono">'+esc(b.devotee.phone)+'</span>')+
+   kv('Contact devotee',contactIcons(b.devotee.name,b.devotee.phone))+
    kv('Language',esc(b.language))+
    (b.balancePaid?'':kv('Balance outstanding','<span class="pill p-warn">'+INR(b.balanceAmt)+' unpaid</span>'))+
    '</dl>'+
@@ -2663,7 +2904,7 @@ function agBooking(){
    '</div>'+
    (b.photos.length?'<div class="card"><div class="eyebrow">Photographs uploaded</div>'+photoGrid(b.photos)+'</div>':'')+
    trig(['The agent sees the devotee, the gotra, the puja, the time and the arrival code. <b>No prices, no payouts, no financial detail</b> beyond whether the balance is clear.',
-         'The devotee’s number is masked here too — the agent cannot take the relationship off the platform.',
+         'Call, WhatsApp and an app-internal Internet call are all one tap away, so the agent can always reach the devotee.',
          'Changing the pandit is a normal action, not an exception. Leaving a booking unassigned silently is the only real failure.',
          'The arrival code is how the agent knows the person at the gate is the person who booked.']);
 }
@@ -2695,12 +2936,14 @@ function pdList(){
 }
 function pdRow(b){
   const p=puja(b.pujaId);
-  return '<button class="lrow" data-act="go" data-go="pandit.booking" data-id="'+b.id+'">'+
-   '<div class="lrow-main"><div class="lrow-t">'+(isPujaRunning(b)?'<span class="running-dot"></span>':'')+esc(b.devotee.name)+'</div>'+
+  return '<div class="lrow cc-booking-row">'+
+   '<div class="lrow-main"><div class="lrow-t">'+(isPujaRunning(b)?'<span class="running-dot"></span>':'')+
+   '<button class="cc-name-link" data-act="go" data-go="pandit.booking" data-id="'+b.id+'">'+esc(b.devotee.name)+'</button></div>'+
+   contactLine(b.devotee.name,b.devotee.phone)+
    '<div class="lrow-s mono">Client '+esc(b.clientId)+' · Pooja '+esc(b.poojaBookingId)+'</div>'+
    '<div class="lrow-s">'+esc(b.devotee.gotra)+' gotra · '+esc(p.name)+' · '+esc(temple(b.templeId).name)+'</div>'+
    '<div class="lrow-s" style="margin-top:3px">'+fmtDT(b.pujaAt)+'</div></div>'+
-   '<div class="lrow-r">'+remainingBadge(b)+'</div></button>';
+   '<div class="lrow-r">'+remainingBadge(b)+'</div></div>';
 }
 function pdBooking(){
   const b=bk(S.id); if(!b) return pdList();
@@ -2710,12 +2953,14 @@ function pdBooking(){
    '<div class="eyebrow">Perform in this name</div>'+
    '<h1 class="h-page" style="margin-bottom:2px">'+esc(b.devotee.name)+'</h1>'+
    '<p class="sub" style="margin:0 0 4px">'+esc(b.devotee.gotra)+' gotra</p>'+
-   '<p class="sub mono" style="margin:0 0 14px">Client '+esc(b.clientId)+' · Pooja '+esc(b.poojaBookingId)+'</p>'+
+   '<p class="sub mono" style="margin:0 0 10px">Client '+esc(b.clientId)+' · Pooja '+esc(b.poojaBookingId)+'</p>'+
+   '<div class="row" style="gap:5px;margin-bottom:14px">'+contactIcons(b.devotee.name,b.devotee.phone)+'</div>'+
    '<div class="card" style="background:var(--surface-2)"><dl style="margin:0">'+
    kv('Package',esc(p.name))+kv('Temple',esc(temple(b.templeId).name))+
    kv('Client location',esc(b.devotee.city))+kv('Booking date',fmtDT(b.createdAt))+
    kv('Pooja date',fmtDT(b.pujaAt))+kv('Duration',esc(p.dur))+
    kv('Agent',b.agentId?agentNameId(b.agentId):'Direct assignment')+
+   (b.agentId?kv('Contact agent',contactIcons(agent(b.agentId).name,agent(b.agentId).phone)):'')+
    (b.devotee.dob?kv('Date of birth',esc(b.devotee.dob)):'')+
    (b.devotee.pob?kv('Place of birth',esc(b.devotee.pob)):'')+'</dl></div>'+
    (b.sankalpaNames.length?'<div class="card" style="margin-top:12px"><div class="eyebrow">Also name at the sankalpa</div>'+
@@ -2745,14 +2990,59 @@ function pdBooking(){
    SCREENS — admin panel
    ========================================================================== */
 function adminScreen(){
-  const tabs=[['dash','Overview'],['bookings','Bookings'],['temples','Temples'],['pujas','Puja catalogue'],
+  const tabs=[['dash','Overview'],['bookings','Bookings'],['devotees','Details of devotees'],['temples','Temples'],['pujas','Puja catalogue'],
     ['payouts','Payout rules'],['people','Agents & pandits'],['careteam','Care team access'],['blackouts','Blackout calendar'],
     ['payments','Payments & settlement'],['perms','Roles & permissions'],['settings','Settings']];
   const sub=S.sub||'dash';
-  const m={dash:adDash,bookings:adBookings,temples:adTemples,pujas:adPujas,payouts:adPayouts,people:adPeople,
+  const m={dash:adDash,bookings:adBookings,devotees:adDevotees,temples:adTemples,pujas:adPujas,payouts:adPayouts,people:adPeople,
     careteam:adCareTeam,blackouts:adBlackouts,payments:adPayments,perms:adPerms,settings:adSettings,
     pujaedit:adPujaEdit,bookedit:adBookEdit};
   return dashShell('admin','Admin panel',tabs,(sub==='pujaedit'?'pujas':sub==='bookedit'?'bookings':sub),(m[sub]||adDash)());
+}
+function adDevotees(){ return devoteesDirectoryBody(); }
+function ccHistory(){ return devoteesDirectoryBody(); }
+function devoteesDirectoryBody(){
+  const f=S.devFilter, list=filteredDevotees(f.from,f.to);
+  const letters='ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+  const cols=['Devotee','Pooja','Agent','Pandit','Pooja rate','Advance payment','Due','Full payment','Total','Date & time'];
+  return '<div class="row" style="justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px">'+
+   '<div><div class="eyebrow">'+(S.role==='admin'?'Admin — both desks':'Customer care · Desk '+esc(S.careSeat||''))+' · directory</div><h1 class="h-page">All history — details of devotees</h1></div>'+
+   '<button class="btn btn-pri" data-act="ad-devotees-csv">Export CSV</button></div>'+
+   '<p class="sub" style="max-width:70ch;margin:6px 0 0">Every offline, online and subscription booking in one searchable, filterable list — built for hundreds of devotees and repeat bookings, not a handful. Live payment status, a countdown to the pooja, and one-tap contact for the devotee, their agent and their pandit.</p>'+
+   trig(['A booking counts as <b>fully paid</b> only once the balance has actually cleared — Full payment and Total never show for one that still has a Due amount, however close the date.',
+         'A pooja the '+who('Onsite agent')+' or '+who('Pandit')+' has marked as started, but not yet closed with the completion code, shows a pulsing dot and <b>RUNNING</b> here.',
+         isCareMasked()?'The devotee’s name and number are partially masked here, and only Internet call is offered — customer care never sees or dials the real number. Agent and pandit contact stay real.':
+           'Call, Internet call and WhatsApp are all real, one-tap icons on every name — devotee, agent and pandit alike.',
+         isCareMasked()?'This list and its export only ever show your own desk’s bookings.':'',
+         'Export has its own date range, separate from the filters above — leave it blank to export exactly what the filters currently show.'].filter(Boolean))+
+   '<div class="card" style="margin-top:12px"><div class="grid g3">'+
+   '<div class="ed"><label class="ed-l">Booking type</label><select class="inp" id="devtype">'+
+     ['all','in_person','online','subscription'].map(k=>'<option value="'+k+'"'+(k===f.type?' selected':'')+'>'+(k==='all'?'All types':esc(MODES[k].label))+'</option>').join('')+
+     '</select></div>'+
+   '<div class="ed"><label class="ed-l">Payment status</label><select class="inp" id="devpay">'+
+     [['all','All statuses'],['awaiting','Awaiting balance'],['ready','Ready — fully paid'],['running','Running'],['completed','Completed'],['cancelled','Cancelled']]
+       .map(([k,l])=>'<option value="'+k+'"'+(k===f.pay?' selected':'')+'>'+esc(l)+'</option>').join('')+'</select></div>'+
+   '<div class="ed"><label class="ed-l">Search</label><input class="inp" id="devq" placeholder="Name, phone, booking or client ID" value="'+esc(f.q)+'"></div>'+
+   '</div>'+
+   '<div class="grid g2" style="margin-top:2px">'+
+   '<div class="ed"><label class="ed-l">Pooja date from</label><input class="inp" id="devfrom" type="date" value="'+esc(f.from)+'"></div>'+
+   '<div class="ed"><label class="ed-l">Pooja date to</label><input class="inp" id="devto" type="date" value="'+esc(f.to)+'"></div>'+
+   '</div>'+
+   '<div class="row" style="margin-top:10px;gap:4px;flex-wrap:wrap">'+
+   '<button class="chip-tog" aria-pressed="'+(!f.letter)+'" data-act="dev-letter" data-v="">All</button>'+
+   letters.map(l=>'<button class="chip-tog" aria-pressed="'+(f.letter===l)+'" data-act="dev-letter" data-v="'+l+'">'+l+'</button>').join('')+
+   '</div></div>'+
+   '<div class="card" style="margin-top:12px;background:var(--surface-2)"><div class="eyebrow">Export — its own date range</div>'+
+   '<p class="sub" style="margin:0 0 10px">Pick a window just for the download; everything else (type, status, search, letter) still applies. Leave both blank to export whatever the filters above currently show.</p>'+
+   '<div class="row" style="gap:10px;align-items:flex-end;flex-wrap:wrap">'+
+   '<div class="ed" style="width:180px;margin:0"><label class="ed-l">Export from</label><input class="inp" id="devexpfrom" type="date" value="'+esc(f.expFrom)+'"></div>'+
+   '<div class="ed" style="width:180px;margin:0"><label class="ed-l">Export to</label><input class="inp" id="devexpto" type="date" value="'+esc(f.expTo)+'"></div>'+
+   '<button class="btn btn-pri" data-act="ad-devotees-csv">Export CSV</button></div></div>'+
+   '<div class="sub" id="dev-count" style="margin:14px 0 8px">'+list.length+' matching booking'+(list.length===1?'':'s')+'</div>'+
+   '<div class="card" style="padding:6px"><div class="scroll-x"><table class="t dev-table">'+DEV_TABLE_COLGROUP+'<thead><tr>'+
+   cols.map((c,i)=>'<th'+([4,5,6,7,8].includes(i)?' style="text-align:right"':'')+'>'+esc(c)+'</th>').join('')+
+   '</tr></thead><tbody id="dev-list">'+(list.length?list.map(devoteeTableRow).join(''):'<tr><td colspan="10" class="empty">No devotees match these filters.</td></tr>')+
+   '</tbody></table></div></div>';
 }
 function adDash(){
   const B=DB.bookings;
@@ -2767,7 +3057,7 @@ function adDash(){
    [['Bookings',B.length],['Collected',INR(collected)],['Outstanding',INR(outstanding)],
     ['Paid out',INR(paidOut)],['Escalations',B.filter(x=>x.escalated).length],['SLA breaches',B.filter(slaBreached).length],
     ['Avg rating',avg+(rated.length?' /5':'')],['Gross margin',INR(collected-paidOut)]].map(([l,v])=>
-    '<div class="card"><div class="eyebrow">'+esc(l)+'</div><div class="mono" style="font-size:19px;font-weight:600;line-height:1.2">'+v+'</div></div>').join('')+'</div>'+
+    '<div class="card"><div class="eyebrow">'+esc(l)+'</div><div class="mono" style="font-size:23px;font-weight:600;line-height:1.2">'+v+'</div></div>').join('')+'</div>'+
    trig(['The only place that sees money end to end — what came in, what is owed, what went out to pujaris and agents.',
          'Also where the catalogue lives: temples, pujas, prices, payout rules, agents, pandits and blackout dates all originate here.',
          who('Admin')+' can edit any field on any booking, including the ones locked to '+who('Customer care')+'. Every override is audited.'])+
@@ -2809,7 +3099,12 @@ function adBookEdit(){
    '<div class="row" style="gap:5px;margin-top:6px">'+srcPill(b)+modePill(b)+statusPill(b)+payPill(b)+'</div>'+
    '<div class="warnbox" style="margin-top:12px"><h4>Admin override</h4>'+
    '<p>Name, mobile, puja, amount and status are locked to customer care. Admin can change them, and every change is written to the audit trail with the reason you give below.</p></div>'+
-   '<div class="card"><div class="eyebrow">Devotee</div><div class="grid g2">'+
+   '<div class="card"><div class="eyebrow">Devotee</div>'+
+   '<div class="grid g3" style="margin-bottom:14px">'+
+   '<div><div class="sub" style="margin-bottom:4px">Devotee</div><div class="row" style="gap:5px">'+contactIcons(b.devotee.name,b.devotee.phone)+'</div></div>'+
+   (b.agentId?'<div><div class="sub" style="margin-bottom:4px">Agent — '+esc(agent(b.agentId).name)+'</div><div class="row" style="gap:5px">'+contactIcons(agent(b.agentId).name,agent(b.agentId).phone)+'</div></div>':'')+
+   (b.pandaId?'<div><div class="sub" style="margin-bottom:4px">Pandit — '+esc(pandit(b.pandaId).name)+'</div><div class="row" style="gap:5px">'+contactIcons(pandit(b.pandaId).name,pandit(b.pandaId).phone)+'</div></div>':'')+
+   '</div><div class="grid g2">'+
    '<div class="ed"><label class="ed-l">Full name</label><input class="inp" id="abn" value="'+esc(b.devotee.name)+'"></div>'+
    '<div class="ed"><label class="ed-l">Mobile</label><input class="inp" id="abp" value="'+esc(b.devotee.phone)+'"></div>'+
    '<div class="ed"><label class="ed-l">Gotra</label><input class="inp" id="abg" value="'+esc(b.devotee.gotra)+'"></div>'+
@@ -2957,23 +3252,31 @@ function adPeople(){
   return '<h1 class="h-page">Agents & pandits</h1>'+
    trig(['Agents are mapped to temples. '+who('Customer care')+' can only assign an agent who covers that temple and is active.',
          'Pandits carry a daily capacity and a leave flag, so an absent or fully-booked pandit never appears in the '+who('Agent')+' picker.',
+         'Each agent belongs to Desk A or Desk B — 10 a side. A pandit inherits their desk from their agent, so a client is never handed from one desk’s agent to the other desk’s pandit.',
          'Ratings roll up from devotee feedback, per person — that is what makes them actionable.',
          'Deactivating someone removes them from every picker without deleting their history.'])+
-   '<h3 class="h-sec" style="margin:20px 0 10px">Onsite agents</h3><div class="stack">'+
+   '<h3 class="h-sec" style="margin:20px 0 10px">Onsite agents · '+AGENTS.filter(a=>a.careTeam==='A').length+' on Desk A, '+AGENTS.filter(a=>a.careTeam==='B').length+' on Desk B</h3><div class="stack">'+
    AGENTS.map(a=>'<div class="card"><div class="row" style="justify-content:space-between;align-items:flex-start">'+
-    '<div style="flex:1;min-width:0"><div class="lrow-t">'+esc(a.name)+'</div><div class="lrow-s mono">'+esc(a.phone)+'</div>'+
+    '<div style="flex:1;min-width:0"><div class="lrow-t">'+esc(a.name)+' <span class="pill p-flow">Desk '+esc(a.careTeam||'—')+'</span></div><div class="lrow-s mono">'+esc(a.phone)+'</div>'+
+    contactLine(a.name,a.phone)+
     '<div class="sub" style="margin-top:4px">Shift: '+esc(a.shift)+'</div>'+
     '<div class="row" style="margin-top:7px;gap:5px">'+a.temples.map(id=>'<span class="pill p-mute">'+esc(temple(id).name)+'</span>').join('')+'</div></div>'+
     '<div style="text-align:right">'+(a.active?'<span class="pill p-ok">Active</span>':'<span class="pill p-stop">Inactive</span>')+
     '<div class="sub mono" style="margin-top:6px">'+DB.bookings.filter(b=>b.agentId===a.id).length+' bookings</div>'+
     '<div class="sub mono">'+rate(a.id,'agentId')+'</div></div></div>'+
+    '<div class="row" style="margin-top:10px;gap:8px;align-items:flex-end">'+
+    '<div style="width:200px"><label class="f">Phone number</label><input class="inp mono" id="phone-'+a.id+'" value="'+esc(a.phone)+'"></div>'+
+    '<button class="btn btn-sm" data-act="ad-save-agent-phone" data-id="'+a.id+'">Save number</button></div>'+
     '<div class="chips" style="margin-top:10px">'+
     '<button class="chip-tog" aria-pressed="'+a.active+'" data-act="tg-agent" data-id="'+a.id+'">Active '+(a.active?'✓':'')+'</button>'+
+    '<button class="chip-tog" aria-pressed="false" data-act="tg-agent-team" data-id="'+a.id+'">Move to Desk '+(a.careTeam==='A'?'B':'A')+'</button>'+
     TEMPLES.filter(t=>t.live).map(t=>'<button class="chip-tog" aria-pressed="'+a.temples.includes(t.id)+'" data-act="tg-agent-temple" data-id="'+a.id+'" data-v="'+t.id+'">'+esc(t.name)+'</button>').join('')+
     '</div></div>').join('')+'</div>'+
+   '<p class="sub" style="margin:10px 0 0">Numbers saved here are what every screen calls — Customer care, the agent and pandit boards, and the Devotees directory all read the same record, so there is nothing separate to keep in sync.</p>'+
    '<h3 class="h-sec" style="margin:20px 0 10px">Temple pandits</h3><div class="stack">'+
    PANDITS.map(d=>'<div class="card"><div class="row" style="justify-content:space-between;align-items:flex-start">'+
-    '<div style="flex:1;min-width:0"><div class="lrow-t">'+esc(d.name)+'</div><div class="lrow-s">'+esc(d.skills)+'</div>'+
+    '<div style="flex:1;min-width:0"><div class="lrow-t">'+esc(d.name)+' '+(panditTeam(d)?'<span class="pill p-mute">Desk '+esc(panditTeam(d))+'</span>':'')+'</div><div class="lrow-s">'+esc(d.skills)+'</div>'+
+    contactLine(d.name,d.phone)+
     '<div class="row" style="margin-top:7px;gap:5px"><span class="pill p-mute">'+esc(temple(d.temple).name)+'</span>'+
     '<span class="pill p-mute">'+d.cap+' pujas/day</span>'+
     (d.leave.includes('absent-today')?'<span class="pill p-stop">Absent today</span>':'')+'</div></div>'+
@@ -2981,6 +3284,7 @@ function adPeople(){
     '<div class="sub mono" style="margin-top:6px">'+DB.bookings.filter(b=>b.pandaId===d.id).length+' pujas</div>'+
     '<div class="sub mono">'+rate(d.id,'pandaId')+'</div></div></div>'+
     '<div class="row" style="margin-top:10px;gap:8px;align-items:flex-end">'+
+    '<div style="width:200px"><label class="f">Phone number</label><input class="inp mono" id="phone-'+d.id+'" value="'+esc(d.phone)+'"></div>'+
     '<div style="width:130px"><label class="f">Daily capacity</label><input class="inp mono" id="cap-'+d.id+'" value="'+d.cap+'"></div>'+
     '<button class="btn btn-sm" data-act="ad-save-cap" data-id="'+d.id+'">Save</button>'+
     '<button class="chip-tog" aria-pressed="'+d.active+'" data-act="tg-pandit" data-id="'+d.id+'">Active '+(d.active?'✓':'')+'</button>'+
@@ -2988,12 +3292,28 @@ function adPeople(){
     '</div></div>').join('')+'</div>';
 }
 function adCareTeam(){
+  const seats=readSeats();
+  const deskCard=seat=>{
+    const occ=seats[seat];
+    const live=DB.bookings.filter(b=>b.careTeam===seat&&!['CANCELLED','COMPLETED','SETTLED'].includes(b.status));
+    return '<div class="card"><div class="row" style="justify-content:space-between;align-items:flex-start">'+
+     '<div><div class="eyebrow">Desk '+seat+'</div>'+
+     (occ?'<div class="lrow-t">'+esc(occ.name)+'</div><div class="sub">Signed in since '+fmtDT(occ.at)+'</div>':'<div class="sub">Nobody signed in</div>')+
+     '<div class="sub mono" style="margin-top:6px">'+live.length+' open booking'+(live.length===1?'':'s')+' on this desk</div></div>'+
+     (occ?'<span class="pill '+(occ?'p-ok':'p-mute')+'">Occupied</span>':'<span class="pill p-mute">Free</span>')+'</div>'+
+     (occ?'<button class="btn btn-sm" style="margin-top:10px" data-act="ad-release-seat" data-v="'+seat+'">Force release</button>':'')+'</div>';
+  };
   return '<h1 class="h-page">Care team access</h1>'+
    trig(['Every customer care login is created and reset here — there is no self-signup.',
          'Deactivating someone blocks their next sign-in immediately without deleting their call history or audit trail.',
          'A login ID must be unique across the team; the portal checks this the moment you save.',
+         'Both desks share this same login list — the desk (A/B) is chosen at sign-in, not tied to a particular account.',
          'Passwords are shown in the clear here only because this is a demo — a live build would hash them and never display them again.'])+
-   '<div class="stack" style="margin-top:12px">'+CARE_USERS.map(u=>
+   '<h3 class="h-sec" style="margin:20px 0 10px">Both desks, live</h3>'+
+   '<p class="sub" style="margin:0 0 10px">Admin sees both customer care desks at once — customer care staff on one desk never see the other’s queue. Occupancy updates live across tabs on this browser; force-release a desk if someone closed their tab without logging out.</p>'+
+   '<div class="grid g2">'+deskCard('A')+deskCard('B')+'</div>'+
+   '<h3 class="h-sec" style="margin:20px 0 10px">Logins</h3>'+
+   '<div class="stack">'+CARE_USERS.map(u=>
     '<div class="card"><div class="row" style="justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:10px">'+
     '<div style="flex:1;min-width:160px"><div class="lrow-t">'+esc(u.name)+'</div>'+
     '<div class="sub" style="margin-top:2px">'+(u.active?'<span class="pill p-ok">Active</span>':'<span class="pill p-stop">Inactive</span>')+'</div></div>'+
@@ -3458,22 +3778,37 @@ const ROLE_TABS=[['user','Devotee'],['cc','Customer care'],['agent','Agent'],['p
 const SCREENS={flow:flowScreen,user:userScreen,cc:ccScreen,agent:agentScreen,pandit:panditScreen,admin:adminScreen};
 const DEFAULT_SUB={flow:'pipeline',user:'browse',cc:'queue',agent:'list',pandit:'list',admin:'dash'};
 const MOBILE_ROLES=['user','agent','pandit'];
-const STORAGE_KEY='namonamaha-care-demo-v6';
+const STORAGE_KEY='namonamaha-care-demo-v8';
 function saveDemo(){
-  try{window.localStorage.setItem(STORAGE_KEY,JSON.stringify({SIM,SEQ,DB,TEMPLES,PUJAS,AGENTS,PANDITS,CARE_USERS,BLACKOUTS}));}catch(e){}
+  try{window.localStorage.setItem(STORAGE_KEY,JSON.stringify({SIM,SEQ,DB,TEMPLES,PUJAS,AGENTS,PANDITS,CARE_USERS,ADMIN_USERS,BLACKOUTS}));}catch(e){}
 }
 function restoreDemo(){
   try{
     const data=JSON.parse(window.localStorage.getItem(STORAGE_KEY)||'null');
-    if(!data||!Array.isArray(data.DB&&data.DB.bookings)||!Array.isArray(data.AGENTS)||!Array.isArray(data.CARE_USERS)) return;
+    if(!data||!Array.isArray(data.DB&&data.DB.bookings)||!Array.isArray(data.AGENTS)||!Array.isArray(data.CARE_USERS)||!Array.isArray(data.ADMIN_USERS)) return;
     SIM=data.SIM;SEQ=data.SEQ;DB=data.DB;TEMPLES=data.TEMPLES;PUJAS=data.PUJAS;
-    AGENTS=data.AGENTS;PANDITS=data.PANDITS;CARE_USERS=data.CARE_USERS;BLACKOUTS=data.BLACKOUTS;
+    AGENTS=data.AGENTS;PANDITS=data.PANDITS;CARE_USERS=data.CARE_USERS;ADMIN_USERS=data.ADMIN_USERS;BLACKOUTS=data.BLACKOUTS;
   }catch(e){}
 }
 
+/* ---- customer care desk seats — a same-browser, cross-tab occupancy lock. Only one
+   signed-in person can hold Desk A (or B) at a time; a second sign-in to the same desk
+   is blocked until it's released. This is a client-only app with no server, so "live" here
+   means live across tabs on this browser via localStorage + the storage event — it cannot
+   coordinate across different browsers or devices without a real backend. ---- */
+const SEAT_KEY='nm_care_seats';
+function readSeats(){
+  try{ const s=JSON.parse(window.localStorage.getItem(SEAT_KEY)||'null'); return (s&&typeof s==='object')?s:{A:null,B:null}; }
+  catch(e){ return {A:null,B:null}; }
+}
+function writeSeats(seats){ try{ window.localStorage.setItem(SEAT_KEY,JSON.stringify(seats)); }catch(e){} }
+function claimSeat(seat,userId,name){ const s=readSeats(); s[seat]={userId,name,at:Date.now()}; writeSeats(s); }
+function releaseSeat(seat){ if(!seat) return; const s=readSeats(); s[seat]=null; writeSeats(s); }
+
 function render(){
-  document.getElementById('roles').innerHTML=ROLE_TABS.map(([k,l])=>
-   '<button class="role" role="tab" aria-selected="'+(S.role===k)+'" data-act="role" data-v="'+k+'"><span class="dot"></span>'+esc(l)+'</button>').join('');
+  const signedIntoCare=S.role!=='cc'||!!S.careUser;
+  document.getElementById('roles').innerHTML=signedIntoCare?ROLE_TABS.map(([k,l])=>
+   '<button class="role" role="tab" aria-selected="'+(S.role===k)+'" data-act="role" data-v="'+k+'"><span class="dot"></span>'+esc(l)+'</button>').join(''):'';
   document.getElementById('app').innerHTML=(SCREENS[S.role]||flowScreen)();
   document.getElementById('clock').textContent='Simulated: '+fmtDate(SIM)+', '+fmtTime(SIM);
   document.getElementById('evcount').textContent=DB.events.length;
@@ -3482,16 +3817,24 @@ function render(){
   dt.querySelectorAll('button').forEach(x=>x.setAttribute('aria-selected',String(x.dataset.v===S.device)));
   document.body.classList.toggle('mobile-preview',show&&S.device==='mobile');
   document.body.classList.toggle('modal-open',!!S.modal);
-  document.body.classList.toggle('cc-wallpaper',S.role==='cc'&&!!S.careUser);
+  document.body.classList.toggle('app-wallpaper',['user','agent','pandit'].includes(S.role)||(S.role==='cc'&&!!S.careUser));
+  document.body.classList.toggle('role-wide',S.role==='agent'||S.role==='pandit');
   renderEvents();
   saveDemo();
   window.scrollTo({top:0,behavior:'instant'});
+}
+/* Masks a devotee's real name out of a free-text event string, for a customer care
+   viewer — the events feed is global chrome, visible on every screen including CC's. */
+function maskEventText(text,bookingId){
+  if(!isCareMasked()||!bookingId) return text;
+  const b=bk(bookingId); if(!b||!b.devotee.name) return text;
+  return text.split(b.devotee.name).join(maskName(b.devotee.name));
 }
 function renderEvents(){
   document.getElementById('evlist').innerHTML=DB.events.length?DB.events.map(e=>{
     const c=CH[e.channel]||CH.System;
     return '<div class="ev"><div class="ev-i" style="background:'+c.bg+';color:'+c.fg+'">'+c.t+'</div><div class="ev-b">'+
-     '<div class="ev-t">'+esc(e.title)+'</div><div class="ev-m">'+esc(e.body)+'</div>'+
+     '<div class="ev-t">'+esc(maskEventText(e.title,e.bookingId))+'</div><div class="ev-m">'+esc(maskEventText(e.body,e.bookingId))+'</div>'+
      '<div class="ev-w">'+esc(e.channel)+' · '+fmtDT(e.at)+(e.tpl?' · '+esc(e.tpl):'')+'</div></div></div>';
   }).join(''):'<div class="empty">Nothing yet. Book a puja and the messages appear here.</div>';
 }
@@ -3515,6 +3858,11 @@ function tsFrom(dateId,timeId,fallback){
   return isFinite(ts)?ts:fallback;
 }
 
+/* live, cross-tab: when another tab on this browser claims/releases a seat, this tab's
+   login screen (or admin oversight panel) updates without a manual refresh. */
+window.addEventListener('storage',e=>{ if(e.key===SEAT_KEY) render(); });
+window.addEventListener('beforeunload',()=>{ if(S.careUser&&S.careSeat) releaseSeat(S.careSeat); });
+
 document.addEventListener('click',e=>{
   const el=e.target.closest('[data-act]'); if(!el||el.disabled) return;
   const a=el.dataset.act, id=el.dataset.id, v=el.dataset.v;
@@ -3522,6 +3870,7 @@ document.addEventListener('click',e=>{
   switch(a){
     case 'role': S.role=v; S.sub=DEFAULT_SUB[v]; S.open=null; S.modal=null; render(); break;
     case 'go': goTo(el.dataset.go,id); break;
+    case 'brand-home': goTo(S.role+'.'+DEFAULT_SUB[S.role]); break;
     case 'device': S.device=v; render(); break;
     case 'sim-day': advance(DAY); break;
     case 'reset':
@@ -3570,15 +3919,17 @@ document.addEventListener('click',e=>{
 
     /* ---------- customer care ---------- */
     case 'cc-login': {
-      const loginId=val('cli'), pw=val('clp');
+      const seat=v, loginId=val('cli'), pw=val('clp');
       S.loginDraft=loginId;
       const u=CARE_USERS.find(x=>x.active&&x.loginId.toLowerCase()===loginId.trim().toLowerCase()&&x.password===pw);
       if(!u){ S.loginError='Incorrect login ID or password.'; S.pwDraft=''; S.pwShow=false; render(); break; }
-      S.careUser=u.id; S.loginError=''; S.loginDraft=''; S.pwDraft=''; S.pwShow=false; S.sub='queue';
-      render(); toast('Welcome back, '+u.name+'.'); break;
+      if(readSeats()[seat]){ S.loginError='Desk '+seat+' was just taken by someone else. Choose the other desk.'; S.pwDraft=''; S.pwShow=false; render(); break; }
+      S.careUser=u.id; S.careSeat=seat; claimSeat(seat,u.id,u.name);
+      S.loginError=''; S.loginDraft=''; S.pwDraft=''; S.pwShow=false; S.sub='queue';
+      render(); toast('Welcome back, '+u.name+' — Desk '+seat+'.'); break;
     }
     case 'cc-toggle-pw': S.loginDraft=val('cli'); S.pwDraft=val('clp'); S.pwShow=!S.pwShow; render(); break;
-    case 'cc-logout': S.careUser=null; S.sub='queue'; render(); break;
+    case 'cc-logout': releaseSeat(S.careSeat); S.careUser=null; S.careSeat=null; S.sub='queue'; render(); break;
     case 'cc-temple':
       S.templeFrom=id||null; S.templeId=v;
       S.modal={type:'temple',templeId:v,bookingId:id||null}; render(); break;
@@ -3755,14 +4106,32 @@ document.addEventListener('click',e=>{
     case 'tg-agent': { const ag=agent(id); ag.active=!ag.active; render(); break; }
     case 'tg-agent-temple': { const ag=agent(id);
       ag.temples=ag.temples.includes(v)?ag.temples.filter(x=>x!==v):ag.temples.concat(v); render(); break; }
+    case 'tg-agent-team': { const ag=agent(id); ag.careTeam=ag.careTeam==='A'?'B':'A';
+      render(); toast(ag.name+' moved to Desk '+ag.careTeam+'. Their pandits move with them.'); break; }
     case 'tg-pandit': { const d=pandit(id); d.active=!d.active; render(); break; }
     case 'tg-pandit-leave': { const d=pandit(id);
       d.leave=d.leave.includes('absent-today')?[]:['absent-today']; render(); break; }
-    case 'ad-save-cap': { const d=pandit(id); d.cap=numv('cap-'+id,d.cap); render(); toast('Capacity saved.'); break; }
+    case 'ad-save-cap': {
+      const d=pandit(id); d.cap=numv('cap-'+id,d.cap);
+      const ph=val('phone-'+id); if(ph) d.phone=ph;
+      render(); toast('Saved. Every screen that shows '+d.name+' now uses this number.'); break;
+    }
+    case 'ad-save-agent-phone': {
+      const ag=agent(id); const ph=val('phone-'+id);
+      if(!ph){ toast('Enter a phone number first.','stop'); break; }
+      ag.phone=ph; render(); toast('Saved. Every screen that shows '+ag.name+' now uses this number.'); break;
+    }
+    case 'dev-letter': S.devFilter.letter=(S.devFilter.letter===v?'':v); render(); break;
+    case 'ad-devotees-csv': downloadDevoteesCsv(); break;
+    case 'masked-call': toast('Connecting to '+esc(v)+' on a masked line — neither side sees the other’s real number. (Simulated)'); break;
+    case 'ad-release-seat': {
+      releaseSeat(v);
+      render(); toast('Desk '+v+' released. It is free for the next sign-in.'); break;
+    }
     case 'tg-careuser': {
       const u=careUser(id); if(!u) break;
       u.active=!u.active;
-      if(!u.active&&S.careUser===u.id) S.careUser=null;
+      if(!u.active&&S.careUser===u.id){ releaseSeat(S.careSeat); S.careUser=null; S.careSeat=null; }
       render(); toast(u.active?u.name+' can sign in again.':u.name+'’s login is deactivated.'); break;
     }
     case 'ad-save-careuser': {
@@ -3864,6 +4233,16 @@ document.addEventListener('change',e=>{
     picker.innerHTML=agentOptions(b,ts,selected);
     roster.innerHTML=agentRoster(b,ts);
   }
+  if(['devtype','devpay','devfrom','devto'].includes(e.target.id)){
+    S.devFilter.type=val('devtype')||'all'; S.devFilter.pay=val('devpay')||'all';
+    S.devFilter.from=val('devfrom'); S.devFilter.to=val('devto');
+    patchDevList();
+  }
+  if(e.target.id==='devexpfrom') S.devFilter.expFrom=e.target.value;
+  if(e.target.id==='devexpto') S.devFilter.expTo=e.target.value;
+});
+document.addEventListener('input',e=>{
+  if(e.target.id==='devq'){ S.devFilter.q=e.target.value; patchDevList(); }
 });
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape'){
